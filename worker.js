@@ -55,6 +55,31 @@ export default {
     return json({summary});
    }catch(e){return json({error:e.message||"Summary unavailable."},502)}
   }
+  if(url.pathname==="/api/hotels/search"){
+   if(request.method!=="POST")return json({error:"Method not allowed"},405);
+   const ip=request.headers.get("CF-Connecting-IP")||"unknown",now=Date.now(),recent=(requestCounts.get("hotel:"+ip)||[]).filter(t=>now-t<60000);
+   if(recent.length>=5)return json({error:"Please wait a minute before searching again."},429);recent.push(now);requestCounts.set("hotel:"+ip,recent);
+   let body;try{body=await request.json()}catch{return json({error:"Invalid request."},400)}
+   const query=typeof body.query==="string"?body.query.trim():"";if(!query||query.length>500)return json({error:"Enter a hotel search up to 500 characters."},400);
+   try{
+    const key=await env.OPENAI_API_KEY.get();
+    const upstream=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:JSON.stringify({
+     model:"gpt-6.2-astra",
+     tools:[{type:"web_search",search_context_size:"medium",user_location:{type:"approximate",country:"IN",region:"Gujarat"}}],
+     input:"Search the live public web for this hotel request: "+query+"\\n\\nGive practical results for a family traveller. For each property, include name, exact area, independently reported platform ratings and review counts only when visible, recurring guest praise and complaints, price only when a dated/current source shows it, family suitability, and a direct source link. Compare platforms separately; never average incompatible scores. State when a fact is unavailable. Do not invent hotels, ratings, review counts, prices, room availability or review quotes. Availability and prices can change; tell the visitor to confirm on the provider site. Keep results concise and useful."
+    })});
+    if(!upstream.ok)return json({error:upstream.status===429?"Hotel search is busy. Please try again shortly.":"Live hotel search could not be completed."},502);
+    const result=await upstream.json();
+    const messages=(result.output||[]).filter(x=>x.type==="message");
+    const answer=messages.flatMap(x=>x.content||[]).filter(x=>x.type==="output_text").map(x=>x.text).join("\\n").trim();
+    const sources=[];
+    for(const message of messages)for(const content of message.content||[])for(const annotation of content.annotations||[]){
+     if(annotation.type==="url_citation"&&annotation.url&&!sources.some(x=>x.url===annotation.url))sources.push({title:annotation.title||annotation.url,url:annotation.url});
+    }
+    if(!answer)return json({error:"No hotel results were returned. Try a more specific search."},502);
+    return json({answer,sources});
+   }catch(e){return json({error:"Hotel search is temporarily unavailable."},502)}
+  }
   if(url.pathname==="/api/chat"){
    if(request.method!=="POST")return json({error:"Method not allowed"},405);
    const origin=request.headers.get("Origin");if(origin&&new URL(origin).host!==url.host)return json({error:"Cross-origin requests are not allowed."},403);
