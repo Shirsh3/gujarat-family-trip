@@ -482,16 +482,25 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
   {date:'2027-01-02',label:'2 Jan',title:'Diu → Porbandar',weekday:'Saturday',city:'Porbandar',places:['diuHotel','gangeshwar','porbandar'],route:['diuHotel','gangeshwar','porbandar'],weather:'porbandar',times:{diuHotel:'Early checkout',gangeshwar:'Early morning',porbandar:'Target arrival 3:30–4:00 PM'}},
   {date:'2027-01-03',label:'3 Jan',title:'Jaipur → home',weekday:'Sunday',city:'Jaipur',places:[],route:[],weather:null}
  ];
+ // The basemap is real OpenStreetMap geography, not a generated India silhouette.
+ // Leaflet coordinate order is always [latitude, longitude].
  const map=L.map(el,{scrollWheelZoom:false}).setView([21.55,69.95],7);
- L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+  maxZoom:18,
+  attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+ }).addTo(map);
  const markers={};
  Object.entries(places).forEach(([id,p])=>{
+  if(!Array.isArray(p.coords)||p.coords.length!==2||!p.coords.every(Number.isFinite)){
+   console.error('Skipping map marker with invalid [lat, lon] coordinates:',id,p.coords);return;
+  }
   const marker=L.marker(p.coords).addTo(map);
   marker.bindPopup('<b>'+p.name+'</b><br>'+p.type+'<br>'+p.detail);
   markers[id]=marker;
  });
- const allCoords=Object.values(places).map(p=>p.coords);
- map.fitBounds(L.latLngBounds(allCoords).pad(.08));
+ const allCoords=Object.values(places).map(p=>p.coords).filter(c=>Array.isArray(c)&&c.length===2&&c.every(Number.isFinite));
+ // Keep the full Gujarat journey in view on initial load without excessive zoom-out.
+ if(allCoords.length)map.fitBounds(L.latLngBounds(allCoords).pad(.12),{maxZoom:7});
  const picker=document.getElementById('trip-day-picker'), list=document.getElementById('trip-place-list'), title=document.getElementById('trip-day-title'), subtitle=document.getElementById('trip-day-subtitle'), legsEl=document.getElementById('trip-route-legs'), status=document.getElementById('trip-route-status'), weatherEl=document.getElementById('trip-weather');
  let routeLayer=null, activeDay=1;
  days.forEach((d,i)=>{const b=document.createElement('button');b.textContent=d.label;b.addEventListener('click',()=>selectDay(i));picker.appendChild(b)});
