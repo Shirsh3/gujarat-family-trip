@@ -61,3 +61,11 @@ test("AI and hotel research failures provide user-facing retry actions", () => {
   assert.match(html, /Retry this question/);
   assert.match(html, /Retry search/);
 });
+
+
+test("all AI routes use GPT-4o mini and never route requests to Astra", () => {
+  assert.doesNotMatch(worker, /gpt-6\\.2-astra|gpt-4\\.1-mini/);
+  assert.equal((worker.match(/model:"gpt-4o-mini"/g) || []).length, 3);
+  assert.match(worker, /hotelResearchPrompt/);
+  assert.match(worker, /async function callAI/);
+});
