@@ -395,7 +395,6 @@ const root=document.getElementById('checks');let saved=[];try{saved=JSON.parse(l
 items.forEach((t,i)=>{const l=document.createElement('label');l.className='check';const c=document.createElement('input');c.type='checkbox';c.checked=saved.includes(i);c.addEventListener('change',()=>{saved=[...root.querySelectorAll('input')].map((x,j)=>x.checked?j:null).filter(x=>x!==null);localStorage.setItem('gujarat-checks',JSON.stringify(saved));progress()});const s=document.createElement('span');s.textContent=t;l.append(c,s);root.append(l)});
 function progress(){const n=root.querySelectorAll('input:checked').length;document.getElementById('count').textContent=n+' / '+items.length;document.getElementById('bar').style.width=(n/items.length*100)+'%'}progress();
 // Chat UI deliberately calls only a same-origin backend route. No browser-side API key.
-document.getElementById('trip-chat-form').addEventListener('submit',async e=>{e.preventDefault();const input=document.getElementById('trip-chat-input'),log=document.getElementById('chat-log'),status=document.getElementById('chat-status'),form=e.currentTarget,button=form.querySelector('button'),question=input.value.trim();if(!question||button.disabled)return;const user=document.createElement('p');user.textContent='You: '+question;log.appendChild(user);input.value='';button.disabled=true;button.textContent='Thinking…';status.textContent='AI is reading your question and preparing a trip-specific answer…';const started=Date.now();try{const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:question})});const data=await res.json();if(!res.ok)throw new Error(data.error||'Assistant unavailable');const reply=document.createElement('p');reply.textContent='Trip assistant: '+(data.reply||'I could not prepare an answer.');log.appendChild(reply);status.textContent='Answer ready · '+Math.max(1,Math.round((Date.now()-started)/1000))+' seconds.';}catch(err){status.textContent=err.message;}finally{button.disabled=false;button.textContent='Send';button.title='Send message';}log.scrollTop=log.scrollHeight;});
 // If a remote photo fails, retain a visible, branded image treatment instead of a blank area.
 document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
   const bg=getComputedStyle(el).backgroundImage;
@@ -508,13 +507,16 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
   const p=places[d.weather]|| (d.date==='2027-01-03'?{name:'Jaipur',coords:[26.9124,75.7873]}:places.jam);
   const date=d.date;
   try{
-   const url='https://api.open-meteo.com/v1/forecast?latitude='+p.coords[0]+'&longitude='+p.coords[1]+'&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max&timezone=Asia%2FKolkata&start_date='+date+'&end_date='+date;
+   const today=new Date();today.setHours(0,0,0,0);
+   const target=new Date(date+'T00:00:00');const daysAhead=Math.ceil((target-today)/86400000);
+   if(daysAhead<0||daysAhead>16)throw new Error('Trip date is outside the 16-day forecast window');
+   const url='https://api.open-meteo.com/v1/forecast?latitude='+p.coords[0]+'&longitude='+p.coords[1]+'&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max&timezone=Asia%2FKolkata&forecast_days=16';
    const res=await fetch(url);if(!res.ok)throw new Error('Forecast not available');const data=await res.json(),i=data.daily?.time?.indexOf(date);
-   if(i===undefined||i<0)throw new Error('Outside forecast window');
-   weatherEl.innerHTML='<div class="tag">Trip-date forecast · '+p.name+'</div><b>'+weatherDescription(data.daily.weather_code[i])+' · '+data.daily.temperature_2m_min[i]+'°C to '+data.daily.temperature_2m_max[i]+'°C</b><div class="weather-metrics"><span>🌧️ Rain chance '+(data.daily.precipitation_probability_max?.[i]??'—')+'%</span><span>💨 Max wind '+(data.daily.wind_speed_10m_max?.[i]??'—')+' km/h</span></div><p class="weather-status">Forecast for '+date+' · Open-Meteo. This becomes available closer to the date.</p>';
+   if(i===undefined||i<0)throw new Error('Trip date is outside forecast window');
+   weatherEl.innerHTML='<div class="tag">Trip-date forecast · '+p.name+'</div><b>'+weatherDescription(data.daily.weather_code[i])+' · '+data.daily.temperature_2m_min[i]+'°C to '+data.daily.temperature_2m_max[i]+'°C</b><div class="weather-metrics"><span>🌧️ Rain chance '+(data.daily.precipitation_probability_max?.[i]??'—')+'%</span><span>💨 Max wind '+(data.daily.wind_speed_10m_max?.[i]??'—')+' km/h</span></div><p class="weather-status">Forecast for '+date+' · Open-Meteo. Forecasts are available up to 16 days ahead.</p>';
   }catch(e){
    try{
-    const histUrl='https://archive-api.open-meteo.com/v1/archive?latitude='+p.coords[0]+'&longitude='+p.coords[1]+'&start_date=2016-01-01&end_date=2025-12-31&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max&timezone=Asia%2FKolkata&models=ERA5-Land';
+    const histUrl='https://archive-api.open-meteo.com/v1/archive?latitude='+p.coords[0]+'&longitude='+p.coords[1]+'&start_date=2016-01-01&end_date=2025-12-31&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max&timezone=Asia%2FKolkata&models=era5_land';
     const histRes=await fetch(histUrl);if(!histRes.ok)throw new Error('Historical weather unavailable');
     const hist=await histRes.json(),target=date.slice(5),indices=(hist.daily?.time||[]).map((v,i)=>v.slice(5)===target?i:-1).filter(i=>i>=0);
     if(!indices.length)throw new Error('No historical reference values');
@@ -608,7 +610,7 @@ function renderChatReply(container,markdown){
    if(data.summary){const note=document.createElement('div');note.className='chat-memory-note';const label=document.createElement('strong');label.textContent='Family trip memory';const body=document.createElement('p');body.textContent=data.summary;note.append(label,body);log.appendChild(note)}
    (data.messages||[]).slice(-20).forEach(message=>{
     const node=document.createElement(message.role==='assistant'?'div':'p');
-    if(message.role==='assistant'){renderChatReply(node,message.content||'');if(Array.isArray(message.sources)&&message.sources.length){const box=document.createElement('div');box.className='chat-source-links';const heading=document.createElement('strong');heading.textContent='Sources';box.appendChild(heading);message.sources.forEach(source=>{if(!source||typeof source.url!=='string'||!/^https?:\\/\\//.test(source.url))return;const link=document.createElement('a');link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=source.title||source.url;box.appendChild(link)});node.appendChild(box)}}
+    if(message.role==='assistant'){renderChatReply(node,message.content||'');if(Array.isArray(message.sources)&&message.sources.length){const box=document.createElement('div');box.className='chat-source-links';const heading=document.createElement('strong');heading.textContent='Sources';box.appendChild(heading);message.sources.forEach(source=>{if(!source||typeof source.url!=='string'||!/^https?:\/\//.test(source.url))return;const link=document.createElement('a');link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=source.title||source.url;box.appendChild(link)});node.appendChild(box)}}
     else{node.className='user';node.textContent=message.content||''}
     log.appendChild(node);
    });
