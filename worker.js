@@ -64,26 +64,25 @@ function containsSensitiveRequest(text){
  const patterns=[/\bpnr\b/i,/\baadhaar\b/i,/\b(passport|pan card|identity number|ticket number|booking reference|transaction id|invoice number|voucher number|qr code)\b/i,/\b(phone number|mobile number|email address|contact number|passenger name|full name)\b/i,/\b\d{10,}\b/,/\b\d{4}[ -]?\d{4}[ -]?\d{4}\b/];
  return patterns.some(p=>p.test(text));
 }
-async function getSharedChatContext(env){
- const summaryRow=await env.DB.prepare("SELECT summary FROM trip_chat_summary WHERE id=1").first();
- const recent=await env.DB.prepare("SELECT role,content,created_at FROM trip_chat_messages ORDER BY id DESC LIMIT 20").all();
- const messages=(recent.results||[]).reverse();
- return {summary:summaryRow?.summary||"",messages};
+async function getUserChatContext(env,username){
+ const summaryRow=await env.DB.prepare("SELECT summary FROM trip_chat_user_summary WHERE username=?").bind(username).first();
+ const recent=await env.DB.prepare("SELECT role,content,created_at FROM trip_chat_messages WHERE username=? ORDER BY id DESC LIMIT 20").bind(username).all();
+ return {summary:summaryRow?.summary||"",messages:(recent.results||[]).reverse()};
 }
-async function saveSharedChatMessage(env,role,content,sources=[]){
- await env.DB.prepare("INSERT INTO trip_chat_messages (username,role,content,sources_json) VALUES ('family',?,?,?)").bind(role,content,JSON.stringify(sources||[])).run();
+async function saveUserChatMessage(env,username,role,content,sources=[]){
+ await env.DB.prepare("INSERT INTO trip_chat_messages (username,role,content,sources_json) VALUES (?,?,?,?)").bind(username,role,content,JSON.stringify(sources||[])).run();
 }
-async function compactSharedChatMemory(env){
- const countRow=await env.DB.prepare("SELECT COUNT(*) AS count FROM trip_chat_messages").first();
+async function compactUserChatMemory(env,username){
+ const countRow=await env.DB.prepare("SELECT COUNT(*) AS count FROM trip_chat_messages WHERE username=?").bind(username).first();
  const count=Number(countRow?.count||0);if(count<=20)return;
- const older=await env.DB.prepare("SELECT id,role,content FROM trip_chat_messages ORDER BY id ASC LIMIT ?").bind(count-20).all();
+ const older=await env.DB.prepare("SELECT id,role,content FROM trip_chat_messages WHERE username=? ORDER BY id ASC LIMIT ?").bind(username,count-20).all();
  const rows=older.results||[];if(!rows.length)return;
- const summaryRow=await env.DB.prepare("SELECT summary FROM trip_chat_summary WHERE id=1").first();
+ const summaryRow=await env.DB.prepare("SELECT summary FROM trip_chat_user_summary WHERE username=?").bind(username).first();
  const transcript=rows.map(x=>x.role.toUpperCase()+": "+x.content).join("\\n");
- const summary=await callAI(env,"Maintain a concise factual memory for a shared family trip assistant. Merge the existing summary with older conversation messages. Preserve confirmed decisions, preferences, constraints, dates, amounts, unresolved questions and who proposed/confirmed them when relevant. Remove repetition. Do not preserve passwords, authentication secrets, private booking identifiers or sensitive personal data. Do not invent facts. Return only the updated summary, preferably under 900 words.", "Existing memory:\\n"+(summaryRow?.summary||"None") + "\\n\\nOlder messages to absorb:\\n"+transcript,900);
- if(summary)await env.DB.prepare("UPDATE trip_chat_summary SET summary=?,updated_at=datetime('now') WHERE id=1").bind(summary).run();
+ const summary=await callAI(env,"Maintain a concise factual memory for this individual user's trip assistant. Merge the existing summary with older conversation messages. Preserve confirmed decisions, preferences, constraints, dates, amounts and unresolved questions. Remove repetition. Never preserve passwords, authentication secrets, private booking identifiers or sensitive personal data. Do not invent facts. Return only the updated summary, preferably under 900 words.","Existing memory:\\n"+(summaryRow?.summary||"None")+"\\n\\nOlder messages to absorb:\\n"+transcript,900);
+ if(summary)await env.DB.prepare("INSERT INTO trip_chat_user_summary (username,summary,updated_at) VALUES (?,?,datetime('now')) ON CONFLICT(username) DO UPDATE SET summary=excluded.summary,updated_at=datetime('now')").bind(username,summary).run();
  const maxId=rows[rows.length-1].id;
- await env.DB.prepare("DELETE FROM trip_chat_messages WHERE id<=?").bind(maxId).run();
+ await env.DB.prepare("DELETE FROM trip_chat_messages WHERE username=? AND id<=?").bind(username,maxId).run();
 }
 async function callAI(env,instructions,input,maxTokens=350){
  const key=await env.OPENAI_API_KEY.get();
@@ -180,8 +179,8 @@ export default {
    const origin=request.headers.get("Origin");if(origin&&new URL(origin).host!==url.host)return json({error:"Cross-origin requests are not allowed."},403);
    const user=await currentUser(request,env);if(!user)return json({error:"Please sign in to access the family conversation."},401);
    try{
-    const context=await getSharedChatContext(env);
-    const saved=await env.DB.prepare("SELECT role,content,sources_json,created_at FROM trip_chat_messages ORDER BY id ASC").all();
+    const context=await getUserChatContext(env,user.username);
+    const saved=await env.DB.prepare("undefined").all();
     return json({summary:context.summary,messages:(saved.results||[]).map(x=>({role:x.role,content:x.content,sources:JSON.parse(x.sources_json||"[]"),createdAt:x.created_at}))});
    }catch(e){return json({error:"Could not load the family conversation."},500)}
   }
@@ -196,8 +195,8 @@ export default {
    if(!env.DB)return json({error:"Conversation storage is not configured."},503);
    if(containsSensitiveRequest(message))return json({reply:"I can help with trip planning, but cannot share private passenger, identity, contact or booking identifiers."});
    try{
-    const memory=await getSharedChatContext(env);
-    await saveSharedChatMessage(env,"user",message);
+    const memory=await getUserChatContext(env,user.username);
+    await saveUserChatMessage(env,user.username,"user",message);
     const contextText=[memory.summary?"Family conversation summary:\\n"+memory.summary:"",memory.messages.length?"Recent conversation (oldest first):\\n"+memory.messages.map(x=>x.role.toUpperCase()+": "+x.content).join("\\n"):""].filter(Boolean).join("\\n\\n");
     const contextualQuestion=(contextText?contextText+"\\n\\n":"")+"Current user question: "+message;
     const hotelIntent=/\b(hotel|hotels|stay|stays|accommodation|guest house|resort|laxmi niwas|sukhnath|hotel ankur|hotel reviews?|tripadvisor|booking\.com|agoda)\b/i.test(message);
@@ -217,13 +216,13 @@ export default {
      for(const item of result.output||[]){for(const source of item.action?.sources||[])addSource(source.title,source.url);for(const content of item.content||[])for(const annotation of content.annotations||[])if(annotation.type==="url_citation")addSource(annotation.title,annotation.url);}
      if(!reply)return json({error:"No hotel research results were returned. Try a more specific hotel name or location."},502);
      if(containsSensitiveRequest(reply))return json({reply:"I can help with hotel research, but cannot share private passenger, identity, contact or booking identifiers."});
-     await saveSharedChatMessage(env,"assistant",reply,sources);try{await compactSharedChatMemory(env)}catch(e){}
+     await saveUserChatMessage(env,user.username,"assistant",reply,sources);try{await compactUserChatMemory(env,user.username)}catch(e){}
      return json({reply,sources,researchedAt:new Date().toISOString(),sourceCount:sources.length});
     }
     const reply=await callAI(env,SYSTEM_PROMPT,contextualQuestion,550);
     if(!reply)return json({error:"No answer returned."},502);
     if(containsSensitiveRequest(reply))return json({reply:"I can help with trip planning, but cannot share private passenger, identity, contact or booking identifiers."});
-    await saveSharedChatMessage(env,"assistant",reply);try{await compactSharedChatMemory(env)}catch(e){}
+    await saveUserChatMessage(env,user.username,"assistant",reply);try{await compactUserChatMemory(env,user.username)}catch(e){}
     return json({reply});
    }
    catch(e){return json({error:e.message||"Assistant unavailable."},502)}
