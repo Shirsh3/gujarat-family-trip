@@ -69,3 +69,12 @@ test("all AI routes use GPT-4o mini and never route requests to Astra", () => {
   assert.match(worker, /hotelResearchPrompt/);
   assert.match(worker, /async function callAI/);
 });
+
+
+test("map overlays Survey of India national boundary data over OpenStreetMap navigation tiles", () => {
+  assert.match(html, /esri-leaflet@3\.0\.15/);
+  assert.match(html, /IND_AdminBoundary\/FeatureServer\/0/);
+  assert.match(html, /L\.esri\.featureLayer/);
+  assert.match(html, /color:'#9b1c1c'/);
+  assert.match(html, /OpenStreetMap/);
+});
