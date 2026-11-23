@@ -18,9 +18,9 @@ function json(data, status = 200) {
 
 function containsSensitiveRequest(text) {
   const patterns = [
-    /\\bpnr\\b/i, /\\baadhaar\\b/i, /\\b(passport|pan card|identity number|ticket number|booking reference|transaction id|invoice number|voucher number|qr code)\\b/i,
-    /\\b(phone number|mobile number|email address|contact number|passenger name|full name)\\b/i,
-    /\\b\\d{10,}\\b/, /\\b\\d{4}[ -]?\\d{4}[ -]?\\d{4}\\b/
+    /\bpnr\b/i, /\baadhaar\b/i, /\b(passport|pan card|identity number|ticket number|booking reference|transaction id|invoice number|voucher number|qr code)\b/i,
+    /\b(phone number|mobile number|email address|contact number|passenger name|full name)\b/i,
+    /\b\d{10,}\b/, /\b\d{4}[ -]?\d{4}[ -]?\d{4}\b/
   ];
   return patterns.some((pattern) => pattern.test(text));
 }
@@ -64,7 +64,7 @@ export default {
           return json({ error: upstream.status === 429 ? "The assistant is busy. Please try again shortly." : "The assistant could not answer right now." }, 502);
         }
         const result = await upstream.json();
-        const reply = (result.output || []).flatMap(item => item.content || []).filter(item => item.type === "output_text").map(item => item.text).join("\\n").trim();
+        const reply = (result.output || []).flatMap(item => item.content || []).filter(item => item.type === "output_text").map(item => item.text).join("\n").trim();
         if (!reply) return json({ error: "No answer was returned. Please try again." }, 502);
         return json({ reply });
       } catch {
