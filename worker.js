@@ -162,7 +162,31 @@ export default {
    let body;try{body=await request.json()}catch{return json({error:"Invalid request."},400)}
    const message=typeof body.message==="string"?body.message.trim():"";if(!message||message.length>1000)return json({error:"Enter a question up to 1,000 characters."},400);
    if(containsSensitiveRequest(message))return json({reply:"I can help with trip planning, but cannot share private passenger, identity, contact or booking identifiers."});
-   try{const reply=await callAI(env,SYSTEM_PROMPT,message,350);if(!reply)return json({error:"No answer returned."},502);if(containsSensitiveRequest(reply))return json({reply:"I can help with trip planning, but cannot share private passenger, identity, contact or booking identifiers."});return json({reply});}
+   try{
+    const hotelIntent=/\\b(hotel|hotels|stay|stays|accommodation|guest house|resort|laxmi niwas|sukhnath|hotel ankur|hotel reviews?|tripadvisor|booking\\.com|agoda)\\b/i.test(message);
+    if(hotelIntent){
+     const key=await env.OPENAI_API_KEY.get();
+     const upstream=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:JSON.stringify({
+      model:"gpt-6.2-astra",
+      tools:[{type:"web_search",search_context_size:"low",user_location:{type:"approximate",country:"IN",region:"Gujarat"}}],
+      input:"The user asked a hotel/accommodation question in the Gujarat family trip assistant. Use live public web search; do not answer that web search is unavailable. User question: "+message+"\\n\\nFind the exact property and location before attributing reviews. Search relevant public sources independently, including Google Maps, Tripadvisor, Booking.com and Agoda where available. Only say a platform was checked when you found an exact-property result there. Report rating with scale and review count only when visible. Latest review date means the date of an actual review, not a page update. Summarise recurring praise/complaints only when supported by multiple reviews. Never invent hotel identity, ratings, review counts, review dates, prices, amenities, quotes or availability. Mark unavailable details Not verified and explain why. Compare platforms separately; never average scores. Include direct source URLs. If the hotel name is ambiguous, explain the ambiguity and ask for area/address rather than guessing. Keep under 600 words."
+     })});
+     if(!upstream.ok)return json({error:upstream.status===429?"Hotel research is busy. Please try again shortly.":"Live hotel research could not be completed."},502);
+     const result=await upstream.json();
+     const messages=(result.output||[]).filter(x=>x.type==="message");
+     const reply=messages.flatMap(x=>x.content||[]).filter(x=>x.type==="output_text").map(x=>x.text).join("\\n").trim();
+     const sources=[];
+     const addSource=(title,url)=>{if(typeof url!=="string"||!(url.startsWith("https://")||url.startsWith("http://"))||sources.some(x=>x.url===url))return;sources.push({title:typeof title==="string"&&title.trim()?title.trim():url,url});};
+     for(const item of result.output||[]){for(const source of item.action?.sources||[])addSource(source.title,source.url);for(const content of item.content||[])for(const annotation of content.annotations||[])if(annotation.type==="url_citation")addSource(annotation.title,annotation.url);}
+     if(!reply)return json({error:"No hotel research results were returned. Try a more specific hotel name or location."},502);
+     if(containsSensitiveRequest(reply))return json({reply:"I can help with hotel research, but cannot share private passenger, identity, contact or booking identifiers."});
+     return json({reply,sources,researchedAt:new Date().toISOString(),sourceCount:sources.length});
+    }
+    const reply=await callAI(env,SYSTEM_PROMPT,message,350);
+    if(!reply)return json({error:"No answer returned."},502);
+    if(containsSensitiveRequest(reply))return json({reply:"I can help with trip planning, but cannot share private passenger, identity, contact or booking identifiers."});
+    return json({reply});
+   }
    catch(e){return json({error:e.message||"Assistant unavailable."},502)}
   }
   return env.ASSETS.fetch(request);
