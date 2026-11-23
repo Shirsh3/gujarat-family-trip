@@ -6,6 +6,12 @@ const read = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 const worker = read("../worker.js");
 const cases = JSON.parse(read("./hotel-research-cases.json"));
 
+test("general chatbot routes hotel questions through live web search and returns source metadata", () => {
+  assert.match(worker, /const hotelIntent=/);
+  assert.match(worker, /type:"web_search"/);
+  assert.match(worker, /return json\(\{reply,sources,researchedAt:new Date\(\)\.toISOString\(\),sourceCount:sources\.length\}\)/);
+});
+
 test("hotel research instructions require exact-property matching and independent platform checks", () => {
   assert.match(worker, /Identify the exact property first/);
   for (const platform of ["Google Maps", "Tripadvisor", "Booking\.com", "Agoda"]) {
