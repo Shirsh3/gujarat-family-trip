@@ -22,39 +22,12 @@ async function callAI(env,instructions,input,maxTokens=350){
  const key=await env.OPENAI_API_KEY.get();
  const r=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:JSON.stringify({model:"gpt-4.1-mini",instructions,input,max_output_tokens:maxTokens})});
  if(!r.ok)throw new Error(r.status===429?"AI is busy. Please try again shortly.":"AI service could not complete the request.");
- const data=await r.json();return (data.output||[]).flatMap(x=>x.content||[]).filter(x=>x.type==="output_text").map(x=>x.text).join("\\n").trim();
+ const data=await r.json();return (data.output||[]).flatMap(x=>x.content||[]).filter(x=>x.type==="output_text").map(x=>x.text).join("\n").trim();
 }
 export default {
  async fetch(request,env){
   const url=new URL(request.url);
   if(url.pathname==="/api/health"&&request.method==="GET")return json({ok:true,service:"gujarat-trip-assistant",aiConfigured:Boolean(env.OPENAI_API_KEY)});
-  if(url.pathname==="/api/reviews"&&request.method==="GET"){
-   if(!env.DB)return json({error:"Public review storage is not connected yet."},503);
-   const category=url.searchParams.get("category");
-   const rows=category&&REVIEW_CATEGORIES.includes(category)?await env.DB.prepare("SELECT id,category,rating,title,body,created_at FROM public_reviews WHERE category=? ORDER BY created_at DESC LIMIT 200").bind(category).all():await env.DB.prepare("SELECT id,category,rating,title,body,created_at FROM public_reviews ORDER BY created_at DESC LIMIT 200").all();
-   return json({reviews:rows.results||[]});
-  }
-  if(url.pathname==="/api/reviews"&&request.method==="POST"){
-   if(!env.DB)return json({error:"Review publishing is not enabled yet. The shared review database still needs to be connected."},503);
-   let body;try{body=await request.json()}catch{return json({error:"Invalid review."},400)}
-   const category=String(body.category||""),rating=Number(body.rating),title=String(body.title||"").trim(),content=String(body.body||"").trim();
-   if(!REVIEW_CATEGORIES.includes(category)||!Number.isInteger(rating)||rating<1||rating>5||title.length<3||title.length>80||content.length<10||content.length>1200)return json({error:"Please check the category, rating, headline and review text."},400);
-   if(containsSensitiveRequest(title+" "+content))return json({error:"Please remove personal or booking information before publishing."},400);
-   const ip=request.headers.get("CF-Connecting-IP")||"unknown",now=Date.now(),recent=(requestCounts.get("review:"+ip)||[]).filter(t=>now-t<3600000);
-   if(recent.length>=5)return json({error:"Review limit reached for now. Please try again later."},429);
-   recent.push(now);requestCounts.set("review:"+ip,recent);
-   const result=await env.DB.prepare("INSERT INTO public_reviews(category,rating,title,body) VALUES(?,?,?,?)").bind(category,rating,title,content).run();
-   return json({ok:true,id:result.meta?.last_row_id},201);
-  }
-  if(url.pathname==="/api/reviews/summary"&&request.method==="POST"){
-   if(!env.DB)return json({error:"Connect the shared review database before generating a summary."},503);
-   try{
-    const rows=await env.DB.prepare("SELECT category,rating,title,body,created_at FROM public_reviews ORDER BY created_at DESC LIMIT 200").all();
-    const reviews=rows.results||[];if(!reviews.length)return json({summary:"There are no public reviews to summarise yet."});
-    const summary=await callAI(env,"Summarise these real public traveller reviews for a trip-planning website. Report recurring positives, concerns, rating distribution and category differences. Do not invent claims or expose personal data. If the sample is small, say so. Keep it under 140 words.",JSON.stringify(reviews),260);
-    return json({summary});
-   }catch(e){return json({error:e.message||"Summary unavailable."},502)}
-  }
   if(url.pathname==="/api/hotels/search"){
    if(request.method!=="POST")return json({error:"Method not allowed"},405);
    const ip=request.headers.get("CF-Connecting-IP")||"unknown",now=Date.now(),recent=(requestCounts.get("hotel:"+ip)||[]).filter(t=>now-t<60000);
@@ -71,7 +44,7 @@ export default {
     if(!upstream.ok)return json({error:upstream.status===429?"Hotel search is busy. Please try again shortly.":"Live hotel search could not be completed."},502);
     const result=await upstream.json();
     const messages=(result.output||[]).filter(x=>x.type==="message");
-    const answer=messages.flatMap(x=>x.content||[]).filter(x=>x.type==="output_text").map(x=>x.text).join("\\n").trim();
+    const answer=messages.flatMap(x=>x.content||[]).filter(x=>x.type==="output_text").map(x=>x.text).join("\n").trim();
     const sources=[];
     for(const message of messages)for(const content of message.content||[])for(const annotation of content.annotations||[]){
      if(annotation.type==="url_citation"&&annotation.url&&!sources.some(x=>x.url===annotation.url))sources.push({title:annotation.title||annotation.url,url:annotation.url});
