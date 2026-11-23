@@ -1,45 +1,37 @@
-# Public reviews database setup
+# Cloudflare D1 setup and migration policy
 
-The site now has a public review interface and Worker API. Public reviews require a Cloudflare D1 database; until it is bound, the API intentionally returns a clear unavailable response rather than saving reviews only in a visitor's browser.
+The production D1 database already exists and is configured in `wrangler.jsonc`:
 
-## Create the database
-
-1. In Cloudflare, open **Storage & databases → D1 SQL Database**.
-2. Create a database named `gujarat-trip-reviews`.
-3. Copy its **Database ID**.
-
-## Bind it to the Worker
-
-Add a D1 binding to the `gujarat-family-trip` Worker:
-
-- Binding name: `DB`
+- Binding: `DB`
 - Database: `gujarat-trip-reviews`
+- Database ID: `6903edf4-e024-4bdd-b480-132362972180`
 
-Because this project is deployed from GitHub with Wrangler configuration, also add the D1 binding to `wrangler.jsonc` after the database is created:
+**Do not create a replacement database or delete the existing one.** The GitHub Actions deployment applies pending migrations to this existing database.
 
-```json
-"d1_databases": [
-  {
-    "binding": "DB",
-    "database_name": "gujarat-trip-reviews",
-    "database_id": "PASTE_DATABASE_ID_HERE"
-  }
-]
-```
+## Existing schema migrations
 
-Replace the placeholder with the real ID. Never put API keys or other secrets in this file.
+- `migrations/0001_public_reviews.sql`
+- `migrations/0002_trip_users.sql`
 
-## Create the table
+Both create their tables and indexes using `IF NOT EXISTS`. This is intentional: if the tables already exist from earlier manual setup, applying the migrations does not drop or overwrite their existing rows. Wrangler records applied migration names in its D1 migration ledger.
 
-Open the database's SQL Console and run the contents of `migrations/0001_public_reviews.sql`.
+## Automated production deployment
 
-## Test
+The workflow `.github/workflows/deploy-cloudflare.yml`:
 
-After the next successful Worker deployment:
+1. Runs Worker syntax validation and repository smoke tests.
+2. Applies pending migrations to the remote database.
+3. Deploys the Worker and static assets.
+4. Verifies `/api/health`, including a real D1 query and AI binding presence.
 
-- `GET /api/reviews` should return `{"reviews":[]}` initially.
-- Submit a review through the website.
-- Reload the page or open it on another device; the review should remain visible.
-- Use **Summarise reviews with AI** to generate an evidence-based summary.
+Do not add destructive database reset commands to this workflow.
 
-The AI summary uses only submitted public reviews. It does not create fake reviews or ratings.
+## GitHub Actions secrets
+
+Add `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` under GitHub repository **Settings → Secrets and variables → Actions**. The API token needs Workers Scripts edit, D1 edit for this database, and access needed to deploy the configured Workers Secrets Store binding.
+
+Keep the existing `SESSION_SECRET` Worker secret and `OPENAI_API_KEY` Secrets Store entry in Cloudflare. They are not part of Git and must not be copied into the repository.
+
+## Future migrations
+
+Create new sequential SQL files in `migrations/`, for example `0003_group_chat.sql`. Prefer additive changes. Review any `DROP`, destructive `ALTER`, bulk `DELETE`, or data rewrite carefully before merging. Production migrations are applied automatically after tests pass.
