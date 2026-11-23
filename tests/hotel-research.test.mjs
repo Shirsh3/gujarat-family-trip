@@ -7,7 +7,8 @@ const worker = read("../worker.js");
 const cases = JSON.parse(read("./hotel-research-cases.json"));
 
 test("general chatbot routes hotel questions through live web search and returns source metadata", () => {
-  assert.match(worker, /const hotelIntent=/);
+  assert.ok(worker.includes("const hotelIntent=/\\b"), "Hotel routing must use real regex word boundaries");
+  assert.ok(worker.includes("booking\\\\.com"), "Booking.com matching must escape the dot, not the backslash");
   assert.match(worker, /type:"web_search"/);
   assert.match(worker, /return json\(\{reply,sources,researchedAt:new Date\(\)\.toISOString\(\),sourceCount:sources\.length\}\)/);
 });
