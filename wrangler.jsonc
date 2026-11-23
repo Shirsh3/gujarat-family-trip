@@ -3,6 +3,7 @@
   "name": "gujarat-family-trip",
   "main": "./worker.js",
   "compatibility_date": "2026-11-23",
+  "migrations_dir": "./migrations",
   "assets": {
     "directory": "./",
     "binding": "ASSETS",
