@@ -10,6 +10,13 @@
       "/api/*"
     ]
   },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "gujarat-trip-reviews",
+      "database_id": "6903edf4-e024-4bdd-b480-132362972180"
+    }
+  ],
   "secrets_store_secrets": [
     {
       "binding": "OPENAI_API_KEY",
