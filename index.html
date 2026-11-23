@@ -38,6 +38,23 @@ main{padding:46px 0 80px}.section{display:none}.section.active{display:block;ani
 .check{display:flex;gap:12px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line)}.check input{margin-top:5px;accent-color:var(--green);width:18px;height:18px}.progress{height:8px;background:#e8e7df;border-radius:20px;overflow:hidden}.progress span{display:block;height:100%;background:var(--green);width:0;transition:width .2s}
 footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;font-size:12px}
 @media(max-width:760px){.hero{min-height:490px;background-position:58% center}.hero-inner{padding:70px 0 40px}.feature-grid{grid-template-columns:1fr}.feature{min-height:135px}.section-head{display:block}.wrap{width:min(100% - 28px,1120px)}main{padding-top:32px}.card{padding:18px}.stay-image{margin:-18px -18px 16px}}
+.train-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.train-card{border-radius:18px;border-top:4px solid var(--green);padding:20px}
+.train-route{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--mint);border-radius:12px;padding:12px;margin:12px 0;font-weight:700;font-size:12px}
+.train-arrow{font-size:20px;color:var(--gold)}
+.budget-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:18px 0 26px}
+.budget-card{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:var(--shadow)}
+.budget-card strong{display:block;font:23px 'Playfair Display',serif;margin:6px 0}
+.map-card{overflow:hidden;padding:0;margin:0 0 26px}
+.map-card iframe{display:block;width:100%;height:280px;border:0}
+.map-caption{padding:16px 19px}
+details.day-details{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+details.day-details summary{cursor:pointer;color:var(--green);font-weight:700;font-size:13px;list-style:none}
+details.day-details summary:after{content:"＋";float:right}
+details.day-details[open] summary:after{content:"−"}
+details.day-details ul{margin-bottom:0}
+.day h3{margin-bottom:5px}
+@media(max-width:760px){.train-grid,.budget-grid{grid-template-columns:1fr}.map-card iframe{height:220px}}
 </style>
 </head>
 <body>
@@ -46,20 +63,26 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 <main class="wrap">
 <section id="plan" class="section active">
 <div class="section-head"><div><div class="tag">The itinerary</div><h2>Six days, one beautiful route</h2><p class="intro">A flexible family-first plan. Keep meal, nap and washroom breaks; timings are targets, not commitments.</p></div></div>
-<div class="card" style="margin-bottom:22px">
-<div class="tag">Your confirmed onward journeys</div><h3>Train reservations · Sunday, 3 January 2027</h3>
-<div class="grid"><article class="card day"><div class="date">Sunday · 3 January 2027</div><h3>Jaipur → Delhi NCR / Chandigarh</h3><p>After the Gujarat trip, the group splits at Jaipur Junction: you travel back to Delhi NCR, while the rest of the family travels to Chandigarh.</p>
-<div class="route"><span><b>Your return · Train 15013 Ranikhet Express</b><br>Jaipur Junction → Gurgaon (GGN), Delhi NCR<br><span class="small">Your ticket destination is Gurgaon (GGN), not New Delhi railway station.</span><br>3A · PNR 2527967688<br>Passenger: SHIRSH SINHA · CNF/B1/38/UPPER</span><b class="km">Confirmed</b></div>
-<div class="actions"><a class="btn" target="_blank" rel="noopener" href="https://enquiry.indianrail.gov.in/ntes/">Check live status · NTES</a><a class="btn alt" href="sms:139?body=SPOT%2015013">SMS SPOT 15013 to 139</a></div>
-<div class="route"><span><b>Family return · Train 12983 AII CDG G Rath</b><br>Jaipur Junction → Chandigarh (CDG)<br>3A · PNR 2962115816<br>Reservation shown as confirmed on the uploaded ERS.</span><b class="km">Confirmed</b></div><div class="actions"><a class="btn" target="_blank" rel="noopener" href="https://enquiry.indianrail.gov.in/ntes/">Check live status · NTES</a><a class="btn alt" href="sms:139?body=SPOT%2012983">SMS SPOT 12983 to 139</a></div>
-<p class="small">Both journeys are dated 3 Jan 2027 and the booking slips show booking date 4 Nov 2026. Departure and arrival times are marked N.A. in the screenshots. The buttons open the official Indian Railways NTES portal for near-real-time running information; choose “Spot Your Train” and the correct journey date. You can also SMS SPOT followed by the train number to 139. The NTES portal is the live source; this website does not itself receive a live railway data feed. Passenger details on the Chandigarh slip are partly outside the uploaded image.</p>
-</article></div>
+<div class="tag">Confirmed onward journeys · 3 January 2027</div>
+<div class="grid train-grid" style="margin-bottom:24px">
+<article class="card train-card"><div class="date">YOUR RETURN</div><h3>15013 · Ranikhet Express</h3><div class="train-route"><span>JAIPUR JN.</span><span class="train-arrow">→</span><span>GURGAON</span></div><p class="small">Gurgaon (GGN), not New Delhi station</p><p><b>3A · B1 / 38 / Upper</b></p><p class="small">PNR · 2527967688</p><p class="small">Passenger: SHIRSH SINHA · CNF</p><div class="actions"><a class="btn" target="_blank" rel="noopener" href="https://enquiry.indianrail.gov.in/ntes/">Live status · NTES</a><a class="btn alt" href="sms:139?body=SPOT%2015013">SMS 139</a></div></article>
+<article class="card train-card"><div class="date">FAMILY RETURN</div><h3>12983 · AII CDG G Rath</h3><div class="train-route"><span>JAIPUR JN.</span><span class="train-arrow">→</span><span>CHANDIGARH</span></div><p><b>3A · Confirmed</b></p><p class="small">PNR · 2962115816</p><p class="small">Reservation status as shown on uploaded ERS</p><div class="actions"><a class="btn" target="_blank" rel="noopener" href="https://enquiry.indianrail.gov.in/ntes/">Live status · NTES</a><a class="btn alt" href="sms:139?body=SPOT%2012983">SMS 139</a></div></article>
 </div>
+<p class="small" style="margin:-12px 0 24px">Both tickets are for 3 Jan 2027 (booked 4 Nov 2026). Departure and arrival times are not shown on the slips. NTES opens the official live-running portal; select the journey date and train. SMS SPOT followed by the train number to 139 is another option. This site does not directly fetch live railway data.</p>
 <div class="overview-grid">
   <div class="overview-card"><div class="overview-label">Travel dates</div><div class="overview-value">28 Dec – 3 Jan</div><div class="overview-sub">2026–27 · 7 calendar days</div></div>
   <div class="overview-card"><div class="overview-label">Travellers</div><div class="overview-value">6 + 1</div><div class="overview-sub">Six adults and one toddler</div></div>
   <div class="overview-card"><div class="overview-label">Main route</div><div class="overview-value">Gujarat coast</div><div class="overview-sub">Jamnagar · Dwarka · Somnath · Diu</div></div>
   <div class="overview-card"><div class="overview-label">Return split</div><div class="overview-value">Jaipur</div><div class="overview-sub">You to Gurgaon · family to Chandigarh</div></div>
+</div>
+<div class="budget-grid">
+  <div class="budget-card"><div class="overview-label">Hotel reference subtotal</div><strong>₹19,838+</strong><div class="small">₹18,222 room rates + ₹1,616 listed taxes; Dwarka tax not included</div></div>
+  <div class="budget-card"><div class="overview-label">Transport planning target</div><strong>₹28k–30k</strong><div class="small">Indicative negotiation target for the multi-day vehicle, not a confirmed quote</div></div>
+  <div class="budget-card"><div class="overview-label">Combined planning subtotal</div><strong>₹47,838–49,838+</strong><div class="small">Hotels + transport only; excludes food, toll/parking differences and other expenses</div></div>
+</div>
+<div class="card map-card">
+  <iframe title="Gujarat family trip route map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?output=embed&q=Jamnagar%20Railway%20Station%20to%20Dwarka%20to%20Somnath%20to%20Diu%20to%20Porbandar"></iframe>
+  <div class="map-caption"><div class="tag">Your road journey</div><b>Jamnagar → Dwarka → Somnath → Diu → Porbandar</b><p class="small">Open the full route in Google Maps for directions and updated travel estimates.</p><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/Jamnagar+Railway+Station/Dwarka+Gujarat/Somnath+Temple/Diu/Porbandar+Railway+Station/">Open full route</a></div>
 </div>
 <div class="feature-grid">
 <div class="feature" style="background-image:url('https://assets.simplotel.com/simplotel/image/upload/w_1600%2Cdpr_1%2Cf_auto%2Cfl_progressive%2Cc_limit/dwarkadhish-lords-eco-inn/DWARKADHISH_TEMPLE_b9c0695c')"><div><b>Dwarka</b><span>Faith, sea breeze & ancient stories</span></div></div>
@@ -67,12 +90,12 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 <div class="feature" style="background-image:url('https://media.assettype.com/outlooktraveller/2024-09-04/4kzh5xcz/Daman%20%26%20Diu.jpg?auto=format%2Ccompress&dpr=1.0&fit=max&format=webp&w=1200')"><div><b>Diu</b><span>Slow coastal moments</span></div></div>
 </div>
 <div class="grid">
-<article class="card day"><div class="date">Monday · 28 December</div><h3>Delhi → Jamnagar</h3><p><b>Train 20938 · DEE–PBR Express</b></p><ul><li>Departure: Delhi Sarai Rohilla, 8:10 AM</li><li>Overnight train journey</li><li>Keep baby essentials and medicines in a small day bag</li></ul></article>
-<article class="card day"><div class="date">Tuesday · 29 December</div><h3>Arrive & settle in Dwarka</h3><ul><li>5:25 AM: scheduled arrival at Jamnagar</li><li>Pre-booked vehicle to Dwarka; allow roughly 2–3 hours</li><li>Hotel, breakfast and rest / early check-in</li><li>Afternoon/evening: Dwarkadhish Temple</li><li>Rukmini Devi and Bhadkeshwar Mahadev if energy and darshan timings permit</li></ul></article>
-<article class="card day"><div class="date">Wednesday · 30 December</div><h3>Dwarka & the coast</h3><ul><li>Morning: Nageshwar Jyotirlinga</li><li>Optional: Bet Dwarka / other local sights</li><li>Return for lunch and afternoon rest</li><li>Evening: Shivrajpur Beach</li></ul></article>
-<article class="card day"><div class="date">Thursday · 31 December</div><h3>Dwarka → Somnath</h3><ul><li>Start around 7:00 AM after breakfast</li><li>Allow 5–6 hours including comfort breaks</li><li>Hotel check-in, lunch and rest</li><li>Evening: Somnath Jyotirlinga darshan</li><li>Light & sound show, subject to operating schedule</li></ul></article>
-<article class="card day"><div class="date">Friday · 1 January</div><h3>Somnath → Diu</h3><ul><li>Breakfast and drive to Diu</li><li>Hotel check-in and rest</li><li>Afternoon: Diu Fort, St. Paul's Church; Naida Caves / INS Khukri Memorial optional</li><li>Evening: Nagoa Beach</li></ul></article>
-<article class="card day"><div class="date">Saturday · 2 January</div><h3>Diu → Porbandar → Delhi</h3><ul><li>Early morning: Gangeshwar Mahadev</li><li>Breakfast and checkout</li><li>Leave for Porbandar early; allow road and meal breaks</li><li>Target station arrival by 3:30–4:00 PM for the planned 7 PM train</li><li>Confirm exact return train and station before travel</li></ul></article>
+<article class="card day"><div class="date">Monday · 28 December</div><h3>Delhi → Jamnagar</h3><p><b>Train 20938 · DEE–PBR Express</b></p><details class="day-details"><summary>View day details</summary><ul><li>Departure: Delhi Sarai Rohilla, 8:10 AM</li><li>Overnight train journey</li><li>Keep baby essentials and medicines in a small day bag</li></ul></details></article></article>
+<article class="card day"><div class="date">Tuesday · 29 December</div><h3>Arrive & settle in Dwarka</h3><details class="day-details"><summary>View day details</summary><ul><li>5:25 AM: scheduled arrival at Jamnagar</li><li>Pre-booked vehicle to Dwarka; allow roughly 2–3 hours</li><li>Hotel, breakfast and rest / early check-in</li><li>Afternoon/evening: Dwarkadhish Temple</li><li>Rukmini Devi and Bhadkeshwar Mahadev if energy and darshan timings permit</li></ul></details></article></article>
+<article class="card day"><div class="date">Wednesday · 30 December</div><h3>Dwarka & the coast</h3><details class="day-details"><summary>View day details</summary><ul><li>Morning: Nageshwar Jyotirlinga</li><li>Optional: Bet Dwarka / other local sights</li><li>Return for lunch and afternoon rest</li><li>Evening: Shivrajpur Beach</li></ul></details></article></article>
+<article class="card day"><div class="date">Thursday · 31 December</div><h3>Dwarka → Somnath</h3><details class="day-details"><summary>View day details</summary><ul><li>Start around 7:00 AM after breakfast</li><li>Allow 5–6 hours including comfort breaks</li><li>Hotel check-in, lunch and rest</li><li>Evening: Somnath Jyotirlinga darshan</li><li>Light & sound show, subject to operating schedule</li></ul></details></article></article>
+<article class="card day"><div class="date">Friday · 1 January</div><h3>Somnath → Diu</h3><details class="day-details"><summary>View day details</summary><ul><li>Breakfast and drive to Diu</li><li>Hotel check-in and rest</li><li>Afternoon: Diu Fort, St. Paul's Church; Naida Caves / INS Khukri Memorial optional</li><li>Evening: Nagoa Beach</li></ul></details></article></article>
+<article class="card day"><div class="date">Saturday · 2 January</div><h3>Diu → Porbandar</h3><details class="day-details"><summary>View day details</summary><ul><li>Early morning: Gangeshwar Mahadev</li><li>Breakfast and checkout</li><li>Leave for Porbandar early; allow road and meal breaks</li><li>Target station arrival by 3:30–4:00 PM for the planned 7 PM train</li><li>Confirm exact return train and station before travel</li></ul></details></article></article>
 
 </div>
 </section>
