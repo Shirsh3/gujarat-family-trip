@@ -120,7 +120,9 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 #floating-chat-log{padding:14px;overflow:auto;flex:1;background:#f7f6f0}#floating-chat-log p{background:white;border-radius:12px;padding:10px 12px;margin:8px 0;max-width:90%;font-size:13px}#floating-chat-log p.user{margin-left:auto;background:#e5efe8}
 #floating-chat-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}#floating-chat-form input{min-width:0;flex:1;padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit}
 @media(max-width:600px){.review-summary-grid{grid-template-columns:1fr}.review-controls{flex-direction:column}.review-controls select{max-width:none}.trip-bot-launcher{right:12px;bottom:12px}.trip-bot-panel{right:10px;bottom:82px}}
-.cost-legend{display:flex;flex-wrap:wrap;gap:9px;margin:10px 0}.cost-exact,.cost-estimated,.cost-pending{display:inline-block;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700}.cost-exact{background:#e4f3e9;color:#17663a}.cost-estimated{background:#fff0d6;color:#875000}.cost-pending{background:#eceff1;color:#53616a}</style>
+.cost-legend{display:flex;flex-wrap:wrap;gap:9px;margin:10px 0}.cost-exact,.cost-estimated,.cost-pending{display:inline-block;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700}.cost-exact{background:#e4f3e9;color:#17663a}.cost-estimated{background:#fff0d6;color:#875000}.cost-pending{background:#eceff1;color:#53616a}
+.hotel-filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.hotel-search-form label{display:block;font-size:12px;font-weight:700;color:var(--muted)}.hotel-search-form input:not([type=checkbox]),.hotel-search-form select{display:block;width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink);margin:5px 0 12px}.filter-label{display:block;font-size:13px;font-weight:700;margin:8px 0}.filter-label .small{font-weight:400}.hotel-filter-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0 15px}.hotel-filter-options label{display:flex;align-items:center;gap:8px;background:#f7f6f0;border:1px solid var(--line);border-radius:10px;padding:10px;color:var(--ink);font-size:12px;font-weight:600}.hotel-filter-options input{accent-color:var(--green);width:16px;height:16px}.hotel-search-status{margin-top:12px;padding:9px 0}.hotel-results{display:grid;gap:12px;margin-top:12px}.hotel-result-card{padding:19px}.hotel-result-card h3{margin-top:0}.hotel-result-card p{margin:7px 0}.hotel-result-card ul{margin:8px 0}.hotel-sources{background:#f8f7f1}.review-filter-options{margin-top:14px}@media(max-width:600px){.hotel-filter-grid,.hotel-filter-options{grid-template-columns:1fr}}
+</style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 </head>
 <body>
@@ -188,12 +190,32 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 <section id="hotels" class="section">
 <div class="section-head"><div><div class="tag">Rest well</div><h2>Places to stay</h2><p class="intro">Two rooms at every stop: Room 1 for four adults; Room 2 for you, your wife and baby. Prices are published reference rates, not confirmed quotes for these festive dates.</p></div></div>
 <div class="card" style="margin-bottom:17px"><h3>Room plan & dates</h3><div class="route"><span>Dwarka · 29–31 December 2026 · 2 nights</span><b class="km">2 rooms</b></div><div class="route"><span>Somnath · 31 December–1 January · 1 night</span><b class="km">2 rooms</b></div><div class="route"><span>Diu · 1–2 January 2027 · 1 night</span><b class="km">2 rooms</b></div><ul><li><b>Room 1:</b> Family room for 4 adults.</li><li><b>Room 2:</b> Double room for 2 adults + baby. Confirm child policy and request a cot/extra mattress.</li></ul></div>
-<div class="card" style="margin:18px 0">
- <div class="tag">AI-powered hotel discovery</div><h3>Find hotels for your preferences</h3>
- <p class="small">Describe what you need — location, budget, family rooms, parking, breakfast, ratings or dates. The assistant searches current public web sources and shows links so you can verify details.</p>
- <form id="hotel-search-form" style="display:flex;gap:9px;flex-wrap:wrap"><input id="hotel-search-query" maxlength="500" required placeholder="e.g. Family hotels in Dwarka under ₹3,000 with parking and good guest reviews" style="flex:1;min-width:220px;padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit"><button class="btn" type="submit">Find hotels</button></form>
- <div id="hotel-search-status" class="small" aria-live="polite" style="margin-top:10px"></div>
- <div id="hotel-search-results" style="margin-top:12px"></div>
+<div class="card hotel-discovery" style="margin:18px 0">
+ <div class="tag">AI-powered hotel discovery</div><h3>Find hotels that match your family</h3>
+ <p class="small">Choose a destination and tap the preferences you care about. We'll build the search prompt for you and check current public sources.</p>
+ <form id="hotel-search-form" class="hotel-search-form">
+  <div class="hotel-filter-grid">
+   <label>Destination<select id="hotel-destination"><option value="Dwarka">Dwarka</option><option value="Somnath">Somnath</option><option value="Diu">Diu</option><option value="all">All Gujarat stops</option></select></label>
+   <label>Nightly budget<select id="hotel-budget"><option value="Any budget">Any budget</option><option value="under ₹2,000 per room">Under ₹2,000 / room</option><option value="under ₹3,000 per room">Under ₹3,000 / room</option><option value="under ₹5,000 per room">Under ₹5,000 / room</option></select></label>
+  </div>
+  <div class="filter-label">What matters most? <span class="small">Choose multiple</span></div>
+  <div class="hotel-filter-options">
+   <label><input type="checkbox" name="hotel-pref" value="family rooms suitable for 6 adults and a toddler" checked> Family rooms</label>
+   <label><input type="checkbox" name="hotel-pref" value="secure on-site parking" checked> Parking</label>
+   <label><input type="checkbox" name="hotel-pref" value="close to the main temple or key attractions" checked> Near temple / attractions</label>
+   <label><input type="checkbox" name="hotel-pref" value="consistently good cleanliness feedback" checked> Clean rooms</label>
+   <label><input type="checkbox" name="hotel-pref" value="breakfast included or available"> Breakfast</label>
+   <label><input type="checkbox" name="hotel-pref" value="lift or ground-floor access"> Lift / easy access</label>
+   <label><input type="checkbox" name="hotel-pref" value="family and toddler friendly facilities"> Toddler friendly</label>
+   <label><input type="checkbox" name="hotel-pref" value="strong recent guest ratings and review volume"> Good guest reviews</label>
+   <label><input type="checkbox" name="hotel-pref" value="good value for money"> Value for money</label>
+  </div>
+  <label class="filter-label" for="hotel-search-extra">Anything else? <span class="small">Optional</span></label>
+  <input id="hotel-search-extra" maxlength="220" placeholder="e.g. two rooms, refundable booking, sea view">
+  <button class="btn" type="submit">Find matching hotels</button>
+ </form>
+ <div id="hotel-search-status" class="hotel-search-status small" aria-live="polite"></div>
+ <div id="hotel-search-results" class="hotel-results"></div>
 </div><div class="grid">
 <article class="card"><div class="stay-image" style="background-image:url('https://assets.simplotel.com/simplotel/image/upload/w_1600%2Cdpr_1%2Cf_auto%2Cfl_progressive%2Cc_limit/dwarkadhish-lords-eco-inn/DWARKADHISH_TEMPLE_b9c0695c')"></div><div class="date">DWARKA · 2 NIGHTS</div><h3>Hotel Laxmi Niwas</h3><p><b>Room 1:</b> 2 Bed River View Deluxe AC, double bed + 2 mattresses, max 4 — ₹1,890/night + taxes.</p><p><b>Room 2:</b> 2 Bed AC, double bed + 1 mattress, max 3 — ₹1,575/night + taxes.</p><p><b>Reference total:</b> ₹3,465/night; ₹6,930 for 2 nights, before taxes.</p><p class="small">Published YatraDham rates. Listing says about 700 m from Dwarkadhish Mandir. Confirm baby occupancy and festive availability.</p><div class="actions"><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/travel/search?q=Hotel%20Laxmi%20Niwas%20Dwarka&checkin=2026-12-29&checkout=2026-12-31">Check 29–31 Dec dates</a><a class="btn alt" target="_blank" rel="noopener" href="https://yatradham.org/dwarka-hotel-laxmi-niwas.html">Hotel listing</a></div></article>
 <article class="card"><div class="stay-image" style="background-image:url('https://static.wixstatic.com/media/d37a82_54e4d42fc67b4ecfb48d4f9813753ba6~mv2.jpg/v1/fill/w_980%2Ch_704%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/d37a82_54e4d42fc67b4ecfb48d4f9813753ba6~mv2.jpg')"></div><div class="date">SOMNATH · 1 NIGHT</div><h3>Hotel Sukhnath</h3><p><b>Room 1:</b> 4 Bed AC Family Room, 2 double beds, max 4 — ₹1,800/night + ₹90 tax.</p><p><b>Room 2:</b> 2 Bed AC Room, double bed, max 2 — ₹1,200/night + ₹60 tax.</p><p><b>Reference total:</b> ₹3,000/night; ₹3,150 including listed taxes.</p><p class="small">Published YatraDham starting rates. Confirm actual festive-date rates, baby policy and cancellation terms.</p><div class="actions"><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/travel/search?q=Hotel%20Sukhnath%20Somnath&checkin=2026-12-31&checkout=2027-01-01">Check 31 Dec–1 Jan dates</a><a class="btn alt" target="_blank" rel="noopener" href="https://yatradham.org/somnath-hotel-sukhnath.html">Hotel listing</a></div></article>
@@ -273,15 +295,24 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 <section id="reviews" class="section">
 <div class="section-head"><div><div class="tag">Independent guest feedback</div><h2>Hotel ratings & guest experiences</h2><p class="intro">Explore publicly available ratings and review themes for the recommended stays. Results are fetched when requested and link back to their original sources.</p></div></div>
 <div class="card">
- <h3>Check feedback for a hotel</h3>
- <form id="hotel-review-search-form" style="display:flex;gap:9px;flex-wrap:wrap">
-  <select id="hotel-review-hotel" style="flex:1;min-width:200px;padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit">
-   <option>Hotel Laxmi Niwas, Dwarka</option><option>Hotel Sukhnath, Somnath</option><option>Hotel Ankur, Diu</option>
-  </select>
-  <button class="btn" type="submit">Find ratings & reviews</button>
+ <h3>Check guest feedback</h3>
+ <p class="small">The most useful review categories are already selected. Change them if you want a narrower comparison.</p>
+ <form id="hotel-review-search-form" class="hotel-search-form">
+  <label>Hotel<select id="hotel-review-hotel"><option>Hotel Laxmi Niwas, Dwarka</option><option>Hotel Sukhnath, Somnath</option><option>Hotel Ankur, Diu</option></select></label>
+  <div class="hotel-filter-options review-filter-options">
+   <label><input type="checkbox" name="review-pref" value="overall rating, review count and recent review dates" checked> Ratings & review volume</label>
+   <label><input type="checkbox" name="review-pref" value="cleanliness and room condition" checked> Cleanliness</label>
+   <label><input type="checkbox" name="review-pref" value="location and walking distance to attractions" checked> Location</label>
+   <label><input type="checkbox" name="review-pref" value="staff behaviour and service" checked> Staff & service</label>
+   <label><input type="checkbox" name="review-pref" value="family suitability, toddler comfort and noise" checked> Family / toddler comfort</label>
+   <label><input type="checkbox" name="review-pref" value="parking availability and ease of access"> Parking</label>
+   <label><input type="checkbox" name="review-pref" value="breakfast and food quality"> Food / breakfast</label>
+   <label><input type="checkbox" name="review-pref" value="value for money and hidden charges"> Value for money</label>
+  </div>
+  <button class="btn" type="submit">Compare guest feedback</button>
  </form>
- <div id="hotel-review-status" class="small" aria-live="polite" style="margin-top:10px"></div>
- <div id="hotel-review-results" style="margin-top:12px"></div>
+ <div id="hotel-review-status" class="hotel-search-status small" aria-live="polite"></div>
+ <div id="hotel-review-results" class="hotel-results"></div>
 </div>
 <div class="note"><b>How to read these results:</b> Ratings and review themes are attributed to the linked public sources when available. Scores can differ by platform and change over time. We do not create, store or publish visitor-submitted reviews here.</div>
 </section>
@@ -459,19 +490,54 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
 
 <script>
 (function(){
+ const byId=id=>document.getElementById(id);
+ function addText(parent,tag,text,className){const el=document.createElement(tag);el.textContent=text;if(className)el.className=className;parent.appendChild(el);return el;}
+ function renderAnswer(answer,sources,resultEl){
+  resultEl.replaceChildren();
+  const lines=String(answer||'').replace(/\r/g,'').split('\n');
+  let card=null,list=null;
+  const ensureCard=()=>{if(!card){card=document.createElement('article');card.className='card hotel-result-card';resultEl.appendChild(card)}return card};
+  for(const raw of lines){
+   const line=raw.trim();if(!line)continue;
+   if(/^#{1,3}\s/.test(line)){card=document.createElement('article');card.className='card hotel-result-card';resultEl.appendChild(card);addText(card,'h3',line.replace(/^#{1,3}\s*/,''));list=null;continue}
+   const target=ensureCard();
+   if(/^[-*•]\s/.test(line)){if(!list){list=document.createElement('ul');target.appendChild(list)}addText(list,'li',line.replace(/^[-*•]\s*/,''));continue}
+   list=null;
+   const clean=line.replace(/^\*\*(.*?)\*\*:?\s*/,'$1: ').replace(/\*\*/g,'').replace(/^\d+[.)]\s*/,'');
+   const colon=clean.indexOf(':');
+   if(colon>0&&colon<48){const p=document.createElement('p');const b=document.createElement('b');b.textContent=clean.slice(0,colon+1);p.appendChild(b);p.appendChild(document.createTextNode(' '+clean.slice(colon+1).trim()));target.appendChild(p)}
+   else addText(target,'p',clean);
+  }
+  if(sources&&sources.length){const box=document.createElement('article');box.className='card hotel-result-card hotel-sources';addText(box,'h3','Sources & booking checks');const ul=document.createElement('ul');sources.forEach(s=>{const li=document.createElement('li');const a=document.createElement('a');a.href=s.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent=s.title||s.url;li.appendChild(a);ul.appendChild(li)});box.appendChild(ul);resultEl.appendChild(box)}
+ }
  async function runHotelSearch(query,statusEl,resultEl){
-  statusEl.textContent='Searching current public hotel listings and guest feedback…';resultEl.replaceChildren();
+  statusEl.textContent='Searching the web… This can take around 15–40 seconds when sources need to be checked.';resultEl.replaceChildren();
+  const started=Date.now();
   try{
    const response=await fetch('/api/hotels/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query})});
    const data=await response.json();if(!response.ok)throw new Error(data.error||'Hotel search is unavailable.');
-   const summary=document.createElement('div');summary.className='card';summary.style.whiteSpace='pre-wrap';summary.textContent=data.answer||'No results returned.';resultEl.appendChild(summary);
-   if(data.sources&&data.sources.length){const box=document.createElement('div');box.className='card';const heading=document.createElement('b');heading.textContent='Sources to verify';box.appendChild(heading);const list=document.createElement('ul');data.sources.forEach(source=>{const li=document.createElement('li');const link=document.createElement('a');link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=source.title||source.url;li.appendChild(link);list.appendChild(li)});box.appendChild(list);resultEl.appendChild(box)}
-   statusEl.textContent='Search completed. Check the source links for current availability, prices and full review details.';
+   renderAnswer(data.answer,data.sources,resultEl);
+   const seconds=Math.max(1,Math.round((Date.now()-started)/1000));
+   statusEl.textContent='Search completed in '+seconds+' seconds. Ratings, prices and availability can change; use the source links to confirm.';
   }catch(error){statusEl.textContent=error.message;}
  }
- const hf=document.getElementById('hotel-search-form');
- if(hf)hf.addEventListener('submit',e=>{e.preventDefault();runHotelSearch(document.getElementById('hotel-search-query').value.trim(),document.getElementById('hotel-search-status'),document.getElementById('hotel-search-results'))});
- const rf=document.getElementById('hotel-review-search-form');
- if(rf)rf.addEventListener('submit',e=>{e.preventDefault();const name=document.getElementById('hotel-review-hotel').value;runHotelSearch('Find current public guest ratings and review feedback for '+name+'. Compare Google, Tripadvisor, Booking.com, Agoda and other credible sources where available. Report each platform rating separately with review count and date if visible. Summarise recurring positive and negative themes. Include source links. Do not invent scores, counts, quotes or availability.',document.getElementById('hotel-review-status'),document.getElementById('hotel-review-results'))});
+ const hf=byId('hotel-search-form');
+ if(hf)hf.addEventListener('submit',e=>{
+  e.preventDefault();
+  const destination=byId('hotel-destination').value,budget=byId('hotel-budget').value;
+  const prefs=[...document.querySelectorAll('input[name="hotel-pref"]:checked')].map(x=>x.value);
+  const extra=byId('hotel-search-extra').value.trim();
+  const places=destination==='all'?'Dwarka, Somnath and Diu':destination;
+  const query='Find and compare current public hotel options in '+places+' for our family trip (6 adults and one toddler), 2 rooms where possible. Budget: '+budget+'. Priorities: '+(prefs.length?prefs.join('; '):'general family suitability')+'. Additional requirements: '+(extra||'none')+'. Dates: Dwarka 29–31 Dec 2026, Somnath 31 Dec 2026–1 Jan 2027, Diu 1–2 Jan 2027. Return concise hotel options with name, area, separate platform ratings and review counts when available, room suitability, parking, distance to key attractions, current indicative price and taxes, key pros/cons, and source links. Never invent missing details or claim availability is confirmed.';
+  runHotelSearch(query,byId('hotel-search-status'),byId('hotel-search-results'));
+ });
+ const rf=byId('hotel-review-search-form');
+ if(rf)rf.addEventListener('submit',e=>{
+  e.preventDefault();
+  const name=byId('hotel-review-hotel').value;
+  const prefs=[...document.querySelectorAll('input[name="review-pref"]:checked')].map(x=>x.value);
+  const query='Research current public guest feedback for '+name+'. Compare Google, Tripadvisor, Booking.com, Agoda and other credible sources where available. Focus on: '+(prefs.length?prefs.join('; '):'overall guest experience')+'. Show each platform rating separately with review count and review date when visible. Summarise repeated positive themes and repeated complaints, note family/toddler suitability only when supported, and include source links. Do not invent scores, counts, quotes or availability.';
+  runHotelSearch(query,byId('hotel-review-status'),byId('hotel-review-results'));
+ });
 })();
 </script></body></html>
