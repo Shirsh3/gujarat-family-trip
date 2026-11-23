@@ -130,9 +130,9 @@ async function fetchOpenAIResponse(key,payload,maxRetries=2){
  return lastResponse;
 }
 async function callAI(env,instructions,input,maxTokens=350){
- // gpt-4.1-mini Responses requests must not send unsupported reasoning.effort.
+ // All assistant requests use the same cost-efficient mini model.
  const key=await env.OPENAI_API_KEY.get();
- const r=await fetchOpenAIResponse(key,{model:"gpt-4.1-mini",instructions,input,max_output_tokens:maxTokens});
+ const r=await fetchOpenAIResponse(key,{model:"gpt-4o-mini",instructions,input,max_output_tokens:maxTokens});
  if(!r.ok)throw new Error(r.status===429?"AI is busy. Please try again shortly.":"AI service could not complete the request.");
  const data=await r.json();return (data.output||[]).flatMap(x=>x.content||[]).filter(x=>x.type==="output_text").map(x=>x.text).join("\n").trim();
 }
@@ -227,7 +227,7 @@ export default {
    try{
     const key=await env.OPENAI_API_KEY.get();
     const payload={
-     model:"gpt-6.2-astra",
+     model:"gpt-4o-mini",
      max_output_tokens:thinkHarder?1300:850,
      max_tool_calls:thinkHarder?8:4,
      tools:[{type:"web_search",search_context_size:thinkHarder?"medium":"low",user_location:{type:"approximate",country:"IN",region:"Gujarat"}}],
@@ -275,7 +275,7 @@ export default {
     if(hotelIntent){
      const key=await env.OPENAI_API_KEY.get();
      const payload={
-      model:"gpt-6.2-astra",
+      model:"gpt-4o-mini",
       max_output_tokens:thinkHarder?1300:650,
       max_tool_calls:thinkHarder?8:4,
       tools:[{type:"web_search",search_context_size:thinkHarder?"high":"low",user_location:{type:"approximate",country:"IN",region:"Gujarat"}}],
