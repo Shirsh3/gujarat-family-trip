@@ -110,12 +110,24 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 .leaflet-popup-content{font:13px/1.55 'DM Sans',sans-serif;min-width:190px}
 .leaflet-popup-content b{color:var(--green)}
 @media(max-width:760px){#trip-map{height:340px}}
+
+.review-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.review-summary-grid strong{display:block;font:30px 'Playfair Display',serif;margin:8px 0}
+#public-review-form{display:grid;gap:8px}#public-review-form input,#public-review-form textarea,#public-review-form select,.review-controls select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:white;margin:3px 0 10px}
+.review-controls{display:flex;gap:10px;margin:16px 0}.review-controls select{max-width:260px}
+.review-card .review-stars{color:#b77b2e;letter-spacing:2px;font-size:18px}.review-card .review-meta{font-size:11px;color:var(--muted)}
+.trip-bot-launcher{position:fixed;right:22px;bottom:22px;z-index:1000;border:0;border-radius:999px;background:var(--deep);color:white;padding:10px 16px 10px 10px;display:flex;gap:10px;align-items:center;box-shadow:0 8px 28px #102d2940;cursor:pointer;font:600 13px 'DM Sans'}
+.trip-bot-avatar{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#f3d5b4,#d9a879);font-size:29px;border:2px solid white}
+.trip-bot-panel{display:none;position:fixed;right:22px;bottom:92px;width:min(370px,calc(100vw - 28px));height:490px;max-height:70vh;z-index:1001;background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:0 18px 60px #102d2940;overflow:hidden;flex-direction:column}
+.trip-bot-panel.open{display:flex}.trip-bot-head{background:var(--deep);color:white;padding:14px;display:flex;align-items:center;gap:10px}.trip-bot-head button{margin-left:auto;background:transparent;color:white;border:0;font-size:22px;cursor:pointer}
+#floating-chat-log{padding:14px;overflow:auto;flex:1;background:#f7f6f0}#floating-chat-log p{background:white;border-radius:12px;padding:10px 12px;margin:8px 0;max-width:90%;font-size:13px}#floating-chat-log p.user{margin-left:auto;background:#e5efe8}
+#floating-chat-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}#floating-chat-form input{min-width:0;flex:1;padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit}
+@media(max-width:600px){.review-summary-grid{grid-template-columns:1fr}.review-controls{flex-direction:column}.review-controls select{max-width:none}.trip-bot-launcher{right:12px;bottom:12px}.trip-bot-panel{right:10px;bottom:82px}}
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 </head>
 <body>
 <header class="hero"><div class="wrap hero-inner"><div class="eyebrow">A family journey · Gujarat, India</div><h1>Gujarat, at a gentler pace.</h1><p>Temple mornings, coastal sunsets and time together. A thoughtfully paced family escape through Dwarka, Somnath and Diu.</p><div class="chips"><span class="chip">28 Dec 2026 – 2 Jan 2027 · Gujarat trip</span><span class="chip">6 adults + 1 little traveller</span><span class="chip">5 nights · 6 days</span></div></div></header>
-<nav><div class="wrap nav"><button class="active" data-tab="plan">The journey</button><button data-tab="hotels">Places to stay</button><button data-tab="travel">Getting around</button><button data-tab="checklist">Travel checklist</button><button data-tab="costs">Trip cost</button><button data-tab="reviews">Ratings & feedback</button><button data-tab="assistant">Ask the trip assistant</button></div></nav>
+<nav><div class="wrap nav"><button class="active" data-tab="plan">The journey</button><button data-tab="hotels">Places to stay</button><button data-tab="travel">Getting around</button><button data-tab="checklist">Travel checklist</button><button data-tab="costs">Trip cost</button><button data-tab="reviews">Ratings & feedback</button></div></nav>
 <main class="wrap">
 <section id="plan" class="section active">
 <div class="section-head"><div><div class="tag">The itinerary</div><h2>Six days, one beautiful route</h2><p class="intro">A flexible family-first plan. Keep meal, nap and washroom breaks; timings are targets, not commitments.</p></div></div>
@@ -246,23 +258,29 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 </div>
 </section>
 <section id="reviews" class="section">
-<div class="section-head"><div><div class="tag">Family feedback</div><h2>Ratings & reviews</h2><p class="intro">Capture your family's experience with stays, transport and trip planning. No ratings are pre-filled or invented.</p></div></div>
-<div class="note"><b>Review status:</b> No verified guest ratings or feedback have been added yet. Hotel links currently reflect the booking source recorded in the itinerary; Yatra is not a mandatory provider.</div>
-<div class="grid">
- <article class="card"><h3>Hotel Laxmi Niwas · Dwarka</h3><p class="small">Booking source recorded: Yatra Dham · 29–31 Dec</p><p>Rating: <b>Not reviewed yet</b></p><a href="https://yatradham.org/dwarka-hotel-laxmi-niwas.html" target="_blank" rel="noopener">View recorded listing</a></article>
- <article class="card"><h3>Hotel Sukhnath · Somnath</h3><p class="small">Booking source recorded: Yatra Dham · 31 Dec–1 Jan</p><p>Rating: <b>Not reviewed yet</b></p><a href="https://yatradham.org/somnath-hotel-sukhnath.html" target="_blank" rel="noopener">View recorded listing</a></article>
- <article class="card"><h3>Hotel Ankur · Diu</h3><p class="small">Booking source recorded: Goibibo / MakeMyTrip links recorded</p><p>Rating: <b>Not reviewed yet</b></p><p class="small">Compare the same room, dates, occupancy, taxes and cancellation terms across providers before booking.</p></article>
- <article class="card"><h3>Transport & overall trip</h3><p>Rating: <b>Not reviewed yet</b></p><p class="small">Add feedback after the trip or after receiving a confirmed operator quote.</p></article>
+<div class="section-head"><div><div class="tag">Community experiences</div><h2>Guest ratings & reviews</h2><p class="intro">Share a genuine experience or browse what other travellers have said. Reviews are public after submission.</p></div></div>
+<div class="review-summary-grid" id="review-summary">
+ <article class="card"><div class="tag">Average rating</div><strong id="review-average">—</strong><div class="small" id="review-count">No reviews yet</div></article>
+ <article class="card"><div class="tag">Most loved</div><strong id="review-loved">—</strong><div class="small">Highest review volume</div></article>
+ <article class="card"><div class="tag">AI review summary</div><p id="review-ai-summary">AI summary will appear after visitors submit reviews.</p><button class="btn alt" id="summarise-reviews" type="button">Summarise reviews with AI</button></article>
 </div>
-</section>
-<section id="assistant" class="section">
-<div class="section-head"><div><div class="tag">Ask before you message the organiser</div><h2>Gujarat trip assistant</h2><p class="intro">Ask about itinerary, trains, hotels, retiring rooms, food, transport and estimated costs. It should only use approved trip facts and must not disclose personal or booking identifiers.</p></div></div>
-<div class="card" id="trip-chat">
- <div id="chat-log" aria-live="polite" style="min-height:190px;max-height:420px;overflow:auto;padding:8px;background:#f7f6f0;border-radius:12px"><p class="small">Hello! I can help with the itinerary, train journeys, hotels, retiring rooms, food, transport and trip budget.</p></div>
- <form id="trip-chat-form" style="display:flex;gap:9px;margin-top:14px"><input id="trip-chat-input" maxlength="1000" required placeholder="Ask a trip question…" style="min-width:0;flex:1;padding:13px;border:1px solid var(--line);border-radius:10px;font:inherit"><button class="btn" type="submit">Ask</button></form>
- <p id="chat-status" class="small">Ask about the itinerary, hotels, trains, food, transport or trip costs.</p>
+<div class="card" style="margin:18px 0">
+ <h3>Write a review</h3><p class="small">Please review only a place or service you have personally experienced. Do not include phone numbers, booking IDs or other private details.</p>
+ <form id="public-review-form">
+  <label class="small" for="review-category">What are you reviewing?</label>
+  <select id="review-category" required><option value="Hotel Laxmi Niwas · Dwarka">Hotel Laxmi Niwas · Dwarka</option><option value="Hotel Sukhnath · Somnath">Hotel Sukhnath · Somnath</option><option value="Hotel Ankur · Diu">Hotel Ankur · Diu</option><option value="Transport">Transport</option><option value="Overall trip">Overall trip</option></select>
+  <label class="small" for="review-rating">Your rating</label>
+  <select id="review-rating" required><option value="5">★★★★★ · Loved it (5)</option><option value="4">★★★★☆ · Very good (4)</option><option value="3">★★★☆☆ · Average (3)</option><option value="2">★★☆☆☆ · Below expectations (2)</option><option value="1">★☆☆☆☆ · Poor (1)</option></select>
+  <label class="small" for="review-title">Review headline</label><input id="review-title" maxlength="80" required placeholder="Summarise your experience">
+  <label class="small" for="review-body">Your review</label><textarea id="review-body" rows="4" maxlength="1200" required placeholder="What did you like? What should other travellers know?"></textarea>
+  <button class="btn" type="submit">Publish review</button><span class="small" id="review-submit-status" aria-live="polite"></span>
+ </form>
 </div>
-
+<div class="review-controls">
+ <select id="review-filter"><option value="all">All categories</option><option>Hotel Laxmi Niwas · Dwarka</option><option>Hotel Sukhnath · Somnath</option><option>Hotel Ankur · Diu</option><option>Transport</option><option>Overall trip</option></select>
+ <select id="review-sort"><option value="helpful">Most loved</option><option value="rating">Highest rated</option><option value="recent">Most recent</option><option value="low">Lowest rated</option></select>
+</div>
+<div id="public-review-list" class="grid"><article class="card"><p class="small">Loading public reviews…</p></article></div>
 </section>
 <section id="checklist" class="section">
 <div class="section-head"><div><div class="tag">Before you go</div><h2>Family travel checklist</h2><p class="intro">Tick things off as you prepare. Progress is saved in this browser on this device.</p></div></div>
@@ -422,4 +440,49 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
  selectDay(activeDay);
  document.querySelectorAll('[data-tab]').forEach(btn=>btn.addEventListener('click',()=>{if(btn.dataset.tab==='plan')setTimeout(()=>map.invalidateSize(),250)}));
 })();
-</script></body></html>
+</script><button class="trip-bot-launcher" id="trip-bot-launcher" aria-label="Open trip assistant"><span class="trip-bot-avatar">👩🏻</span><span>Ask trip assistant</span></button>
+<div class="trip-bot-panel" id="trip-bot-panel" role="dialog" aria-label="Trip assistant">
+ <div class="trip-bot-head"><span class="trip-bot-avatar">👩🏻</span><span><b>Trip assistant</b><br><small>Ask me about your Gujarat journey</small></span><button id="trip-bot-close" aria-label="Close">×</button></div>
+ <div id="floating-chat-log" aria-live="polite"><p>Hello! I can help with the itinerary, trains, hotels, retiring rooms, food, transport and estimated costs. What would you like to know?</p></div>
+ <form id="floating-chat-form"><input id="floating-chat-input" maxlength="1000" required placeholder="Ask a trip question…"><button class="btn" type="submit">Send</button></form>
+</div>
+<script>
+(function(){
+ const list=document.getElementById('public-review-list');
+ if(list){
+  let reviews=[];
+  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  async function loadReviews(){
+   try{const r=await fetch('/api/reviews');if(!r.ok)throw new Error('Reviews are temporarily unavailable');const d=await r.json();reviews=d.reviews||[];renderReviews();}
+   catch(e){list.innerHTML='<article class="card"><p>'+esc(e.message)+'</p><p class="small">Shared reviews will appear here once the review database is connected.</p></article>';}
+  }
+  function renderReviews(){
+   const cat=document.getElementById('review-filter').value,sort=document.getElementById('review-sort').value;
+   let rows=reviews.filter(x=>cat==='all'||x.category===cat);
+   rows.sort((a,b)=>sort==='rating'?b.rating-a.rating:sort==='low'?a.rating-b.rating:sort==='recent'?b.created_at.localeCompare(a.created_at):(b.rating*2+Math.min(b.body.length,500)/500)-(a.rating*2+Math.min(a.body.length,500)/500));
+   const avg=reviews.length?reviews.reduce((n,x)=>n+x.rating,0)/reviews.length:0;
+   document.getElementById('review-average').textContent=reviews.length?avg.toFixed(1)+' / 5':'—';
+   document.getElementById('review-count').textContent=reviews.length+' public review'+(reviews.length===1?'':'s');
+   const counts={};reviews.forEach(x=>counts[x.category]=(counts[x.category]||0)+1);
+   const loved=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+   document.getElementById('review-loved').textContent=loved?loved[0]:'—';
+   if(!rows.length){list.innerHTML='<article class="card"><h3>No reviews yet</h3><p class="small">Be the first to share a genuine experience.</p></article>';return;}
+   list.innerHTML=rows.map(x=>'<article class="card review-card"><div class="review-meta">'+esc(x.category)+' · '+new Date(x.created_at).toLocaleDateString()+'</div><div class="review-stars">'+('★'.repeat(x.rating))+('☆'.repeat(5-x.rating))+'</div><h3>'+esc(x.title)+'</h3><p>'+esc(x.body)+'</p><div class="review-meta">Public community review</div></article>').join('');
+  }
+  document.getElementById('review-filter').addEventListener('change',renderReviews);
+  document.getElementById('review-sort').addEventListener('change',renderReviews);
+  document.getElementById('public-review-form').addEventListener('submit',async e=>{
+   e.preventDefault();const status=document.getElementById('review-submit-status');status.textContent='Publishing…';
+   const payload={category:document.getElementById('review-category').value,rating:Number(document.getElementById('review-rating').value),title:document.getElementById('review-title').value.trim(),body:document.getElementById('review-body').value.trim()};
+   try{const r=await fetch('/api/reviews',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const d=await r.json();if(!r.ok)throw new Error(d.error||'Could not publish review');e.target.reset();status.textContent='Your review is now public. Thank you!';await loadReviews();}
+   catch(err){status.textContent=err.message;}
+  });
+  document.getElementById('summarise-reviews').addEventListener('click',async()=>{const el=document.getElementById('review-ai-summary');el.textContent='Preparing an AI summary…';try{const r=await fetch('/api/reviews/summary',{method:'POST'});const d=await r.json();if(!r.ok)throw new Error(d.error||'Summary unavailable');el.textContent=d.summary;}catch(e){el.textContent=e.message;}});
+  loadReviews();
+ }
+ const panel=document.getElementById('trip-bot-panel'),launcher=document.getElementById('trip-bot-launcher');
+ launcher.addEventListener('click',()=>panel.classList.toggle('open'));document.getElementById('trip-bot-close').addEventListener('click',()=>panel.classList.remove('open'));
+ document.getElementById('floating-chat-form').addEventListener('submit',async e=>{e.preventDefault();const input=document.getElementById('floating-chat-input'),log=document.getElementById('floating-chat-log'),q=input.value.trim();if(!q)return;const user=document.createElement('p');user.className='user';user.textContent=q;log.appendChild(user);input.value='';const waiting=document.createElement('p');waiting.textContent='Let me check that for you…';log.appendChild(waiting);log.scrollTop=log.scrollHeight;try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Assistant unavailable');waiting.textContent=d.reply;}catch(err){waiting.textContent=err.message;}log.scrollTop=log.scrollHeight;});
+})();
+</script>
+</body></html>
