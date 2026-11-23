@@ -21,7 +21,7 @@ test("Wrangler keeps the production Worker and D1 binding", () => {
 });
 
 test("existing authentication and health routes remain in place", () => {
-  for (const route of ["/api/auth/login", "/api/auth/logout", "/api/auth/me", "/api/health", "/api/chat", "/api/hotels/search"]) {
+  for (const route of ["/api/auth/login", "/api/auth/logout", "/api/auth/me", "/api/health", "/api/chat", "/api/hotels/search", "/api/trip/context"]) {
     assert.ok(worker.includes(route), `Missing route ${route}`);
   }
   assert.match(worker, /env\.SESSION_SECRET/);

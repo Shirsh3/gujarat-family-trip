@@ -115,10 +115,10 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 .hotel-search-form input,.hotel-search-form select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:white;margin:3px 0 10px}
 .trip-bot-launcher{position:fixed;right:22px;bottom:22px;z-index:1000;border:0;border-radius:999px;border:2px solid #f0d4a8;background:linear-gradient(135deg,#17483e,#102d29);color:white;padding:10px 18px 10px 10px;display:flex;gap:10px;align-items:center;box-shadow:0 10px 34px #102d2960;cursor:pointer;font:700 14px 'DM Sans'}
 .trip-bot-avatar{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#f3d5b4,#d9a879);font-size:29px;border:2px solid white}
-.trip-bot-panel{display:none;position:fixed;right:22px;bottom:92px;width:min(760px,calc(100vw - 28px));height:min(900px,90vh);max-height:90vh;z-index:1001;background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:0 18px 60px #102d2940;overflow:hidden;flex-direction:column}
+.trip-bot-panel{display:none;position:fixed;right:18px;bottom:88px;width:min(860px,calc(100vw - 24px));height:min(920px,92vh);max-height:92vh;z-index:1001;background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:0 18px 60px #102d2940;overflow:hidden;flex-direction:column}
 .trip-bot-panel.open{display:flex}.trip-bot-panel.expanded{right:2vw;bottom:2vh;width:96vw;height:96vh;max-height:96vh}.trip-bot-head{background:var(--deep);color:white;padding:12px 14px;display:flex;align-items:center;gap:10px}.trip-bot-head .chat-head-actions{margin-left:auto;display:flex;gap:6px}.trip-bot-head button{background:transparent;color:white;border:1px solid #ffffff44;border-radius:8px;width:34px;height:32px;font-size:18px;cursor:pointer;margin:0}.trip-bot-head button:hover{background:#ffffff18}
 #floating-chat-log{padding:14px;overflow:auto;flex:1;background:#f7f6f0}.chat-source-links{display:flex;flex-direction:column;gap:5px;margin-top:10px;padding-top:8px;border-top:1px solid var(--line);font-size:12px}.chat-source-links a{color:var(--green);overflow-wrap:anywhere}.chat-source-links small{color:var(--muted);margin-top:4px}#floating-chat-log p{background:white;border-radius:12px;padding:10px 12px;margin:8px 0;max-width:96%;font-size:15px;line-height:1.65}#floating-chat-log p.user{margin-left:auto;background:#e5efe8}
- .chat-mode-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:9px 14px 0;background:#fff;font-size:12px}.chat-mode-row label{font-weight:700;color:var(--green)}.chat-mode-row select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font:inherit}#floating-chat-form{display:flex;align-items:center;gap:8px;padding:10px 12px;border-top:1px solid var(--line);background:#fff}#floating-chat-form input{min-width:0;flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit}#floating-chat-form button{flex:0 0 auto;min-width:64px;padding:9px 13px;border-radius:9px;font-size:12px;line-height:1.2}#floating-chat-form button:disabled{opacity:.75;cursor:wait}.chat-memory-note{background:#edf3e9;border:1px solid #d8e5d6;border-radius:10px;padding:10px 12px;margin:8px 0;color:var(--deep);font-size:12px}.chat-memory-note p{margin:5px 0 0;white-space:pre-wrap;max-height:150px;overflow:auto}.chat-steps{display:flex;flex-direction:column;gap:6px;margin-top:8px}.chat-step{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:11px}.chat-step .step-dot{width:17px;height:17px;border:1px solid #b9c6bc;border-radius:50%;display:grid;place-items:center;font-size:10px;flex:0 0 17px}.chat-step.active{color:var(--green);font-weight:700}.chat-step.active .step-dot{border-color:var(--green);background:#e4f3e9}.chat-step.done{color:#557465}.chat-step.done .step-dot{background:#e4f3e9;border-color:#b7d7c2}
+ .chat-mode-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:10px 14px 0;background:#fff;font-size:13px}.chat-mode-row label{font-weight:700;color:var(--green)}.chat-mode-row select{padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font:inherit;min-height:40px}#floating-chat-form{display:flex;align-items:center;gap:8px;padding:12px 14px;border-top:1px solid var(--line);background:#fff}#floating-chat-form input{min-width:0;flex:1;padding:12px 14px;border:1px solid var(--line);border-radius:10px;font:inherit;font-size:15px}#floating-chat-form button.btn{flex:0 0 auto;min-width:72px;min-height:44px;padding:10px 16px;border-radius:9px;font-size:14px;line-height:1.2}#floating-chat-form button.btn:disabled{opacity:.75;cursor:wait}#floating-chat-log{font-size:15px;line-height:1.65;padding:12px 14px;overflow:auto;flex:1}.chat-reply{line-height:1.65}.chat-reply p,.chat-reply li{font-size:15px}.chat-reply h2,.chat-reply h3{margin:12px 0 6px;font-size:17px}.chat-table-wrap,.hotel-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:10px 0}.chat-source-links a{display:inline-block;max-width:100%;overflow-wrap:anywhere;word-break:break-word;margin:4px 8px 4px 0}#floating-chat-log .user{background:#edf3e9;border-radius:12px;padding:10px 12px;margin:8px 0;font-weight:600}#floating-chat-log .chat-reply{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:8px 0}.chat-memory-note{background:#edf3e9;border:1px solid #d8e5d6;border-radius:10px;padding:10px 12px;margin:8px 0;color:var(--deep);font-size:12px}.chat-memory-note p{margin:5px 0 0;white-space:pre-wrap;max-height:150px;overflow:auto}.chat-steps{display:flex;flex-direction:column;gap:6px;margin-top:8px}.chat-step{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:11px}.chat-step .step-dot{width:17px;height:17px;border:1px solid #b9c6bc;border-radius:50%;display:grid;place-items:center;font-size:10px;flex:0 0 17px}.chat-step.active{color:var(--green);font-weight:700}.chat-step.active .step-dot{border-color:var(--green);background:#e4f3e9}.chat-step.done{color:#557465}.chat-step.done .step-dot{background:#e4f3e9;border-color:#b7d7c2}
 @media(max-width:600px){.review-summary-grid{grid-template-columns:1fr}.review-controls{flex-direction:column}.review-controls select{max-width:none}.trip-bot-launcher{right:12px;bottom:12px}.trip-bot-panel{right:8px;bottom:76px;width:calc(100vw - 16px);height:88vh;max-height:88vh}.trip-bot-panel.expanded{right:0;bottom:0;width:100vw;height:100dvh;max-height:100dvh;border-radius:0}}
 .cost-legend{display:flex;flex-wrap:wrap;gap:9px;margin:10px 0}.cost-exact,.cost-estimated,.cost-pending{display:inline-block;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700}.cost-exact{background:#e4f3e9;color:#17663a}.cost-estimated{background:#fff0d6;color:#875000}.cost-pending{background:#eceff1;color:#53616a}
 .hotel-filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.hotel-search-form label{display:block;font-size:12px;font-weight:700;color:var(--muted)}.hotel-search-form input:not([type=checkbox]),.hotel-search-form select{display:block;width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink);margin:5px 0 12px}.filter-label{display:block;font-size:13px;font-weight:700;margin:8px 0}.filter-label .small{font-weight:400}.hotel-filter-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0 15px}.hotel-filter-options label{display:flex;align-items:center;gap:8px;background:#f7f6f0;border:1px solid var(--line);border-radius:10px;padding:10px;color:var(--ink);font-size:12px;font-weight:600}.hotel-filter-options input{accent-color:var(--green);width:16px;height:16px}.hotel-search-status{margin-top:12px;padding:9px 0}.hotel-results{display:grid;gap:12px;margin-top:12px}.hotel-result-card{padding:19px}.hotel-result-card h3{margin-top:0}.hotel-result-card p{margin:7px 0}.hotel-result-card ul{margin:8px 0}.hotel-sources{background:#f8f7f1}.review-filter-options{margin-top:14px}@media(max-width:600px){.hotel-filter-grid,.hotel-filter-options{grid-template-columns:1fr}}
@@ -365,6 +365,13 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
  <div class="route expense-row" data-expense="tolls"><span>Tolls & parking</span><div class="expense-entry"><strong class="expense-display cost-pending">Not entered</strong><input class="expense-input" type="number" min="0" step="1" inputmode="numeric" placeholder="Amount in ₹" aria-label="Tolls & parking amount" hidden><button type="button" class="expense-edit">Edit</button><button type="button" class="expense-save" hidden>Save</button><button type="button" class="expense-cancel" hidden>Cancel</button></div></div>
  <div class="route expense-row" data-expense="local"><span>Local travel, auto/cab & transfers</span><div class="expense-entry"><strong class="expense-display cost-pending">Not entered</strong><input class="expense-input" type="number" min="0" step="1" inputmode="numeric" placeholder="Amount in ₹" aria-label="Local travel, auto/cab & transfers amount" hidden><button type="button" class="expense-edit">Edit</button><button type="button" class="expense-save" hidden>Save</button><button type="button" class="expense-cancel" hidden>Cancel</button></div></div>
  <div class="route expense-row" data-expense="other"><span>Other expenses / buffer</span><div class="expense-entry"><strong class="expense-display cost-pending">Not entered</strong><input class="expense-input" type="number" min="0" step="1" inputmode="numeric" placeholder="Amount in ₹" aria-label="Other expenses / buffer amount" hidden><button type="button" class="expense-edit">Edit</button><button type="button" class="expense-save" hidden>Save</button><button type="button" class="expense-cancel" hidden>Cancel</button></div></div>
+ <div id="custom-expense-list"></div>
+ <form id="add-expense-form" class="add-expense-form" style="margin-top:14px;display:grid;gap:8px;grid-template-columns:1fr 140px auto;align-items:end">
+  <label>New expense label<input id="new-expense-label" maxlength="60" required placeholder="e.g. Baby supplies"></label>
+  <label>Amount (₹)<input id="new-expense-amount" type="number" min="0" step="1" inputmode="numeric" required placeholder="0"></label>
+  <button class="btn" type="submit">Add expense</button>
+ </form>
+ <p class="small" style="margin-top:10px">Additional expenses are stored in this browser for your signed-in username only. They stay separate from the indicative hotel/vehicle planning subtotal above.</p>
  <p class="expense-total-note" id="expense-entered-total" aria-live="polite">No additional expenses entered yet.</p>
 </div>
 </section>
@@ -578,83 +585,80 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
   <div class="assistant-shortcuts"><button type="button" data-open-tab="hotels">🏨 Open hotel finder</button><button type="button" data-open-tab="reviews">⭐ Check guest reviews</button></div>
  </div>
  <div id="floating-chat-log" aria-live="polite"><p>Hello! I can help with the itinerary, trains, hotels, retiring rooms, food, transport and estimated costs. What would you like to know?</p></div>
- <div class="chat-mode-row"><label for="chat-depth">Answer depth</label><select id="chat-depth" aria-label="Answer depth"><option value="quick">Quick answer</option><option value="deep">Think harder · deeper research</option></select><span class="small">Deeper mode may take longer.</span></div><form id="floating-chat-form"><input id="floating-chat-input" maxlength="1000" required placeholder="Ask a trip question…"><button class="btn" type="submit">Send</button></form>
+ <div class="chat-mode-row"><label for="chat-depth">Answer depth</label><select id="chat-depth" aria-label="Answer depth"><option value="quick">Quick answer</option><option value="deep">Think harder · deeper research</option></select><span class="small" id="chat-depth-hint">Quick is default. Deeper mode may take longer.</span></div><form id="floating-chat-form"><input id="floating-chat-input" maxlength="1000" required placeholder="Ask a trip question…"><button class="btn" type="submit">Send</button></form>
 </div>
+<script src="/markdown.js"></script>
 <script>
 
+function readThinkHarder(selectId){
+ const el=document.getElementById(selectId||'chat-depth');
+ return !!(el&&el.value==='deep');
+}
+function renderChatReply(container,markdown){
+ if(window.TripMarkdown){window.TripMarkdown.renderMarkdown(container,markdown,{className:'chat-reply'});return;}
+ container.className='chat-reply';container.textContent=String(markdown||'');
+}
 (function(){
- const storageKey='gujarat-trip-expenses-v1';
- let saved={};try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}')||{}}catch(e){saved={}}
- const rows=[...document.querySelectorAll('.expense-row[data-expense]')];
- function updateTotal(){
-  let total=0,entered=0;
-  rows.forEach(row=>{const value=saved[row.dataset.expense];if(value!==undefined&&value!==null&&value!==''&&Number.isFinite(Number(value))){total+=Number(value);entered++}});
-  const note=document.getElementById('expense-entered-total');
-  if(note)note.textContent=entered?('Additional expenses entered: ₹'+total.toLocaleString('en-IN')+' across '+entered+' categories. Saved on this browser.'): 'No additional expenses entered yet.';
-  const dash=document.getElementById('dash-actual');if(dash)dash.textContent='₹'+total.toLocaleString('en-IN');
+ let storageKey='gujarat-trip-expenses-v1:anonymous';
+ let saved={};
+ const builtIn=['train','meals','tolls','local','other'];
+ const money=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+ async function resolveStorageKey(){
+  try{const r=await fetch('/api/auth/me');const d=await r.json();if(d.authenticated&&d.user?.username)return 'gujarat-trip-expenses-v1:'+d.user.username;}catch(e){}
+  return 'gujarat-trip-expenses-v1:anonymous';
  }
- rows.forEach(row=>{
+ function loadSaved(){try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}')||{}}catch(e){saved={}}}
+ function persist(){localStorage.setItem(storageKey,JSON.stringify(saved))}
+ function updateTotal(){
+  const values=Object.values(saved).filter(v=>Number.isFinite(Number(v))&&Number(v)>=0);
+  const total=values.reduce((s,v)=>s+Number(v),0);
+  const note=document.getElementById('expense-entered-total');
+  if(note)note.textContent=values.length?('Additional expenses entered: '+money(total)+' across '+values.length+' categories. Saved in this browser for your username.'):'No additional expenses entered yet.';
+  const dash=document.getElementById('dash-actual');if(dash)dash.textContent=money(total);
+ }
+ function bindRow(row){
   const id=row.dataset.expense,input=row.querySelector('.expense-input'),display=row.querySelector('.expense-display');
-  const edit=row.querySelector('.expense-edit'),save=row.querySelector('.expense-save'),cancel=row.querySelector('.expense-cancel');
-  const show=()=>{input.hidden=false;save.hidden=false;cancel.hidden=false;edit.hidden=true;display.hidden=true;input.value=saved[id]??'';input.focus()};
-  const hide=()=>{input.hidden=true;save.hidden=true;cancel.hidden=true;edit.hidden=false;display.hidden=false};
-  const paint=()=>{if(saved[id]!==undefined){display.textContent='₹'+Number(saved[id]).toLocaleString('en-IN');display.classList.remove('cost-pending');display.classList.add('cost-exact')}else{display.textContent='Not entered';display.classList.remove('cost-exact');display.classList.add('cost-pending')}};
-  edit.addEventListener('click',show);
-  save.addEventListener('click',()=>{const raw=input.value.trim();if(raw===''||!Number.isFinite(Number(raw))||Number(raw)<0){input.focus();return}saved[id]=Math.round(Number(raw));localStorage.setItem(storageKey,JSON.stringify(saved));paint();hide();updateTotal();if(typeof refreshFamilyDashboard==='function')refreshFamilyDashboard()});
-  cancel.addEventListener('click',()=>{paint();hide()});
+  const edit=row.querySelector('.expense-edit'),save=row.querySelector('.expense-save'),cancel=row.querySelector('.expense-cancel'),remove=row.querySelector('.expense-remove');
+  if(!input||!display||!edit||!save||!cancel)return;
+  const show=()=>{input.hidden=false;save.hidden=false;cancel.hidden=false;edit.hidden=true;display.hidden=true;if(remove)remove.hidden=true;input.value=saved[id]??'';input.focus()};
+  const hide=()=>{input.hidden=true;save.hidden=true;cancel.hidden=true;edit.hidden=false;display.hidden=false;if(remove)remove.hidden=false};
+  const paint=()=>{if(saved[id]!==undefined&&saved[id]!==null&&saved[id]!==''){display.textContent=money(Number(saved[id]));display.classList.remove('cost-pending');display.classList.add('cost-exact')}else{display.textContent='Not entered';display.classList.remove('cost-exact');display.classList.add('cost-pending')}};
+  edit.onclick=show;
+  save.onclick=()=>{const raw=input.value.trim();if(raw===''||!Number.isFinite(Number(raw))||Number(raw)<0){input.focus();return}saved[id]=Math.round(Number(raw));persist();paint();hide();updateTotal();refreshFamilyDashboard()};
+  cancel.onclick=()=>{paint();hide()};
+  if(remove)remove.onclick=()=>{delete saved[id];persist();if(!builtIn.includes(id))row.remove();else paint();updateTotal();refreshFamilyDashboard()};
   paint();
+ }
+ function renderCustom(){
+  const host=document.getElementById('custom-expense-list');if(!host)return;host.replaceChildren();
+  Object.keys(saved).filter(k=>!builtIn.includes(k)).forEach(id=>{
+   const row=document.createElement('div');row.className='route expense-row';row.dataset.expense=id;
+   row.innerHTML='<span></span><div class="expense-entry"><strong class="expense-display cost-pending">Not entered</strong><input class="expense-input" type="number" min="0" step="1" inputmode="numeric" placeholder="Amount in ₹" hidden><button type="button" class="expense-edit">Edit</button><button type="button" class="expense-save" hidden>Save</button><button type="button" class="expense-cancel" hidden>Cancel</button><button type="button" class="expense-remove">Remove</button></div>';
+   row.querySelector('span').textContent=id;
+   host.appendChild(row);bindRow(row);
+  });
+ }
+ function wireBuiltIns(){document.querySelectorAll('.expense-row[data-expense]').forEach(bindRow)}
+ const addForm=document.getElementById('add-expense-form');
+ if(addForm)addForm.addEventListener('submit',e=>{
+  e.preventDefault();
+  const label=(document.getElementById('new-expense-label').value||'').trim();
+  const amount=Number(document.getElementById('new-expense-amount').value);
+  if(!label||!Number.isFinite(amount)||amount<0)return;
+  if(builtIn.includes(label)||saved[label]!==undefined){document.getElementById('new-expense-label').focus();return}
+  saved[label]=Math.round(amount);persist();document.getElementById('new-expense-label').value='';document.getElementById('new-expense-amount').value='';renderCustom();updateTotal();refreshFamilyDashboard();
  });
- updateTotal();
+ resolveStorageKey().then(key=>{storageKey=key;loadSaved();wireBuiltIns();renderCustom();updateTotal();refreshFamilyDashboard()});
 })();
 function refreshFamilyDashboard(){
- const get=k=>{try{return JSON.parse(localStorage.getItem(k)||'[]')}catch(e){return []}};
  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
- const totalChecks=document.querySelectorAll('#checklist input[type=checkbox]').length;
- const doneChecks=document.querySelectorAll('#checklist input[type=checkbox]:checked').length;
+ const totalChecks=document.querySelectorAll('#checks input[type=checkbox], #checklist input[type=checkbox]').length;
+ const doneChecks=document.querySelectorAll('#checks input[type=checkbox]:checked, #checklist input[type=checkbox]:checked').length;
  set('dash-pending',Math.max(0,totalChecks-doneChecks)+' tasks');
  let actual=0;document.querySelectorAll('.expense-row .expense-display').forEach(e=>{const raw=(e.textContent||'').trim();if(raw!=='Not entered'){const n=Number(raw.replace(/[^0-9.]/g,''));if(Number.isFinite(n))actual+=n}});
  set('dash-actual','₹'+actual.toLocaleString('en-IN'));
 }
-document.addEventListener('click',e=>{if(e.target.closest('.expense-save,.expense-edit,.expense-cancel,.expense-row'))setTimeout(refreshFamilyDashboard,50)});
-function renderChatReply(container,markdown){
- container.className='chat-reply';container.replaceChildren();
- const source=String(markdown||'').replace(/\r/g,'').replace(/\\\|/g,'|').replace(/\\\*/g,'*').replace(/\\\(/g,'(').replace(/\\\)/g,')');
- const lines=source.split('\n');let list=null,listType='';
- const inline=(parent,value)=>{
-  const token=/\*\*([^*]+)\*\*|\*([^*]+)\*|\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)|(https?:\/\/[^\s)]+)/g;
-  let last=0,m;
-  while((m=token.exec(value))){if(m.index>last)parent.appendChild(document.createTextNode(value.slice(last,m.index)));
-   if(m[1]){const b=document.createElement('strong');b.textContent=m[1];parent.appendChild(b)}
-   else if(m[2]){const em=document.createElement('em');em.textContent=m[2];parent.appendChild(em)}
-   else{const a=document.createElement('a');a.href=m[4]||m[5];a.target='_blank';a.rel='noopener noreferrer';a.textContent=m[3]||m[5];parent.appendChild(a)}
-   last=token.lastIndex;
-  }
-  if(last<value.length)parent.appendChild(document.createTextNode(value.slice(last)));
- };
- const isTableRow=line=>line.trim().startsWith('|')&&line.trim().endsWith('|');
- const cells=line=>line.trim().replace(/^\|/,'').replace(/\|$/,'').split('|').map(x=>x.trim());
- const isSeparator=line=>isTableRow(line)&&cells(line).every(x=>/^:?-{3,}:?$/.test(x));
- for(let i=0;i<lines.length;i++){
-  const line=lines[i].trim();if(!line){list=null;listType='';continue}
-  if(isTableRow(line)&&i+1<lines.length&&isSeparator(lines[i+1])){
-   list=null;listType='';
-   const wrap=document.createElement('div');wrap.className='chat-table-wrap';
-   const table=document.createElement('table');table.className='chat-table';
-   const head=document.createElement('thead'),hr=document.createElement('tr');
-   cells(line).forEach(value=>{const th=document.createElement('th');inline(th,value);hr.appendChild(th)});
-   head.appendChild(hr);table.appendChild(head);const body=document.createElement('tbody');i+=2;
-   while(i<lines.length&&isTableRow(lines[i])){
-    const tr=document.createElement('tr');cells(lines[i]).forEach(value=>{const td=document.createElement('td');inline(td,value);tr.appendChild(td)});body.appendChild(tr);i++;
-   }
-   i--;table.appendChild(body);wrap.appendChild(table);container.appendChild(wrap);continue;
-  }
-  const heading=line.match(/^(#{1,3})\s+(.+)/);
-  if(heading){list=null;listType='';const el=document.createElement(heading[1].length===1?'h2':'h3');inline(el,heading[2]);container.appendChild(el);continue}
-  const bullet=line.match(/^[-*•]\s+(.+)/),number=line.match(/^\d+[.)]\s+(.+)/);
-  if(bullet||number){const type=bullet?'ul':'ol';if(!list||listType!==type){list=document.createElement(type);container.appendChild(list);listType=type}const li=document.createElement('li');inline(li,(bullet||number)[1]);list.appendChild(li);continue}
-  list=null;listType='';const p=document.createElement('p');inline(p,line);container.appendChild(p);
- }
-}
+document.addEventListener('click',e=>{if(e.target.closest('.expense-save,.expense-edit,.expense-cancel,.expense-remove,.expense-row'))setTimeout(refreshFamilyDashboard,50)});
 
 (function(){
  const panel=document.getElementById('trip-bot-panel'),launcher=document.getElementById('trip-bot-launcher');
@@ -666,7 +670,7 @@ function renderChatReply(container,markdown){
    if(data.summary){const note=document.createElement('div');note.className='chat-memory-note';const label=document.createElement('strong');label.textContent='Family trip memory';const body=document.createElement('p');body.textContent=data.summary;note.append(label,body);log.appendChild(note)}
    (data.messages||[]).slice(-20).forEach(message=>{
     const node=document.createElement(message.role==='assistant'?'div':'p');
-    if(message.role==='assistant'){renderChatReply(node,message.content||'');if(Array.isArray(message.sources)&&message.sources.length){const box=document.createElement('div');box.className='chat-source-links';const heading=document.createElement('strong');heading.textContent='Sources';box.appendChild(heading);message.sources.forEach(source=>{if(!source||typeof source.url!=='string'||!/^https?:\/\//.test(source.url))return;const link=document.createElement('a');link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=source.title||source.url;box.appendChild(link)});node.appendChild(box)}}
+    if(message.role==='assistant'){renderChatReply(node,message.content||'');if(Array.isArray(message.sources)&&message.sources.length&&window.TripMarkdown){window.TripMarkdown.renderSources(node,message.sources,{title:'Sources'})}else if(Array.isArray(message.sources)&&message.sources.length){const box=document.createElement('div');box.className='chat-source-links';const heading=document.createElement('strong');heading.textContent='Sources';box.appendChild(heading);message.sources.forEach(source=>{if(!source||typeof source.url!=='string'||!/^https?:\/\//.test(source.url))return;const link=document.createElement('a');link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=source.title||source.url;box.appendChild(link)});node.appendChild(box)}}
     else{node.className='user';node.textContent=message.content||''}
     log.appendChild(node);
    });
@@ -675,119 +679,101 @@ function renderChatReply(container,markdown){
   }catch(error){console.warn('Could not restore family chat history',error)}
  }
  launcher.addEventListener('click',()=>{panel.classList.toggle('open');if(panel.classList.contains('open'))loadFamilyChatHistory()});document.querySelectorAll('[data-open-tab]').forEach(b=>b.addEventListener('click',()=>{panel.classList.remove('open');const tab=document.querySelector('[data-tab="'+b.dataset.openTab+'"]');if(tab)tab.click();}));document.getElementById('trip-bot-close').addEventListener('click',()=>{panel.classList.remove('open','expanded');document.getElementById('trip-bot-expand').textContent='⛶';document.getElementById('trip-bot-expand').setAttribute('aria-label','Expand chatbot')});document.getElementById('trip-bot-expand').addEventListener('click',()=>{const expanded=panel.classList.toggle('expanded');const control=document.getElementById('trip-bot-expand');control.textContent=expanded?'⊖':'⛶';control.title=expanded?'Restore chatbot':'Expand chatbot';control.setAttribute('aria-label',expanded?'Restore chatbot':'Expand chatbot')});
- document.getElementById('floating-chat-form').addEventListener('submit',async e=>{e.preventDefault();const input=document.getElementById('floating-chat-input'),log=document.getElementById('floating-chat-log'),form=e.currentTarget,button=form.querySelector('button'),q=input.value.trim();if(!q||button.disabled)return;const user=document.createElement('p');user.className='user';user.textContent=q;log.appendChild(user);input.value='';button.disabled=true;button.textContent='•••';button.title='Assistant is working';const waiting=document.createElement('div');waiting.className='ai-chat-thinking';const title=document.createElement('b');title.textContent='Working on your question';const stage=document.createElement('div');stage.className='ai-activity-stage';const hotelQuestion=/\b(hotel|hotels|stay|accommodation|guest house|resort|laxmi niwas|sukhnath|hotel ankur|reviews?|tripadvisor|booking\.com|agoda)\b/i.test(q);const steps=hotelQuestion?['Understanding the hotel and location','Searching public hotel sources','Preparing a sourced response']:['Understanding your question','Checking trip information','Preparing your answer'];const stepList=document.createElement('div');stepList.className='chat-steps';const stepNodes=steps.map((label,index)=>{const row=document.createElement('div');row.className='chat-step'+(index===0?' active':'');const dot=document.createElement('span');dot.className='step-dot';dot.textContent=index===0?'…':String(index+1);const text=document.createElement('span');text.textContent=label;row.append(dot,text);stepList.appendChild(row);return row});const track=document.createElement('div');track.className='ai-activity-track';const bar=document.createElement('span');track.appendChild(bar);waiting.append(title,stage,stepList,track);stage.textContent='Step 1 of '+steps.length;log.appendChild(waiting);log.scrollTop=log.scrollHeight;const thinkHarder=document.getElementById('chat-depth')?.value==='deep';const started=Date.now();stepNodes[0].classList.remove('active');stepNodes[0].classList.add('done');stepNodes[0].querySelector('.step-dot').textContent='✓';stepNodes[1].classList.add('active');stepNodes[1].querySelector('.step-dot').textContent='…';stage.textContent='Step 2 of '+steps.length+' · '+(hotelQuestion?'Searching public hotel sources':'Checking trip information');try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q,thinkHarder})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Assistant unavailable');stepNodes.forEach((node,index)=>{node.classList.toggle('done',index<steps.length-1);node.classList.toggle('active',index===steps.length-1);node.querySelector('.step-dot').textContent=index<steps.length-1?'✓':'…'});stage.textContent='Step '+steps.length+' of '+steps.length+' · Formatting response';renderChatReply(waiting,d.reply||'I could not prepare an answer.');
- if(Array.isArray(d.sources)&&d.sources.length){
-  const sourceBox=document.createElement('div');sourceBox.className='chat-source-links';
-  const heading=document.createElement('strong');heading.textContent='Sources ('+d.sources.length+')';sourceBox.appendChild(heading);
-  d.sources.forEach(source=>{if(!source||typeof source.url!=='string'||!(source.url.startsWith('https://')||source.url.startsWith('http://')))return;const link=document.createElement('a');link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=source.title||source.url;sourceBox.appendChild(link);});
-  if(d.researchedAt){const stamp=document.createElement('small');const date=new Date(d.researchedAt);stamp.textContent='Research timestamp: '+(Number.isNaN(date.getTime())?'unavailable':date.toLocaleString());sourceBox.appendChild(stamp);}
-  waiting.appendChild(sourceBox);
- }}catch(err){waiting.className='assistant-reply';waiting.textContent=err.message;}finally{button.disabled=false;button.textContent='Send';}log.scrollTop=log.scrollHeight;});
+ document.getElementById('chat-depth')?.addEventListener('change',()=>{const hint=document.getElementById('chat-depth-hint');if(hint)hint.textContent=readThinkHarder()?'Think harder selected — deeper research, longer replies.':'Quick is default. Deeper mode may take longer.';});
+ document.getElementById('floating-chat-form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const input=document.getElementById('floating-chat-input'),log=document.getElementById('floating-chat-log'),form=e.currentTarget;
+  const button=form.querySelector('button.btn[type="submit"]');
+  const q=input.value.trim();if(!q||!button||button.disabled)return;
+  const thinkHarder=readThinkHarder('chat-depth');
+  const user=document.createElement('p');user.className='user';user.textContent=q;log.appendChild(user);input.value='';
+  button.disabled=true;button.textContent='•••';button.title='Assistant is working';
+  const waiting=document.createElement('div');waiting.className='ai-chat-thinking';
+  const title=document.createElement('b');title.textContent=thinkHarder?'Working on a deeper answer':'Working on your question';
+  const stage=document.createElement('div');stage.className='ai-activity-stage';
+  const hotelQuestion=/\b(hotel|hotels|stay|accommodation|guest house|resort|laxmi niwas|sukhnath|hotel ankur|reviews?|tripadvisor|booking\.com|agoda)\b/i.test(q);
+  const steps=hotelQuestion
+   ?['Understanding the request','Identifying the property','Searching public sources','Preparing the response']
+   :['Understanding your question','Checking trip information','Preparing your answer'];
+  const stepList=document.createElement('div');stepList.className='chat-steps';
+  const stepNodes=steps.map((label,index)=>{const row=document.createElement('div');row.className='chat-step'+(index===0?' active':'');const dot=document.createElement('span');dot.className='step-dot';dot.textContent=index===0?'…':String(index+1);const text=document.createElement('span');text.textContent=label;row.append(dot,text);stepList.appendChild(row);return row});
+  const track=document.createElement('div');track.className='ai-activity-track';track.appendChild(document.createElement('span'));
+  waiting.append(title,stage,stepList,track);stage.textContent='Step 1 of '+steps.length+(thinkHarder?' · Think harder':' · Quick');
+  log.appendChild(waiting);log.scrollTop=log.scrollHeight;
+  let stepTimer=null;let stepIndex=0;
+  const advance=()=>{if(stepIndex>=steps.length-1)return;stepNodes[stepIndex].classList.remove('active');stepNodes[stepIndex].classList.add('done');stepNodes[stepIndex].querySelector('.step-dot').textContent='✓';stepIndex++;stepNodes[stepIndex].classList.add('active');stepNodes[stepIndex].querySelector('.step-dot').textContent='…';stage.textContent='Step '+(stepIndex+1)+' of '+steps.length+' · '+steps[stepIndex]};
+  stepTimer=setInterval(advance,1800);advance();
+  try{
+   const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q,thinkHarder:!!thinkHarder})});
+   const d=await r.json();if(!r.ok)throw new Error(d.error||'Assistant unavailable');
+   clearInterval(stepTimer);stepNodes.forEach((node,index)=>{node.classList.add('done');node.classList.remove('active');node.querySelector('.step-dot').textContent='✓'});
+   stage.textContent='Formatting response';
+   renderChatReply(waiting,d.reply||'I could not prepare an answer.');
+   if(Array.isArray(d.sources)&&d.sources.length){
+    if(window.TripMarkdown)window.TripMarkdown.renderSources(waiting,d.sources,{title:'Sources ('+d.sources.length+')'});
+    if(d.researchedAt){const stamp=document.createElement('small');const date=new Date(d.researchedAt);stamp.textContent='Research timestamp: '+(Number.isNaN(date.getTime())?'unavailable':date.toLocaleString());waiting.appendChild(stamp);}
+   }
+  }catch(err){clearInterval(stepTimer);waiting.className='assistant-reply';waiting.textContent=err.message;}
+  finally{button.disabled=false;button.textContent='Send';button.title='Send';}
+  log.scrollTop=log.scrollHeight;
+ });
 })();
 </script>
 
 <script>
 (function(){
  const byId=id=>document.getElementById(id);
- function addText(parent,tag,text,className){const el=document.createElement(tag);el.textContent=text;if(className)el.className=className;parent.appendChild(el);return el;}
  function renderAnswer(answer,sources,resultEl){
-  resultEl.replaceChildren();
-  const source=String(answer||'').replace(/\r/g,'').replace(/\\\|/g,'|').replace(/\\\*/g,'*');
-  const lines=source.split('\n');let card=null,list=null;
-  const ensureCard=()=>{if(!card){card=document.createElement('article');card.className='card hotel-result-card';resultEl.appendChild(card)}return card};
-  const inline=(parent,value)=>{
-   const token=/\*\*([^*]+)\*\*|\*([^*]+)\*|\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)|(https?:\/\/[^\s)]+)/g;
-   let last=0,m;
-   while((m=token.exec(value))){if(m.index>last)parent.appendChild(document.createTextNode(value.slice(last,m.index)));
-    if(m[1]){const b=document.createElement('strong');b.textContent=m[1];parent.appendChild(b)}
-    else if(m[2]){const em=document.createElement('em');em.textContent=m[2];parent.appendChild(em)}
-    else{const a=document.createElement('a');a.href=m[4]||m[5];a.target='_blank';a.rel='noopener noreferrer';a.textContent=m[3]||m[5];parent.appendChild(a)}
-    last=token.lastIndex;
-   }
-   if(last<value.length)parent.appendChild(document.createTextNode(value.slice(last)));
-  };
-  const isRow=line=>line.trim().startsWith('|')&&line.trim().endsWith('|');
-  const cells=line=>line.trim().replace(/^\|/,'').replace(/\|$/,'').split('|').map(x=>x.trim());
-  const isSeparator=line=>isRow(line)&&cells(line).every(x=>/^:?-{3,}:?$/.test(x));
-  for(let i=0;i<lines.length;i++){
-   const line=lines[i].trim();if(!line){list=null;continue}
-   if(isRow(line)&&i+1<lines.length&&isSeparator(lines[i+1])){
-    const target=ensureCard();list=null;
-    const wrap=document.createElement('div');wrap.className='hotel-table-wrap';
-    const table=document.createElement('table');table.className='hotel-table';
-    const thead=document.createElement('thead'),trh=document.createElement('tr');
-    cells(line).forEach(value=>{const th=document.createElement('th');inline(th,value);trh.appendChild(th)});
-    thead.appendChild(trh);table.appendChild(thead);const tbody=document.createElement('tbody');i+=2;
-    while(i<lines.length&&isRow(lines[i])){
-     const tr=document.createElement('tr');cells(lines[i]).forEach(value=>{const td=document.createElement('td');inline(td,value);tr.appendChild(td)});tbody.appendChild(tr);i++;
-    }
-    i--;table.appendChild(tbody);wrap.appendChild(table);target.appendChild(wrap);continue;
-   }
-   if(/^#{1,3}\s/.test(line)){card=document.createElement('article');card.className='card hotel-result-card';resultEl.appendChild(card);const h=document.createElement('h3');inline(h,line.replace(/^#{1,3}\s*/,''));card.appendChild(h);list=null;continue}
-   const target=ensureCard();
-   if(/^[-*•]\s/.test(line)){if(!list){list=document.createElement('ul');target.appendChild(list)}const li=document.createElement('li');inline(li,line.replace(/^[-*•]\s*/,''));list.appendChild(li);continue}
-   list=null;const clean=line.replace(/^\d+[.)]\s*/,'');const colon=clean.indexOf(':');
-   if(colon>0&&colon<48){const p=document.createElement('p');const b=document.createElement('b');inline(b,clean.slice(0,colon+1));p.appendChild(b);p.appendChild(document.createTextNode(' '));inline(p,clean.slice(colon+1).trim());target.appendChild(p)}
-   else{const p=document.createElement('p');inline(p,clean);target.appendChild(p)}
+  if(window.TripMarkdown){
+   window.TripMarkdown.renderMarkdown(resultEl,answer,{cardClass:'card hotel-result-card',tableWrapClass:'hotel-table-wrap',tableClass:'hotel-table'});
+   window.TripMarkdown.renderSources(resultEl,sources,{asCard:true,className:'card hotel-result-card hotel-sources',title:'Sources & booking checks'});
+   return;
   }
-  if(sources&&sources.length){const box=document.createElement('article');box.className='card hotel-result-card hotel-sources';addText(box,'h3','Sources & booking checks');const ul=document.createElement('ul');sources.forEach(s=>{const li=document.createElement('li');const a=document.createElement('a');a.href=s.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent=s.title||s.url;li.appendChild(a);ul.appendChild(li)});box.appendChild(ul);resultEl.appendChild(box)}
+  resultEl.textContent=String(answer||'');
  }
  async function runHotelSearch(query,statusEl,resultEl,activityId){
   const activity=byId(activityId),timer=byId(activityId.replace('-activity','-elapsed'));
   const started=Date.now();let ticker=null;
+  const thinkHarder=readThinkHarder('hotel-research-depth')||readThinkHarder('chat-depth');
   statusEl.textContent='';resultEl.replaceChildren();if(activity){activity.hidden=false;if(timer)timer.textContent='0s';ticker=setInterval(()=>{if(timer)timer.textContent=Math.floor((Date.now()-started)/1000)+'s'},1000)}
   try{
-   const response=await fetch('/api/hotels/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query})});
+   const response=await fetch('/api/hotels/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query,thinkHarder:!!thinkHarder})});
    const data=await response.json();if(!response.ok)throw new Error(data.error||'Hotel search is unavailable.');
    renderAnswer(data.answer,data.sources,resultEl);
    const seconds=Math.max(1,Math.round((Date.now()-started)/1000));
    const sourceCount=Number.isFinite(data.sourceCount)?data.sourceCount:(Array.isArray(data.sources)?data.sources.length:0);
    const checked=data.researchedAt?new Date(data.researchedAt):null;
    const checkedLabel=checked&&!Number.isNaN(checked.getTime())?' Research timestamp: '+checked.toLocaleString() + '.':'';
-   statusEl.textContent='Completed in '+seconds+' seconds · '+sourceCount+' source link(s) returned.'+checkedLabel+' Verify current prices, ratings and availability directly with each provider.';
+   statusEl.textContent='Completed in '+seconds+' seconds · mode '+(data.mode|| (thinkHarder?'deep':'quick'))+' · '+sourceCount+' source link(s) returned.'+checkedLabel+' Verify current prices, ratings and availability directly with each provider.';
   }catch(error){statusEl.textContent=error.message;}
   finally{if(ticker)clearInterval(ticker);if(activity)activity.hidden=true}
  }
+ function ensureHotelDepthControl(form){
+  if(!form||form.querySelector('#hotel-research-depth'))return;
+  const row=document.createElement('div');row.className='chat-mode-row';row.style.padding='0 0 10px';
+  row.innerHTML='<label for="hotel-research-depth">Research depth</label><select id="hotel-research-depth" aria-label="Hotel research depth"><option value="quick">Quick answer</option><option value="deep">Think harder · deeper research</option></select>';
+  form.insertBefore(row, form.firstChild);
+ }
  const hf=byId('hotel-search-form');
- if(hf)hf.addEventListener('submit',e=>{
+ if(hf){ensureHotelDepthControl(hf);hf.addEventListener('submit',e=>{
   e.preventDefault();
   const destination=byId('hotel-destination').value,budget=byId('hotel-budget').value;
   const prefs=[...document.querySelectorAll('input[name="hotel-pref"]:checked')].map(x=>x.value);
   const extra=byId('hotel-search-extra').value.trim();
   const places=destination==='all'?'Dwarka, Somnath and Diu':destination;
-  const query='Find and compare current public hotel options in '+places+' for our family trip (6 adults and one toddler), 2 rooms where possible. Budget: '+budget+'. Priorities: '+(prefs.length?prefs.join('; '):'general family suitability')+'. Additional requirements: '+(extra||'none')+'. Dates: Dwarka 29–31 Dec 2026, Somnath 31 Dec 2026–1 Jan 2027, Diu 1–2 Jan 2027. Return concise hotel options with name, area, separate platform ratings and review counts when available, room suitability, parking, distance to key attractions, current indicative price and taxes, key pros/cons, and source links. Never invent missing details or claim availability is confirmed.';
+  const query='Find and compare current public hotel options in '+places+' for our family trip (6 adults and one toddler), 2 rooms where possible. Budget: '+budget+'. Priorities: '+(prefs.length?prefs.join('; '):'general family suitability')+'. Additional requirements: '+(extra||'none')+'. Dates: Dwarka 29–31 Dec 2026, Somnath 31 Dec 2026–1 Jan 2027, Diu 1–2 Jan 2027. Return concise hotel options with name, area, separate platform ratings and review counts when available, room suitability, parking, distance to key attractions, current indicative price and taxes, key pros/cons, and source links. Never invent missing details or claim availability is confirmed. For Hotel Laxmi Niwas, verify Anand Chowk and reject similarly named Laxmi hotels.';
   runHotelSearch(query,byId('hotel-search-status'),byId('hotel-search-results'),'hotel-search-activity');
- });
+ });}
  const rf=byId('hotel-review-search-form');
- if(rf)rf.addEventListener('submit',e=>{
+ if(rf){if(!document.getElementById('hotel-research-depth'))ensureHotelDepthControl(rf);rf.addEventListener('submit',e=>{
   e.preventDefault();
   const name=byId('hotel-review-hotel').value;
   const prefs=[...document.querySelectorAll('input[name="review-pref"]:checked')].map(x=>x.value);
   const extra=byId('hotel-review-extra')?.value.trim()||'';
-  const query='Research current public guest feedback for '+name+'. Compare Google, Tripadvisor, Booking.com, Agoda and other credible sources where available. Focus on: '+(prefs.length?prefs.join('; '):'overall guest experience')+'. Specific questions: '+(extra||'none')+'. Show each platform rating separately with review count and latest review date when visible. Summarise repeated positive themes and repeated complaints, note family/toddler suitability only when supported, distinguish the exact property from similarly named hotels, and include source links. Do not invent scores, counts, quotes or availability.';
+  const exact=name.includes('Laxmi Niwas')?' Exact property: Hotel Laxmi Niwas, Anand Chowk, Dwarka — do not use Bhadrakali Chowk Laxmi listings.':'';
+  const query='Research current public guest feedback for '+name+'.'+exact+' Compare Google, Tripadvisor, Booking.com, Agoda and other credible sources where available. Focus on: '+(prefs.length?prefs.join('; '):'overall guest experience')+'. Specific questions: '+(extra||'none')+'. Show each platform rating separately with review count and latest review date when visible. Summarise repeated positive themes and repeated complaints, note family/toddler suitability only when supported, investigate under-18 policies carefully, distinguish the exact property from similarly named hotels, and include source links. Do not invent scores, counts, quotes or availability.';
   runHotelSearch(query,byId('hotel-review-status'),byId('hotel-review-results'),'hotel-review-activity');
- });
-})();
-</script>
-
-<script>
-(function(){
- const key="gujarat-trip-extra-expenses-v1";
- const labels={train:"Train tickets",meals:"Meals & refreshments",tolls:"Tolls & parking",local:"Local travel, auto/cab & transfers",other:"Other expenses / buffer"};
- let saved={};try{saved=JSON.parse(localStorage.getItem(key)||"{}")||{}}catch(e){saved={}}
- const money=n=>"₹"+Math.round(n).toLocaleString("en-IN");
- document.querySelectorAll(".expense-row").forEach(row=>{
-  const id=row.dataset.expense,display=row.querySelector(".expense-display"),input=row.querySelector(".expense-input"),edit=row.querySelector(".expense-edit"),save=row.querySelector(".expense-save"),cancel=row.querySelector(".expense-cancel");
-  const paint=()=>{const value=Number(saved[id]);if(Number.isFinite(value)&&value>=0&&saved[id]!==""&&saved[id]!==undefined){display.textContent=money(value);display.className="expense-display cost-exact"}else{display.textContent="Not entered";display.className="expense-display cost-pending"}};
-  const toggle=on=>{input.hidden=!on;save.hidden=!on;cancel.hidden=!on;edit.hidden=on;display.hidden=on};
-  paint();
-  edit.addEventListener("click",()=>{input.value=saved[id]??"";toggle(true);input.focus()});
-  cancel.addEventListener("click",()=>{input.value=saved[id]??"";toggle(false)});
-  save.addEventListener("click",()=>{const raw=input.value.trim();if(raw===""||!Number.isFinite(Number(raw))||Number(raw)<0){input.focus();return}saved[id]=Math.round(Number(raw));localStorage.setItem(key,JSON.stringify(saved));paint();toggle(false);updateTotal()});
- });
- const totalEl=document.getElementById("expense-entered-total");
- function updateTotal(){if(!totalEl)return;const total=Object.values(saved).reduce((sum,v)=>sum+(Number.isFinite(Number(v))?Number(v):0),0);const count=Object.keys(saved).filter(k=>Number.isFinite(Number(saved[k]))&&Number(saved[k])>=0).length;totalEl.textContent=count?money(total)+" entered across "+count+" categories":"No additional expenses entered yet";}
- updateTotal();
+ });}
 })();
 </script>
 

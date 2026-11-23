@@ -10,11 +10,11 @@ test("general chatbot routes hotel questions through live web search and returns
   assert.ok(worker.includes("const hotelIntent=/\\b"), "Hotel routing must use real regex word boundaries");
   assert.ok(worker.includes("booking\\.com"), "Booking.com matching must escape the dot, not the backslash");
   assert.match(worker, /type:"web_search"/);
-  assert.match(worker, /return json\(\{reply,sources,researchedAt:new Date\(\)\.toISOString\(\),sourceCount:sources\.length\}\)/);
+  assert.match(worker, /return json\(\{reply,sources,researchedAt:new Date\(\)\.toISOString\(\),sourceCount:sources\.length,mode:thinkHarder\?"deep":"quick"\}\)/);
 });
 
 test("hotel research instructions require exact-property matching and independent platform checks", () => {
-  assert.match(worker, /Identify the exact property first|Identify the exact property/);
+  assert.match(worker, /Critical identity rule|exact property|Exact listing verified/i);
   for (const platform of ["Google Maps", "Tripadvisor", "Booking.com", "Agoda"]) {
     assert.ok(worker.includes(platform), `Missing platform instruction: ${platform}`);
   }
@@ -22,8 +22,8 @@ test("hotel research instructions require exact-property matching and independen
 
 test("hotel research rules prohibit invented ratings, counts, dates and availability", () => {
   assert.match(worker, /Never invent|Do not invent/);
-  assert.match(worker, /never average|Never guess or average/i);
-  assert.match(worker, /actual review date|actual review is visible/i);
+  assert.match(worker, /Never invent or average|never average|Never guess or average/i);
+  assert.match(worker, /Latest actual review date|actual review date|actual review is visible/i);
   assert.match(worker, /Mark missing|Mark unavailable|Not verified/);
 });
 
@@ -75,7 +75,7 @@ test("family chatbot compacts older messages into a per-user rolling summary", (
 
 test("family chatbot passes saved user context and restores research sources", () => {
   assert.match(worker, /summary:summaryRow\?\.summary/);
-  assert.match(worker, /Conversation context \(only to resolve references\)/);
+  assert.match(worker, /Conversation context \(resolve references only\)/);
   assert.match(worker, /sources:JSON\.parse\(x\.sources_json\|\|"\[\]"\)/);
 });
 
