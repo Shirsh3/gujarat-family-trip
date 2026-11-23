@@ -1,0 +1,101 @@
+[
+  {
+    "id": "H01",
+    "question": "For Hotel Laxmi Niwas in Dwarka, find its exact property listing and report Google, Tripadvisor, Booking.com and Agoda ratings with review counts. Which platforms could you verify?",
+    "checks": [
+      "exact_property_identity",
+      "platform_by_platform_ratings",
+      "review_counts",
+      "direct_sources",
+      "explicit_missing_data"
+    ]
+  },
+  {
+    "id": "H02",
+    "question": "What is the latest visible guest review date for Hotel Laxmi Niwas on each platform? Separate actual review dates from page update dates.",
+    "checks": [
+      "actual_review_dates_only",
+      "platform_separation",
+      "direct_sources"
+    ]
+  },
+  {
+    "id": "H03",
+    "question": "Compare Hotel Laxmi Niwas and two other family-suitable hotels in Dwarka for 29–31 December 2026. Show each platform's rating and review count separately.",
+    "checks": [
+      "exact_property_identity",
+      "separate_platform_scores",
+      "family_suitability_evidence",
+      "no_averaging",
+      "direct_sources"
+    ]
+  },
+  {
+    "id": "H04",
+    "question": "I found two hotels with similar names in Dwarka. How do you confirm that ratings and reviews belong to the exact Hotel Laxmi Niwas we mean?",
+    "checks": [
+      "identity_disambiguation",
+      "address_or_official_site",
+      "avoid_misattribution"
+    ]
+  },
+  {
+    "id": "H05",
+    "question": "Summarise the most repeated positive and negative guest comments for Hotel Laxmi Niwas. Distinguish recurring themes from isolated complaints.",
+    "checks": [
+      "multiple_review_support",
+      "positive_and_negative_themes",
+      "isolated_observations_labelled",
+      "citations"
+    ]
+  },
+  {
+    "id": "H06",
+    "question": "Is Hotel Laxmi Niwas suitable for six adults and one toddler? Check room configuration, lift, parking, cleanliness and family feedback only where evidence exists.",
+    "checks": [
+      "family_claims_evidence",
+      "amenities_verified",
+      "unknowns_marked",
+      "direct_sources"
+    ]
+  },
+  {
+    "id": "H07",
+    "question": "Find the current price for two rooms at Hotel Laxmi Niwas for 29–31 December 2026, including taxes. Is availability actually confirmed?",
+    "checks": [
+      "dated_price_source",
+      "taxes_disclosed",
+      "availability_not_assumed",
+      "provider_link"
+    ]
+  },
+  {
+    "id": "H08",
+    "question": "If Google shows a 4.2 rating but Booking.com shows 8.1, how should I interpret the difference? Do not average the scores.",
+    "checks": [
+      "rating_scales_shown",
+      "platform_scores_not_averaged",
+      "explain_scale_difference"
+    ]
+  },
+  {
+    "id": "H09",
+    "question": "I cannot find Tripadvisor or Agoda ratings for this exact hotel. Tell me precisely what you searched and what remains unverified; do not guess.",
+    "checks": [
+      "no_fabricated_ratings",
+      "missing_platform_explained",
+      "clear_limitations"
+    ]
+  },
+  {
+    "id": "H10",
+    "question": "Give me a final evidence-based shortlist of three Dwarka hotels for our family. Include platform-wise scores, counts, recent review evidence, recurring complaints, price source and direct links.",
+    "checks": [
+      "evidence_backed_shortlist",
+      "all_platform_fields_or_not_verified",
+      "review_date_accuracy",
+      "source_links",
+      "no_invented_facts"
+    ]
+  }
+]
