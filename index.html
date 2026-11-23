@@ -759,7 +759,7 @@ document.addEventListener('click',e=>{if(e.target.closest('.expense-save,.expens
    const checked=data.researchedAt?new Date(data.researchedAt):null;
    const checkedLabel=checked&&!Number.isNaN(checked.getTime())?' Research timestamp: '+checked.toLocaleString() + '.':'';
    statusEl.textContent='Completed in '+seconds+' seconds · mode '+(data.mode|| (thinkHarder?'deep':'quick'))+' · '+sourceCount+' source link(s) returned.'+checkedLabel+' Verify current prices, ratings and availability directly with each provider.';
-  }catch(error){statusEl.textContent=error.message;}
+  }catch(error){statusEl.replaceChildren(document.createTextNode(error.message+' '));if(/busy|temporarily|retry|too long|unreachable/i.test(error.message)){const retry=document.createElement('button');retry.type='button';retry.className='btn alt';retry.textContent='Retry search';retry.addEventListener('click',()=>runHotelSearch(query,statusEl,resultEl,activityId),{once:true});statusEl.appendChild(retry);}}
   finally{if(ticker)clearInterval(ticker);if(activity)activity.hidden=true}
  }
  function ensureHotelDepthControl(form){
