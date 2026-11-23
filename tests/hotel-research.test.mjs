@@ -59,33 +59,31 @@ test("evaluation scenarios cover ratings, dates, property identity, family fit, 
 });
 
 
-test("family chatbot persists shared messages and retrieves authenticated history", () => {
-  assert.match(worker, /\/api\/chat\/history/);
-  assert.match(worker, /currentUser\(request,env\)/);
-  assert.match(worker, /INSERT INTO trip_chat_messages/);
-  assert.match(worker, /SELECT role,content,created_at FROM trip_chat_messages ORDER BY id DESC LIMIT 20/);
+test("family chatbot persists messages under the authenticated user's account", () => {
+  assert.match(worker, /getUserChatContext\(env,user\.username\)/);
+  assert.match(worker, /saveUserChatMessage\(env,user\.username/);
+  assert.match(worker, /WHERE username=\? ORDER BY id DESC LIMIT 20/);
+  assert.match(worker, /SELECT role,content,sources_json,created_at FROM trip_chat_messages WHERE username=\?/);
 });
 
-test("family chatbot compacts older exchanges into a rolling summary", () => {
-  assert.match(worker, /async function compactSharedChatMemory/);
+test("family chatbot compacts older messages into a per-user rolling summary", () => {
+  assert.match(worker, /async function compactUserChatMemory/);
   assert.match(worker, /count<=20/);
-  assert.match(worker, /UPDATE trip_chat_summary SET summary=/);
-  assert.match(worker, /DELETE FROM trip_chat_messages WHERE id<=\?/);
+  assert.match(worker, /trip_chat_user_summary/);
+  assert.match(worker, /DELETE FROM trip_chat_messages WHERE username=\? AND id<=\?/);
 });
 
-test("family chatbot restores summary, recent messages and saved research sources", () => {
-  assert.match(worker, /summary:context\.summary/);
-  assert.match(worker, /sources:JSON\.parse\(x\.sources_json\|\|"\[\]"\)/);
+test("family chatbot passes saved user context and restores research sources", () => {
+  assert.match(worker, /summary:summaryRow\?\.summary/);
   assert.match(worker, /Conversation context \(use only to resolve references and preferences\)/);
+  assert.match(worker, /sources:JSON\.parse\(x\.sources_json\|\|"\[\]"\)/);
 });
 
-test("chat memory migration creates non-destructive conversation and summary tables", () => {
-  const migration = read("../migrations/0003_shared_chat_memory.sql");
-  assert.match(migration, /CREATE TABLE IF NOT EXISTS trip_chat_messages/);
-  assert.match(migration, /CREATE TABLE IF NOT EXISTS trip_chat_summary/);
-  assert.match(migration, /INSERT OR IGNORE INTO trip_chat_summary/);
+test("per-user summary migration matches the Worker schema", () => {
+  const migration = read("../migrations/0004_user_chat_summary.sql");
+  assert.match(migration, /CREATE TABLE IF NOT EXISTS trip_chat_user_summary/);
+  assert.match(migration, /username TEXT PRIMARY KEY/);
 });
-
 
 test("chat history and rolling summaries are isolated by authenticated username", () => {
   assert.match(worker, /getUserChatContext\(env,user\.username\)/);
