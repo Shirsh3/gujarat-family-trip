@@ -121,7 +121,7 @@ export default {
    const ip=request.headers.get("CF-Connecting-IP")||"unknown",now=Date.now(),recent=(requestCounts.get("hotel:"+ip)||[]).filter(t=>now-t<60000);
    if(recent.length>=5)return json({error:"Please wait a minute before searching again."},429);recent.push(now);requestCounts.set("hotel:"+ip,recent);
    let body;try{body=await request.json()}catch{return json({error:"Invalid request."},400)}
-   const query=typeof body.query==="string"?body.query.trim():"";if(!query||query.length>500)return json({error:"Enter a hotel search up to 500 characters."},400);
+   const query=typeof body.query==="string"?body.query.trim():"";if(!query||query.length>1800)return json({error:"Hotel search request is too long. Please reduce the extra requirements."},400);
    try{
     const key=await env.OPENAI_API_KEY.get();
     const upstream=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:JSON.stringify({
