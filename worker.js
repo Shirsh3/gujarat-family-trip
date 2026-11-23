@@ -91,7 +91,7 @@ export default {
    const user=await currentUser(request,env);return user?json({authenticated:true,user:{username:user.username,displayName:user.display_name,role:user.role}}):json({authenticated:false},401);
   }
 
-  const publicPaths = new Set(["/api/health","/api/auth/login","/api/auth/logout","/api/auth/me"]);
+  const publicPaths = new Set(["/","/login.html","/api/health","/api/auth/login","/api/auth/logout","/api/auth/me"]);
   if(!publicPaths.has(url.pathname)){
    if(!env.DB||!env.SESSION_SECRET)return url.pathname.startsWith("/api/")?json({error:"Private site login is not configured."},503):new Response("Site setup in progress", {status:503});
    const user=await currentUser(request,env);
