@@ -12,14 +12,14 @@ If information is missing, say it is not yet available and suggest contacting th
 
 
 const SESSION_TTL_SECONDS = 60 * 60 * 24 * 14;
-const PBKDF2_ITERATIONS = 310000;
+const PBKDF2_ITERATIONS = 100000;
 const encoder = new TextEncoder();
 function toBase64Url(bytes){let s="";for(const b of bytes)s+=String.fromCharCode(b);return btoa(s).replace(/\\+/g,"-").replace(/\\//g,"_").replace(/=+$/,"");}
 function fromHex(value){if(!/^(?:[0-9a-f]{2})+$/i.test(value))return new Uint8Array();return new Uint8Array(value.match(/.{2}/g).map(x=>parseInt(x,16)));}
 function hex(bytes){return Array.from(new Uint8Array(bytes)).map(x=>x.toString(16).padStart(2,"0")).join("");}
 async function derivePassword(password,salt,iterations=PBKDF2_ITERATIONS){
  if(!(salt instanceof Uint8Array)||salt.length!==16)throw new Error("Invalid password salt format");
- if(!Number.isSafeInteger(iterations)||iterations<10000||iterations>1000000)throw new Error("Invalid PBKDF2 iteration count");
+ if(!Number.isSafeInteger(iterations)||iterations<10000||iterations>100000)throw new Error("Invalid PBKDF2 iteration count");
  let material;
  try{
   material=await crypto.subtle.importKey("raw",encoder.encode(password),{name:"PBKDF2"},false,["deriveBits"]);
