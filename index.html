@@ -485,23 +485,21 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
  ];
  // The basemap is real OpenStreetMap geography, not a generated India silhouette.
  // Leaflet coordinate order is always [latitude, longitude].
- const map=L.map(el,{scrollWheelZoom:false}).setView([21.55,69.95],7);
- L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-  maxZoom:18,
-  attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
- }).addTo(map);
- // Official India national boundary overlay: India AdminBoundary FeatureServer,
- // layer 0, credited to Survey of India / Esri India. Keep OSM for roads/labels.
- // This boundary overlay is authoritative for political depiction; the OSM basemap
- // remains the navigational background.
+ const map=L.map(el,{scrollWheelZoom:false}).setView([22.5,82.5],4);
+ // India-only political map layer. Do not load a world basemap: it exposes
+ // neighbouring-country labels/borders and can contradict the requested India-only view.
+ // Government of India's BharatMapService state-boundary layer (36 State/UT polygons).
+ map.getContainer().style.background='#dcecf1';
  if(window.L.esri){
   L.esri.featureLayer({
-   url:'https://services2.arcgis.com/fQDJ6zNJPJ0yhFjv/arcgis/rest/services/IND_AdminBoundary/FeatureServer/0',
-   style:()=>({color:'#9b1c1c',weight:3,opacity:0.95,fill:false,fillOpacity:0,interactive:false})
+   url:'https://mapservice.gov.in/gismapservice/rest/services/BharatMapService/Admin_Boundary_District/MapServer/0',
+   style:()=>({color:'#777f86',weight:1.15,opacity:0.9,fillColor:'#f3f0e7',fillOpacity:1})
   }).addTo(map);
  }else{
-  console.warn('Official India boundary overlay could not load; Esri Leaflet is unavailable.');
+  console.error('India administrative boundary layer unavailable: Esri Leaflet did not load.');
  }
+ // Full-country overview on first load; selecting a day zooms to its Gujarat stops.
+ map.fitBounds([[6.5,68.0],[37.5,98.5]],{padding:[12,12],maxZoom:5});
  const markers={};
  Object.entries(places).forEach(([id,p])=>{
   if(!Array.isArray(p.coords)||p.coords.length!==2||!p.coords.every(Number.isFinite)){
