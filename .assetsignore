@@ -5,3 +5,9 @@ wrangler.jsonc
 README.md
 .github/
 cloudflare-test/
+
+# Never publish deployment, migration, or test sources as static assets
+migrations/
+tests/
+package.json
+package-lock.json
