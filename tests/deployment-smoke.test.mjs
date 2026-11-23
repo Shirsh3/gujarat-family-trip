@@ -15,7 +15,7 @@ test("Wrangler keeps the production Worker and D1 binding", () => {
   assert.equal(wrangler.d1_databases[0].binding, "DB");
   assert.equal(wrangler.d1_databases[0].database_name, "gujarat-trip-reviews");
   assert.equal(wrangler.d1_databases[0].database_id, "6903edf4-e024-4bdd-b480-132362972180");
-  assert.equal(wrangler.migrations_dir, "./migrations");
+  assert.equal(wrangler.d1_databases[0].migrations_dir, "./migrations");
   assert.equal(wrangler.assets.binding, "ASSETS");
   assert.equal(wrangler.assets.run_worker_first, true);
 });
