@@ -75,7 +75,7 @@ test("family chatbot compacts older messages into a per-user rolling summary", (
 
 test("family chatbot passes saved user context and restores research sources", () => {
   assert.match(worker, /summary:summaryRow\?\.summary/);
-  assert.match(worker, /Conversation context \(use only to resolve references and preferences\)/);
+  assert.match(worker, /Conversation context \(only to resolve references\)/);
   assert.match(worker, /sources:JSON\.parse\(x\.sources_json\|\|"\[\]"\)/);
 });
 
