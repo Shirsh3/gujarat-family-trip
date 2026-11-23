@@ -84,9 +84,9 @@ async function compactUserChatMemory(env,username){
  const maxId=rows[rows.length-1].id;
  await env.DB.prepare("DELETE FROM trip_chat_messages WHERE username=? AND id<=?").bind(username,maxId).run();
 }
-async function callAI(env,instructions,input,maxTokens=350){
+async function callAI(env,instructions,input,maxTokens=350,effort="medium"){
  const key=await env.OPENAI_API_KEY.get();
- const r=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:JSON.stringify({model:"gpt-4.1-mini",instructions,input,max_output_tokens:maxTokens})});
+ const r=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:JSON.stringify({model:"gpt-4.1-mini",instructions,input,max_output_tokens:maxTokens,reasoning:{effort}})});
  if(!r.ok)throw new Error(r.status===429?"AI is busy. Please try again shortly.":"AI service could not complete the request.");
  const data=await r.json();return (data.output||[]).flatMap(x=>x.content||[]).filter(x=>x.type==="output_text").map(x=>x.text).join("\n").trim();
 }
@@ -193,6 +193,7 @@ export default {
    if(recent.length>=20)return json({error:"Please wait a minute before asking more questions."},429);recent.push(now);requestCounts.set("chat:"+ip,recent);
    let body;try{body=await request.json()}catch{return json({error:"Invalid request."},400)}
    const message=typeof body.message==="string"?body.message.trim():"";if(!message||message.length>1000)return json({error:"Enter a question up to 1,000 characters."},400);
+   const thinkHarder=body.thinkHarder===true;
    const user=await currentUser(request,env);if(!user)return json({error:"Please sign in to use the family assistant."},401);
    if(!env.DB)return json({error:"Conversation storage is not configured."},503);
    if(containsSensitiveRequest(message))return json({reply:"I can help with trip planning, but cannot share private passenger, identity, contact or booking identifiers."});
@@ -206,10 +207,11 @@ export default {
      const key=await env.OPENAI_API_KEY.get();
      const upstream=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:JSON.stringify({
       model:"gpt-6.2-astra",
-      max_output_tokens:650,
-      max_tool_calls:4,
-      tools:[{type:"web_search",search_context_size:"low",user_location:{type:"approximate",country:"IN",region:"Gujarat"}}],
-      input:"Perform a QUICK hotel evidence check for the Gujarat family trip. Resolve the exact property first. Conversation context (only to resolve references): "+contextText+"\\n\\nQuestion: "+message+"\\n\\nUse at most four focused searches, one per platform where possible: Google Maps/Google reviews, Tripadvisor, Booking.com and Agoda. Prioritise fast exact-property matching; do not browse long review pages. Verify exact-property matches. Return a compact answer (maximum 350 words): property identity; each platform's visible rating/scale and review count; latest actual review date only if immediately visible; two or three repeated review themes only when supported by multiple reviews; family suitability only when evidenced; direct source links. Mark unavailable values Not verified. Never guess or average platform ratings. Skip detailed amenities/prices/availability unless the question specifically asks. If identity is ambiguous, say so and ask for location. Prioritise a useful quick answer over exhaustive research."
+      max_output_tokens:thinkHarder?1300:650,
+      max_tool_calls:thinkHarder?8:4,
+      reasoning:{effort:thinkHarder?"high":"low"},
+      tools:[{type:"web_search",search_context_size:thinkHarder?"high":"low",user_location:{type:"approximate",country:"IN",region:"Gujarat"}}],
+      input:(thinkHarder?"Perform a DETAILED hotel evidence investigation for the Gujarat family trip.":"Perform a QUICK hotel evidence check for the Gujarat family trip.")+ Resolve the exact property first. Conversation context (only to resolve references): "+contextText+"\\n\\nQuestion: "+message+"\\n\\nUse at most four focused searches, one per platform where possible: Google Maps/Google reviews, Tripadvisor, Booking.com and Agoda. Prioritise fast exact-property matching; do not browse long review pages. Verify exact-property matches. Return a compact answer (maximum 350 words): property identity; each platform's visible rating/scale and review count; latest actual review date only if immediately visible; two or three repeated review themes only when supported by multiple reviews; family suitability only when evidenced; direct source links. Mark unavailable values Not verified. Never guess or average platform ratings. Skip detailed amenities/prices/availability unless the question specifically asks. If identity is ambiguous, say so and ask for location. In detailed mode, investigate exact listings more carefully and include the latest three actual review dates only when individually visible; never infer dates. Use clear Markdown headings, bullets and tables. In quick mode, prioritise a concise answer."
      })});
      if(!upstream.ok)return json({error:upstream.status===429?"Hotel research is busy. Please try again shortly.":"Live hotel research could not be completed."},502);
      const result=await upstream.json();
@@ -223,7 +225,7 @@ export default {
      await saveUserChatMessage(env,user.username,"assistant",reply,sources);try{await compactUserChatMemory(env,user.username)}catch(e){}
      return json({reply,sources,researchedAt:new Date().toISOString(),sourceCount:sources.length});
     }
-    const reply=await callAI(env,SYSTEM_PROMPT,contextualQuestion,550);
+    const reply=await callAI(env,SYSTEM_PROMPT,contextualQuestion,thinkHarder?1100:550,thinkHarder?"high":"medium");
     if(!reply)return json({error:"No answer returned."},502);
     if(containsSensitiveRequest(reply))return json({reply:"I can help with trip planning, but cannot share private passenger, identity, contact or booking identifiers."});
     await saveUserChatMessage(env,user.username,"assistant",reply);try{await compactUserChatMemory(env,user.username)}catch(e){}
