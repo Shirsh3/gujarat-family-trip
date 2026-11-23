@@ -52,6 +52,20 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 .day-activities ul{margin:8px 0 0;padding-left:17px}
 .day-activities li{font-size:13px;line-height:1.5;margin:5px 0}
 .day h3{margin-bottom:5px}
+.itinerary-cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.itinerary-cards .day{padding:19px 18px 17px;background:linear-gradient(155deg,#fffefa 0%,#fbfaf5 100%)}
+.itinerary-cards .day h3{font-size:22px;min-height:52px;margin:5px 0 10px}
+.day-meta{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0 12px}
+.day-meta span{font-size:11px;font-weight:700;color:var(--green);background:var(--mint);border-radius:99px;padding:5px 9px}
+.day-highlight{font-size:13px;font-weight:700;line-height:1.5;margin:10px 0 6px}
+.day-extra{font-size:12px;color:var(--muted);line-height:1.5;margin:5px 0 12px}
+.food-pick{margin-top:13px;padding:12px;border-radius:13px;background:#f4ecdf;border:1px solid #eee2cf;display:flex;flex-direction:column;gap:3px}
+.food-pick span{font-size:9px;letter-spacing:.12em;font-weight:700;color:#9b6a34}
+.food-pick b{font-size:13px;color:#463a2b}
+.food-pick small{font-size:11px;line-height:1.4;color:#756b5c}
+@media(max-width:900px){.itinerary-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.itinerary-cards{grid-template-columns:1fr}.itinerary-cards .day h3{min-height:0}}
+
 @media(max-width:760px){.train-grid,.budget-grid{grid-template-columns:1fr}.map-card iframe{height:220px}}
 
 #trip-map{height:430px;width:100%;border-radius:0;z-index:1}
@@ -142,14 +156,13 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 <div class="feature" style="background-image:url('https://static.wixstatic.com/media/d37a82_54e4d42fc67b4ecfb48d4f9813753ba6~mv2.jpg/v1/fill/w_980%2Ch_704%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/d37a82_54e4d42fc67b4ecfb48d4f9813753ba6~mv2.jpg')"><div><b>Somnath</b><span>A memorable evening by the coast</span></div></div>
 <div class="feature" style="background-image:url('https://media.assettype.com/outlooktraveller/2024-09-04/4kzh5xcz/Daman%20%26%20Diu.jpg?auto=format%2Ccompress&dpr=1.0&fit=max&format=webp&w=1200')"><div><b>Diu</b><span>Slow coastal moments</span></div></div>
 </div>
-<div class="grid">
-<article class="card day"><div class="date">Monday · 28 December</div><h3>Delhi → Jamnagar</h3><p><b>Train 20938 · DEE–PBR Express</b></p><div class="day-activities"><ul><li>Departure: Delhi Sarai Rohilla, 8:10 AM</li><li>Overnight train journey</li><li>Keep baby essentials and medicines in a small day bag</li></ul></div></article>
-<article class="card day"><div class="date">Tuesday · 29 December</div><h3>Arrive & settle in Dwarka</h3><div class="day-activities"><ul><li>5:25 AM: scheduled arrival at Jamnagar</li><li>Pre-booked vehicle to Dwarka; allow roughly 2–3 hours</li><li>Hotel, breakfast and rest / early check-in</li><li>Afternoon/evening: Dwarkadhish Temple</li><li>Rukmini Devi and Bhadkeshwar Mahadev if energy and darshan timings permit</li></ul></div></article>
-<article class="card day"><div class="date">Wednesday · 30 December</div><h3>Dwarka & the coast</h3><div class="day-activities"><ul><li>Morning: Nageshwar Jyotirlinga</li><li>Optional: Bet Dwarka / other local sights</li><li>Return for lunch and afternoon rest</li><li>Evening: Shivrajpur Beach</li></ul></div></article>
-<article class="card day"><div class="date">Thursday · 31 December</div><h3>Dwarka → Somnath</h3><div class="day-activities"><ul><li>Start around 7:00 AM after breakfast</li><li>Allow 5–6 hours including comfort breaks</li><li>Hotel check-in, lunch and rest</li><li>Evening: Somnath Jyotirlinga darshan</li><li>Light & sound show, subject to operating schedule</li></ul></div></article>
-<article class="card day"><div class="date">Friday · 1 January</div><h3>Somnath → Diu</h3><div class="day-activities"><ul><li>Breakfast and drive to Diu</li><li>Hotel check-in and rest</li><li>Afternoon: Diu Fort, St. Paul's Church; Naida Caves / INS Khukri Memorial optional</li><li>Evening: Nagoa Beach</li></ul></div></article>
-<article class="card day"><div class="date">Saturday · 2 January</div><h3>Diu → Porbandar</h3><div class="day-activities"><ul><li>Early morning: Gangeshwar Mahadev</li><li>Breakfast and checkout</li><li>Leave for Porbandar early; allow road and meal breaks</li><li>Target station arrival by 3:30–4:00 PM for the planned 7 PM train</li><li>Confirm exact return train and station before travel</li></ul></div></article>
-
+<div class="grid itinerary-cards">
+<article class="card day"><div class="date">MON · 28 DEC</div><h3>Delhi → Jamnagar</h3><div class="day-meta"><span>🚆 Train 20938</span><span>8:10 AM departure</span></div><p class="day-highlight">Board at Delhi Sarai Rohilla · overnight journey</p><div class="food-pick"><span>🍽️ ON THE TRAIN</span><b>Pack thepla, dhokla & fruit</b><small>Easy-to-carry snacks; keep water and toddler food handy.</small></div></article>
+<article class="card day"><div class="date">TUE · 29 DEC</div><h3>Welcome to Dwarka</h3><div class="day-meta"><span>🚗 130–135 km</span><span>2–3 hrs approx.</span></div><p class="day-highlight">5:25 AM arrival · hotel rest · Dwarkadhish Temple</p><p class="day-extra">Rukmini Devi and Bhadkeshwar if everyone has energy.</p><div class="food-pick"><span>🥘 TRY IN DWARKA</span><b>Gujarati thali · khichdi-kadhi</b><small>Ask for a mild, less-spicy portion for the toddler.</small></div></article>
+<article class="card day"><div class="date">WED · 30 DEC</div><h3>Dwarka & the coast</h3><div class="day-meta"><span>🛕 Nageshwar</span><span>🏖️ Shivrajpur</span></div><p class="day-highlight">Morning temple visit · optional Bet Dwarka · beach sunset</p><p class="day-extra">Keep the afternoon free for lunch and the baby's nap. Ferry time is additional.</p><div class="food-pick"><span>🥘 LOCAL BITES</span><b>Fafda-gathiya · Gujarati kadhi</b><small>Try a local farsan shop; choose freshly prepared food.</small></div></article>
+<article class="card day"><div class="date">THU · 31 DEC</div><h3>Dwarka → Somnath</h3><div class="day-meta"><span>🚗 230–240 km</span><span>5–6 hrs approx.</span></div><p class="day-highlight">7:00 AM planned start · hotel rest · evening darshan</p><p class="day-extra">Light & sound show only if operating that evening.</p><div class="food-pick"><span>🍛 TRY IN SOMNATH</span><b>Kathiyawadi thali · bajra rotla</b><small>Ringan no olo and sev-tameta are regional favourites; request mild spice.</small></div></article>
+<article class="card day"><div class="date">FRI · 1 JAN</div><h3>Somnath → Diu</h3><div class="day-meta"><span>🚗 85–95 km</span><span>2–2.5 hrs approx.</span></div><p class="day-highlight">Check in · Diu Fort · Naida Caves · Nagoa Beach</p><p class="day-extra">St. Paul's Church and INS Khukri Memorial if time allows.</p><div class="food-pick"><span>🐟 TRY IN DIU</span><b>Fresh seafood · fish curry-rice</b><small>Also easy to find Gujarati thali; ask about spice and preparation.</small></div></article>
+<article class="card day"><div class="date">SAT · 2 JAN</div><h3>Diu → Porbandar</h3><div class="day-meta"><span>🚗 200–230 km</span><span>4.5–5.5 hrs approx.</span></div><p class="day-highlight">Gangeshwar early · drive to Porbandar · station by 3:30–4 PM</p><p class="day-extra">20937 PBR DEE Express · 3A · 2 January. ERS shows times as N.A.; verify running details.</p><div class="food-pick"><span>🥘 BEFORE THE TRAIN</span><b>Gujarati thali · khaman · ganthiya</b><small>Keep the station meal simple and leave a buffer before boarding.</small></div></article>
 </div>
 </section>
 <section id="hotels" class="section">
