@@ -252,11 +252,11 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
  };
  const days=[
   {date:'2026-12-28',label:'28 Dec',title:'Delhi → train',weekday:'Monday',city:'Delhi',places:[],route:[],weather:null},
-  {date:'2026-12-29',label:'29 Dec',title:'Arrive in Dwarka',weekday:'Tuesday',city:'Dwarka',places:['jam','dwarkaHotel','dwarkadhish','rukmini','bhadkeshwar'],route:['jam','dwarkaHotel','dwarkadhish','rukmini','bhadkeshwar'],weather:'dwarkaHotel'},
-  {date:'2026-12-30',label:'30 Dec',title:'Dwarka & coast',weekday:'Wednesday',city:'Dwarka',places:['dwarkaHotel','nageshwar','betdwarka','shivrajpur'],route:['dwarkaHotel','nageshwar','shivrajpur'],weather:'dwarkaHotel',ferryNote:'Bet Dwarka requires a ferry transfer; ferry time is not included in road estimates.'},
-  {date:'2026-12-31',label:'31 Dec',title:'Dwarka → Somnath',weekday:'Thursday',city:'Somnath',places:['dwarkaHotel','somnathHotel','somnathTemple'],route:['dwarkaHotel','somnathHotel','somnathTemple'],weather:'somnathHotel'},
-  {date:'2027-01-01',label:'1 Jan',title:'Somnath → Diu',weekday:'Friday',city:'Diu',places:['somnathHotel','somnathTemple','diuHotel','diuFort','stpaul','naida','khukri','nagoa'],route:['somnathHotel','diuHotel','diuFort','stpaul','naida','khukri','nagoa'],weather:'diuHotel'},
-  {date:'2027-01-02',label:'2 Jan',title:'Diu → Porbandar',weekday:'Saturday',city:'Porbandar',places:['diuHotel','gangeshwar','porbandar'],route:['diuHotel','gangeshwar','porbandar'],weather:'porbandar'},
+  {date:'2026-12-29',label:'29 Dec',title:'Arrive in Dwarka',weekday:'Tuesday',city:'Dwarka',places:['jam','dwarkaHotel','dwarkadhish','rukmini','bhadkeshwar'],route:['jam','dwarkaHotel','dwarkadhish','rukmini','bhadkeshwar'],weather:'dwarkaHotel',times:{jam:'5:25 AM · scheduled',dwarkaHotel:'Morning · rest / check-in',dwarkadhish:'Afternoon / evening',rukmini:'If time permits',bhadkeshwar:'If time permits'}},
+  {date:'2026-12-30',label:'30 Dec',title:'Dwarka & coast',weekday:'Wednesday',city:'Dwarka',places:['dwarkaHotel','nageshwar','betdwarka','shivrajpur'],route:['dwarkaHotel','nageshwar','shivrajpur'],weather:'dwarkaHotel',times:{dwarkaHotel:'Morning start',nageshwar:'Morning',betdwarka:'Optional · ferry',shivrajpur:'Evening'},ferryNote:'Bet Dwarka requires a ferry transfer; ferry time is not included in road estimates.'},
+  {date:'2026-12-31',label:'31 Dec',title:'Dwarka → Somnath',weekday:'Thursday',city:'Somnath',places:['dwarkaHotel','somnathHotel','somnathTemple'],route:['dwarkaHotel','somnathHotel','somnathTemple'],weather:'somnathHotel',times:{dwarkaHotel:'7:00 AM · planned start',somnathHotel:'Afternoon · check-in / rest',somnathTemple:'Evening darshan'}},
+  {date:'2027-01-01',label:'1 Jan',title:'Somnath → Diu',weekday:'Friday',city:'Diu',places:['somnathHotel','somnathTemple','diuHotel','diuFort','stpaul','naida','khukri','nagoa'],route:['somnathHotel','diuHotel','diuFort','stpaul','naida','khukri','nagoa'],weather:'diuHotel',times:{somnathHotel:'Morning checkout',somnathTemple:'Optional / morning',diuHotel:'Afternoon · check-in',diuFort:'Afternoon',stpaul:'Afternoon',naida:'Optional · afternoon',khukri:'Optional · afternoon',nagoa:'Evening'}},
+  {date:'2027-01-02',label:'2 Jan',title:'Diu → Porbandar',weekday:'Saturday',city:'Porbandar',places:['diuHotel','gangeshwar','porbandar'],route:['diuHotel','gangeshwar','porbandar'],weather:'porbandar',times:{diuHotel:'Early checkout',gangeshwar:'Early morning',porbandar:'Target arrival 3:30–4:00 PM'}},
   {date:'2027-01-03',label:'3 Jan',title:'Jaipur → home',weekday:'Sunday',city:'Jaipur',places:[],route:[],weather:null}
  ];
  const map=L.map(el,{scrollWheelZoom:false}).setView([21.55,69.95],7);
@@ -277,7 +277,8 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
   const p=places[id], row=document.createElement('div');row.className='trip-place';row.dataset.id=id;
   const icon=document.createElement('span');icon.className='place-icon';icon.textContent=p.icon;
   const info=document.createElement('span');const name=document.createElement('b');name.textContent=p.name;const detail=document.createElement('small');detail.textContent=p.type+' · '+p.detail;info.append(name,detail);
-  row.append(icon,info);row.addEventListener('click',()=>focusPlace(id));list.appendChild(row);
+  const time=document.createElement('span');time.className='place-time';time.textContent=(days[activeDay].times||{})[id]||'Flexible';
+  row.append(icon,info,time);row.addEventListener('click',()=>focusPlace(id));list.appendChild(row);
  }
  async function loadRoadRoute(d){
   legsEl.innerHTML='';status.textContent='Calculating road distance & time…';
