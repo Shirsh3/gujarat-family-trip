@@ -64,6 +64,27 @@ function containsSensitiveRequest(text){
  const patterns=[/\bpnr\b/i,/\baadhaar\b/i,/\b(passport|pan card|identity number|ticket number|booking reference|transaction id|invoice number|voucher number|qr code)\b/i,/\b(phone number|mobile number|email address|contact number|passenger name|full name)\b/i,/\b\d{10,}\b/,/\b\d{4}[ -]?\d{4}[ -]?\d{4}\b/];
  return patterns.some(p=>p.test(text));
 }
+async function getSharedChatContext(env){
+ const summaryRow=await env.DB.prepare("SELECT summary FROM trip_chat_summary WHERE id=1").first();
+ const recent=await env.DB.prepare("SELECT role,content,created_at FROM trip_chat_messages ORDER BY id DESC LIMIT 20").all();
+ const messages=(recent.results||[]).reverse();
+ return {summary:summaryRow?.summary||"",messages};
+}
+async function saveSharedChatMessage(env,role,content,sources=[]){
+ await env.DB.prepare("INSERT INTO trip_chat_messages (username,role,content,sources_json) VALUES ('family',?,?,?)").bind(role,content,JSON.stringify(sources||[])).run();
+}
+async function compactSharedChatMemory(env){
+ const countRow=await env.DB.prepare("SELECT COUNT(*) AS count FROM trip_chat_messages").first();
+ const count=Number(countRow?.count||0);if(count<=20)return;
+ const older=await env.DB.prepare("SELECT id,role,content FROM trip_chat_messages ORDER BY id ASC LIMIT ?").bind(count-20).all();
+ const rows=older.results||[];if(!rows.length)return;
+ const summaryRow=await env.DB.prepare("SELECT summary FROM trip_chat_summary WHERE id=1").first();
+ const transcript=rows.map(x=>x.role.toUpperCase()+": "+x.content).join("\\n");
+ const summary=await callAI(env,"Maintain a concise factual memory for a shared family trip assistant. Merge the existing summary with older conversation messages. Preserve confirmed decisions, preferences, constraints, dates, amounts, unresolved questions and who proposed/confirmed them when relevant. Remove repetition. Do not preserve passwords, authentication secrets, private booking identifiers or sensitive personal data. Do not invent facts. Return only the updated summary, preferably under 900 words.", "Existing memory:\\n"+(summaryRow?.summary||"None") + "\\n\\nOlder messages to absorb:\\n"+transcript,900);
+ if(summary)await env.DB.prepare("UPDATE trip_chat_summary SET summary=?,updated_at=datetime('now') WHERE id=1").bind(summary).run();
+ const maxId=rows[rows.length-1].id;
+ await env.DB.prepare("DELETE FROM trip_chat_messages WHERE id<=?").bind(maxId).run();
+}
 async function callAI(env,instructions,input,maxTokens=350){
  const key=await env.OPENAI_API_KEY.get();
  const r=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:JSON.stringify({model:"gpt-4.1-mini",instructions,input,max_output_tokens:maxTokens})});
@@ -154,6 +175,16 @@ export default {
     return json({answer,sources,researchedAt:new Date().toISOString(),sourceCount:sources.length});
    }catch(e){return json({error:"Hotel search is temporarily unavailable."},502)}
   }
+  if(url.pathname==="/api/chat/history"){
+   if(request.method!=="GET")return json({error:"Method not allowed"},405);
+   const origin=request.headers.get("Origin");if(origin&&new URL(origin).host!==url.host)return json({error:"Cross-origin requests are not allowed."},403);
+   const user=await currentUser(request,env);if(!user)return json({error:"Please sign in to access the family conversation."},401);
+   try{
+    const context=await getSharedChatContext(env);
+    const saved=await env.DB.prepare("SELECT role,content,sources_json,created_at FROM trip_chat_messages ORDER BY id ASC").all();
+    return json({summary:context.summary,messages:(saved.results||[]).map(x=>({role:x.role,content:x.content,sources:JSON.parse(x.sources_json||"[]"),createdAt:x.created_at}))});
+   }catch(e){return json({error:"Could not load the family conversation."},500)}
+  }
   if(url.pathname==="/api/chat"){
    if(request.method!=="POST")return json({error:"Method not allowed"},405);
    const origin=request.headers.get("Origin");if(origin&&new URL(origin).host!==url.host)return json({error:"Cross-origin requests are not allowed."},403);
@@ -161,15 +192,21 @@ export default {
    if(recent.length>=20)return json({error:"Please wait a minute before asking more questions."},429);recent.push(now);requestCounts.set("chat:"+ip,recent);
    let body;try{body=await request.json()}catch{return json({error:"Invalid request."},400)}
    const message=typeof body.message==="string"?body.message.trim():"";if(!message||message.length>1000)return json({error:"Enter a question up to 1,000 characters."},400);
+   const user=await currentUser(request,env);if(!user)return json({error:"Please sign in to use the family assistant."},401);
+   if(!env.DB)return json({error:"Conversation storage is not configured."},503);
    if(containsSensitiveRequest(message))return json({reply:"I can help with trip planning, but cannot share private passenger, identity, contact or booking identifiers."});
    try{
+    const memory=await getSharedChatContext(env);
+    await saveSharedChatMessage(env,"user",message);
+    const contextText=[memory.summary?"Family conversation summary:\\n"+memory.summary:"",memory.messages.length?"Recent conversation (oldest first):\\n"+memory.messages.map(x=>x.role.toUpperCase()+": "+x.content).join("\\n"):""].filter(Boolean).join("\\n\\n");
+    const contextualQuestion=(contextText?contextText+"\\n\\n":"")+"Current user question: "+message;
     const hotelIntent=/\b(hotel|hotels|stay|stays|accommodation|guest house|resort|laxmi niwas|sukhnath|hotel ankur|hotel reviews?|tripadvisor|booking\.com|agoda)\b/i.test(message);
     if(hotelIntent){
      const key=await env.OPENAI_API_KEY.get();
      const upstream=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:JSON.stringify({
       model:"gpt-6.2-astra",
       tools:[{type:"web_search",search_context_size:"low",user_location:{type:"approximate",country:"IN",region:"Gujarat"}}],
-      input:"The user asked a hotel/accommodation question in the Gujarat family trip assistant. Use live public web search; do not answer that web search is unavailable. User question: "+message+"\\n\\nFind the exact property and location before attributing reviews. Search relevant public sources independently, including Google Maps, Tripadvisor, Booking.com and Agoda where available. Only say a platform was checked when you found an exact-property result there. Report rating with scale and review count only when visible. Latest review date means the date of an actual review, not a page update. Summarise recurring praise/complaints only when supported by multiple reviews. Never invent hotel identity, ratings, review counts, review dates, prices, amenities, quotes or availability. Mark unavailable details Not verified and explain why. Compare platforms separately; never average scores. Include direct source URLs. If the hotel name is ambiguous, explain the ambiguity and ask for area/address rather than guessing. Keep under 600 words."
+      input:"The user asked a hotel/accommodation question in the Gujarat family trip assistant. Use live public web search; do not answer that web search is unavailable. Conversation context (use only to resolve references and preferences): "+contextText+"\\n\\nCurrent user question: "+message+"\\n\\nFind the exact property and location before attributing reviews. Search relevant public sources independently, including Google Maps, Tripadvisor, Booking.com and Agoda where available. Only say a platform was checked when you found an exact-property result there. Report rating with scale and review count only when visible. Latest review date means the date of an actual review, not a page update. Summarise recurring praise/complaints only when supported by multiple reviews. Never invent hotel identity, ratings, review counts, review dates, prices, amenities, quotes or availability. Mark unavailable details Not verified and explain why. Compare platforms separately; never average scores. Include direct source URLs. If the hotel name is ambiguous, explain the ambiguity and ask for area/address rather than guessing. Keep under 600 words."
      })});
      if(!upstream.ok)return json({error:upstream.status===429?"Hotel research is busy. Please try again shortly.":"Live hotel research could not be completed."},502);
      const result=await upstream.json();
@@ -180,11 +217,13 @@ export default {
      for(const item of result.output||[]){for(const source of item.action?.sources||[])addSource(source.title,source.url);for(const content of item.content||[])for(const annotation of content.annotations||[])if(annotation.type==="url_citation")addSource(annotation.title,annotation.url);}
      if(!reply)return json({error:"No hotel research results were returned. Try a more specific hotel name or location."},502);
      if(containsSensitiveRequest(reply))return json({reply:"I can help with hotel research, but cannot share private passenger, identity, contact or booking identifiers."});
+     await saveSharedChatMessage(env,"assistant",reply,sources);await compactSharedChatMemory(env);
      return json({reply,sources,researchedAt:new Date().toISOString(),sourceCount:sources.length});
     }
-    const reply=await callAI(env,SYSTEM_PROMPT,message,350);
+    const reply=await callAI(env,SYSTEM_PROMPT,contextualQuestion,550);
     if(!reply)return json({error:"No answer returned."},502);
     if(containsSensitiveRequest(reply))return json({reply:"I can help with trip planning, but cannot share private passenger, identity, contact or booking identifiers."});
+    await saveSharedChatMessage(env,"assistant",reply);await compactSharedChatMemory(env);
     return json({reply});
    }
    catch(e){return json({error:e.message||"Assistant unavailable."},502)}
