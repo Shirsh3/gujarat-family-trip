@@ -9,7 +9,7 @@ Each row uses:
 - display_name: name shown internally
 - password_salt: random 16-byte salt as 32 hex characters
 - password_hash: PBKDF2-HMAC-SHA256 password hash as 64 hex characters
-- iterations: 310000
+- iterations: 100000
 - role: admin or member
 - active: 1 to allow login, 0 to disable
 
@@ -19,7 +19,7 @@ Never put plaintext passwords in D1. Generate a salt and hash on a trusted local
 import os, hashlib
 password = input("Temporary password: ")
 salt = os.urandom(16)
-digest = hashlib.pbkdf2_hmac("sha256", password.encode(), salt, 310000)
+digest = hashlib.pbkdf2_hmac("sha256", password.encode(), salt, 100000)
 print("password_salt =", salt.hex())
 print("password_hash =", digest.hex())
 ```
