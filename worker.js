@@ -243,7 +243,7 @@ export default {
     const sources=extractSources(result);
     if(!answer)return json({error:"No hotel results were returned. Try a more specific search."},502);
     return json({answer,sources,researchedAt:new Date().toISOString(),sourceCount:sources.length,mode:thinkHarder?"deep":"quick"});
-   }catch(e){return json({error:"Hotel search is temporarily unavailable."},502)}
+   }catch(e){return json({error:e.message||"Hotel search is temporarily unavailable. Please retry.",retryable:true},503)}
   }
   if(url.pathname==="/api/chat/history"){
    if(request.method!=="GET")return json({error:"Method not allowed"},405);
@@ -299,7 +299,7 @@ export default {
     await saveUserChatMessage(env,user.username,"assistant",reply);try{await compactUserChatMemory(env,user.username)}catch(e){}
     return json({reply,mode:thinkHarder?"deep":"quick"});
    }
-   catch(e){return json({error:e.message||"Assistant unavailable."},502)}
+   catch(e){return json({error:e.message||"Assistant temporarily unavailable. Please retry.",retryable:true},503)}
   }
   return env.ASSETS.fetch(request);
  }
