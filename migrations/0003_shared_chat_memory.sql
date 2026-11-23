@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS trip_chat_messages (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  username TEXT NOT NULL,
+  username TEXT NOT NULL DEFAULT 'family',
   role TEXT NOT NULL CHECK(role IN ('user','assistant')),
   content TEXT NOT NULL,
   sources_json TEXT,
