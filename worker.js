@@ -217,13 +217,13 @@ export default {
      for(const item of result.output||[]){for(const source of item.action?.sources||[])addSource(source.title,source.url);for(const content of item.content||[])for(const annotation of content.annotations||[])if(annotation.type==="url_citation")addSource(annotation.title,annotation.url);}
      if(!reply)return json({error:"No hotel research results were returned. Try a more specific hotel name or location."},502);
      if(containsSensitiveRequest(reply))return json({reply:"I can help with hotel research, but cannot share private passenger, identity, contact or booking identifiers."});
-     await saveSharedChatMessage(env,"assistant",reply,sources);await compactSharedChatMemory(env);
+     await saveSharedChatMessage(env,"assistant",reply,sources);try{await compactSharedChatMemory(env)}catch(e){}
      return json({reply,sources,researchedAt:new Date().toISOString(),sourceCount:sources.length});
     }
     const reply=await callAI(env,SYSTEM_PROMPT,contextualQuestion,550);
     if(!reply)return json({error:"No answer returned."},502);
     if(containsSensitiveRequest(reply))return json({reply:"I can help with trip planning, but cannot share private passenger, identity, contact or booking identifiers."});
-    await saveSharedChatMessage(env,"assistant",reply);await compactSharedChatMemory(env);
+    await saveSharedChatMessage(env,"assistant",reply);try{await compactSharedChatMemory(env)}catch(e){}
     return json({reply});
    }
    catch(e){return json({error:e.message||"Assistant unavailable."},502)}
