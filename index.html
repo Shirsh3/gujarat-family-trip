@@ -122,7 +122,7 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 #floating-chat-log{padding:14px;overflow:auto;flex:1;background:#f7f6f0}#floating-chat-log p{background:white;border-radius:12px;padding:10px 12px;margin:8px 0;max-width:90%;font-size:13px}#floating-chat-log p.user{margin-left:auto;background:#e5efe8}
 #floating-chat-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}#floating-chat-form input{min-width:0;flex:1;padding:11px;border:1px solid var(--line);border-radius:10px;font:inherit}
 @media(max-width:600px){.review-summary-grid{grid-template-columns:1fr}.review-controls{flex-direction:column}.review-controls select{max-width:none}.trip-bot-launcher{right:12px;bottom:12px}.trip-bot-panel{right:10px;bottom:82px}}
-</style>
+.cost-legend{display:flex;flex-wrap:wrap;gap:9px;margin:10px 0}.cost-exact,.cost-estimated,.cost-pending{display:inline-block;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700}.cost-exact{background:#e4f3e9;color:#17663a}.cost-estimated{background:#fff0d6;color:#875000}.cost-pending{background:#eceff1;color:#53616a}</style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 </head>
 <body>
@@ -244,6 +244,11 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
  <div class="budget-card"><div class="overview-label">Transport · target</div><strong>₹28,000–30,000</strong><div class="small">Planning target only; vehicle quote / booking not confirmed.</div></div>
  <div class="budget-card"><div class="overview-label">Jaipur retiring rooms</div><strong>₹1,728</strong><div class="small">Two confirmed rooms · 3 Jan 2027 · 2 PM–8 PM · Jaipur Railway Station.</div></div>
 </div>
+<div class="card" style="margin-top:18px">
+ <h3>Expense status legend</h3>
+ <div class="cost-legend"><span class="cost-exact">Exact / confirmed</span><span class="cost-estimated">Estimated / target</span><span class="cost-pending">Pending entry</span></div>
+ <p class="small">Green means a documented or confirmed amount; amber means a planning estimate; grey means no amount has been entered yet. Pending categories are excluded from the subtotal.</p>
+</div>
 <div class="card">
  <div class="tag">Current known subtotal</div><h3 style="font-size:30px;margin:8px 0">₹49,566–51,566+</h3>
  <p>Hotels + transport planning target + Jaipur retiring rooms.</p>
@@ -254,7 +259,11 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
  <div class="route"><span>Dwarka + Somnath + Diu hotels</span><b>₹19,838+</b></div>
  <div class="route"><span>Multi-day vehicle</span><b>₹28,000–30,000 · estimate</b></div>
  <div class="route"><span>Jaipur Railway Station retiring rooms · 2 rooms · 3 Jan, 2–8 PM</span><b>₹1,728 · confirmed</b></div>
- <div class="route"><span>Train tickets, meals, tolls & local expenses</span><b>Not yet totalled</b></div>
+ <div class="route"><span>Train tickets</span><b><span class="cost-pending">Amount not entered</span></b></div>
+ <div class="route"><span>Meals & refreshments</span><b><span class="cost-pending">Amount not entered</span></b></div>
+ <div class="route"><span>Tolls & parking</span><b><span class="cost-pending">Amount not entered</span></b></div>
+ <div class="route"><span>Local travel, auto/cab & transfers</span><b><span class="cost-pending">Amount not entered</span></b></div>
+ <div class="route"><span>Other expenses / buffer</span><b><span class="cost-pending">Amount not entered</span></b></div>
 </div>
 </section>
 <section id="reviews" class="section">
