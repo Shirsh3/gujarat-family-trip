@@ -1,0 +1,9 @@
+{
+  "name": "gujarat-family-trip",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check worker.js && npm test"
+  }
+}
