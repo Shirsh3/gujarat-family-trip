@@ -78,3 +78,13 @@ test("map overlays Survey of India national boundary data over OpenStreetMap nav
   assert.match(html, /color:'#9b1c1c'/);
   assert.match(html, /OpenStreetMap/);
 });
+
+
+test("trip map uses India-only government state boundaries without a world basemap or red overlay", () => {
+  assert.match(html, /mapservice\.gov\.in\/gismapservice\/rest\/services\/BharatMapService\/Admin_Boundary_District\/MapServer\/0/);
+  assert.match(html, /L\.esri\.featureLayer/);
+  assert.doesNotMatch(html, /tile\.openstreetmap\.org/);
+  assert.doesNotMatch(html, /IND_AdminBoundary\/FeatureServer\/0/);
+  assert.doesNotMatch(html, /color:'#9b1c1c'/);
+  assert.match(html, /map\.fitBounds\(\[\[6\.5,68\.0\],\[37\.5,98\.5\]\]/);
+});
