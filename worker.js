@@ -15,7 +15,7 @@ const requestCounts = new Map();
 const REVIEW_CATEGORIES = ["Hotel Laxmi Niwas · Dwarka","Hotel Sukhnath · Somnath","Hotel Ankur · Diu","Transport","Overall trip"];
 function json(data,status=200){return new Response(JSON.stringify(data),{status,headers:JSON_HEADERS});}
 function containsSensitiveRequest(text){
- const patterns=[/\\bpnr\\b/i,/\\baadhaar\\b/i,/\\b(passport|pan card|identity number|ticket number|booking reference|transaction id|invoice number|voucher number|qr code)\\b/i,/\\b(phone number|mobile number|email address|contact number|passenger name|full name)\\b/i,/\\b\\d{10,}\\b/,/\\b\\d{4}[ -]?\\d{4}[ -]?\\d{4}\\b/];
+ const patterns=[/\bpnr\b/i,/\baadhaar\b/i,/\b(passport|pan card|identity number|ticket number|booking reference|transaction id|invoice number|voucher number|qr code)\b/i,/\b(phone number|mobile number|email address|contact number|passenger name|full name)\b/i,/\b\d{10,}\b/,/\b\d{4}[ -]?\d{4}[ -]?\d{4}\b/];
  return patterns.some(p=>p.test(text));
 }
 async function callAI(env,instructions,input,maxTokens=350){
