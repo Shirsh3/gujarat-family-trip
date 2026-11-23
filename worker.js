@@ -218,7 +218,7 @@ export default {
        + "\\n\\nQuestion: "+message
        + "\\n\\nUse at most "+(thinkHarder?"eight":"four")+" focused searches across Google Maps/Google reviews, Tripadvisor, Booking.com and Agoda. Prioritise exact-property matching and distinguish properties with similar names. "
        + "Return a clear Markdown response with a compact platform table: visible rating/scale, review count, latest actual review date (latest three dates in detailed mode only when individually visible), and direct source links. Summarise repeated themes only when supported by multiple reviews; assess family/toddler suitability only from evidence. Mark unavailable values Not verified. Never guess or average ratings, counts, dates, prices, amenities or availability. If identity is ambiguous, ask for location. "
-       + (thinkHarder?"Include evidence gaps, listing-match confidence and a careful family suitability assessment; maximum 700 words.":"Keep under 350 words and prioritise a useful quick answer.");
+       + (thinkHarder?"Include evidence gaps, listing-match confidence and a careful family suitability assessment; maximum 700 words.":"Keep under 350 words and prioritise a useful quick answer.")
      })});
      if(!upstream.ok)return json({error:upstream.status===429?"Hotel research is busy. Please try again shortly.":"Live hotel research could not be completed."},502);
      const result=await upstream.json();
