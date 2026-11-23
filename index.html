@@ -167,6 +167,14 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 .hotel-table th,.hotel-table td{padding:10px 11px;border-bottom:1px solid #e8e8e1;vertical-align:top}
 .hotel-table tr:last-child td{border-bottom:0}
 .hotel-table a,.hotel-result-card a{overflow-wrap:anywhere;color:var(--green)}
+
+.voice-field{display:flex;align-items:stretch;gap:6px;width:100%;margin:4px 0 10px}
+.voice-field input,.voice-field textarea{flex:1;min-width:0;margin:0!important}
+.voice-field .voice-mic{flex:0 0 42px;width:42px;border:1px solid var(--line);border-radius:10px;background:#f4f1e8;color:var(--deep);font-size:18px;cursor:pointer}
+.voice-field .voice-mic[aria-pressed="true"]{background:#fde8e5;border-color:#d66;color:#a22;animation:micPulse 1.2s infinite}
+.voice-field .voice-mic:disabled{opacity:.45;cursor:not-allowed}
+@keyframes micPulse{50%{box-shadow:0 0 0 5px #d66a6622}}
+@media(max-width:600px){.voice-field .voice-mic{flex-basis:44px;width:44px}}
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 </head>
@@ -353,8 +361,19 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
    <label><input type="checkbox" name="review-pref" value="family suitability, toddler comfort and noise" checked> Family / toddler comfort</label>
    <label><input type="checkbox" name="review-pref" value="parking availability and ease of access"> Parking</label>
    <label><input type="checkbox" name="review-pref" value="breakfast and food quality"> Food / breakfast</label>
-   <label><input type="checkbox" name="review-pref" value="value for money and hidden charges"> Value for money</label>
+   <label><input type="checkbox" name="review-pref" value="value for money, hidden charges and whether the stay matched the advertised price"> Value for money</label>
+   <label><input type="checkbox" name="review-pref" value="bed comfort, mattress quality, linen and room size"> Beds, linen & room size</label>
+   <label><input type="checkbox" name="review-pref" value="bathroom cleanliness, water pressure and hot water reliability"> Bathroom & hot water</label>
+   <label><input type="checkbox" name="review-pref" value="noise levels, quietness at night and sleep quality"> Noise & sleep quality</label>
+   <label><input type="checkbox" name="review-pref" value="Wi-Fi and mobile network reliability"> Wi-Fi & connectivity</label>
+   <label><input type="checkbox" name="review-pref" value="maintenance, air conditioning, power backup and lift reliability"> Maintenance & facilities</label>
+   <label><input type="checkbox" name="review-pref" value="safety, security, lighting and family-friendly environment"> Safety & security</label>
+   <label><input type="checkbox" name="review-pref" value="check-in, check-out, booking accuracy and billing transparency"> Check-in & billing</label>
+   <label><input type="checkbox" name="review-pref" value="accessibility, stairs, lift access and ease for senior guests"> Accessibility for seniors</label>
+   <label><input type="checkbox" name="review-pref" value="crowding, cleanliness of common areas and overall upkeep"> Common areas & crowding</label>
   </div>
+  <label class="filter-label" for="hotel-review-extra">Anything specific to check? <span class="small">Optional</span></label>
+  <input id="hotel-review-extra" maxlength="260" placeholder="e.g. early check-in, extra mattress, hot water, quiet room">
   <button class="btn" type="submit">Compare guest feedback</button>
  </form>
  <div id="hotel-review-status" class="hotel-search-status small" aria-live="polite"></div><div id="hotel-review-activity" class="ai-activity" role="status" aria-live="polite" hidden><span class="ai-activity-dot"></span><div class="ai-activity-copy"><div class="ai-activity-title">AI is analysing guest feedback</div><div class="ai-activity-stage">Checking ratings, review themes and source links…</div><div class="ai-activity-track"><span></span></div></div><span class="ai-activity-time" id="hotel-review-elapsed">0s</span></div>
@@ -660,7 +679,8 @@ function renderChatReply(container,markdown){
   e.preventDefault();
   const name=byId('hotel-review-hotel').value;
   const prefs=[...document.querySelectorAll('input[name="review-pref"]:checked')].map(x=>x.value);
-  const query='Research current public guest feedback for '+name+'. Compare Google, Tripadvisor, Booking.com, Agoda and other credible sources where available. Focus on: '+(prefs.length?prefs.join('; '):'overall guest experience')+'. Show each platform rating separately with review count and review date when visible. Summarise repeated positive themes and repeated complaints, note family/toddler suitability only when supported, and include source links. Do not invent scores, counts, quotes or availability.';
+  const extra=byId('hotel-review-extra')?.value.trim()||'';
+  const query='Research current public guest feedback for '+name+'. Compare Google, Tripadvisor, Booking.com, Agoda and other credible sources where available. Focus on: '+(prefs.length?prefs.join('; '):'overall guest experience')+'. Specific questions: '+(extra||'none')+'. Show each platform rating separately with review count and latest review date when visible. Summarise repeated positive themes and repeated complaints, note family/toddler suitability only when supported, distinguish the exact property from similarly named hotels, and include source links. Do not invent scores, counts, quotes or availability.';
   runHotelSearch(query,byId('hotel-review-status'),byId('hotel-review-results'),'hotel-review-activity');
  });
 })();
@@ -684,6 +704,32 @@ function renderChatReply(container,markdown){
  const totalEl=document.getElementById("expense-entered-total");
  function updateTotal(){if(!totalEl)return;const total=Object.values(saved).reduce((sum,v)=>sum+(Number.isFinite(Number(v))?Number(v):0),0);const count=Object.keys(saved).filter(k=>Number.isFinite(Number(saved[k]))&&Number(saved[k])>=0).length;totalEl.textContent=count?money(total)+" entered across "+count+" categories":"No additional expenses entered yet";}
  updateTotal();
+})();
+</script>
+
+<script>
+(function(){
+ const Speech=window.SpeechRecognition||window.webkitSpeechRecognition;
+ const fields=[...document.querySelectorAll('input:not([type]),input[type="text"],input[type="search"],textarea')].filter(el=>!el.disabled&&el.type!=="hidden");
+ fields.forEach(field=>{
+  if(field.dataset.voiceReady)return;field.dataset.voiceReady="1";
+  const wrap=document.createElement("span");wrap.className="voice-field";
+  field.parentNode.insertBefore(wrap,field);wrap.appendChild(field);
+  const mic=document.createElement("button");mic.type="button";mic.className="voice-mic";mic.textContent="🎙️";mic.title="Dictate text";mic.setAttribute("aria-label","Start voice typing");mic.setAttribute("aria-pressed","false");
+  if(!Speech){mic.disabled=true;mic.title="Voice typing is not supported in this browser";}
+  wrap.appendChild(mic);let recognition=null;
+  mic.addEventListener("click",()=>{
+   if(!Speech)return;if(recognition){recognition.stop();return}
+   recognition=new Speech();recognition.lang="en-IN";recognition.continuous=false;recognition.interimResults=false;
+   mic.setAttribute("aria-pressed","true");mic.textContent="⏹";mic.title="Stop voice typing";
+   recognition.onresult=e=>{
+    const spoken=Array.from(e.results).map(x=>x[0].transcript).join(" ").trim();
+    if(spoken){const start=field.selectionStart??field.value.length,end=field.selectionEnd??field.value.length;const before=field.value.slice(0,start),after=field.value.slice(end);field.value=before+(before&&!/\s$/.test(before)?" ":"")+spoken+(after&&!/^\s/.test(after)?" ":"")+after;field.dispatchEvent(new Event("input",{bubbles:true}));field.dispatchEvent(new Event("change",{bubbles:true}));}
+   };
+   const reset=()=>{recognition=null;mic.setAttribute("aria-pressed","false");mic.textContent="🎙️";mic.title="Dictate text"};
+   recognition.onerror=reset;recognition.onend=reset;try{recognition.start()}catch(e){reset()}
+  });
+ });
 })();
 </script>
 </body></html>
