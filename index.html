@@ -582,6 +582,30 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
 </div>
 <script>
 
+(function(){
+ const storageKey='gujarat-trip-expenses-v1';
+ let saved={};try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}')||{}}catch(e){saved={}}
+ const rows=[...document.querySelectorAll('.expense-row[data-expense]')];
+ function updateTotal(){
+  let total=0,entered=0;
+  rows.forEach(row=>{const value=saved[row.dataset.expense];if(value!==undefined&&value!==null&&value!==''&&Number.isFinite(Number(value))){total+=Number(value);entered++}});
+  const note=document.getElementById('expense-entered-total');
+  if(note)note.textContent=entered?('Additional expenses entered: ₹'+total.toLocaleString('en-IN')+' across '+entered+' categories. Saved on this browser.'): 'No additional expenses entered yet.';
+  const dash=document.getElementById('dash-actual');if(dash)dash.textContent='₹'+total.toLocaleString('en-IN');
+ }
+ rows.forEach(row=>{
+  const id=row.dataset.expense,input=row.querySelector('.expense-input'),display=row.querySelector('.expense-display');
+  const edit=row.querySelector('.expense-edit'),save=row.querySelector('.expense-save'),cancel=row.querySelector('.expense-cancel');
+  const show=()=>{input.hidden=false;save.hidden=false;cancel.hidden=false;edit.hidden=true;display.hidden=true;input.value=saved[id]??'';input.focus()};
+  const hide=()=>{input.hidden=true;save.hidden=true;cancel.hidden=true;edit.hidden=false;display.hidden=false};
+  const paint=()=>{if(saved[id]!==undefined){display.textContent='₹'+Number(saved[id]).toLocaleString('en-IN');display.classList.remove('cost-pending');display.classList.add('cost-exact')}else{display.textContent='Not entered';display.classList.remove('cost-exact');display.classList.add('cost-pending')}};
+  edit.addEventListener('click',show);
+  save.addEventListener('click',()=>{const raw=input.value.trim();if(raw===''||!Number.isFinite(Number(raw))||Number(raw)<0){input.focus();return}saved[id]=Math.round(Number(raw));localStorage.setItem(storageKey,JSON.stringify(saved));paint();hide();updateTotal();if(typeof refreshFamilyDashboard==='function')refreshFamilyDashboard()});
+  cancel.addEventListener('click',()=>{paint();hide()});
+  paint();
+ });
+ updateTotal();
+})();
 function refreshFamilyDashboard(){
  const get=k=>{try{return JSON.parse(localStorage.getItem(k)||'[]')}catch(e){return []}};
  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
