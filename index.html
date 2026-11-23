@@ -125,7 +125,7 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 
 .ai-activity{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;margin:10px 0;border:1px solid var(--line);border-radius:12px;background:var(--surface,#f8f7f1)}.ai-activity[hidden]{display:none}.ai-activity-dot{width:10px;height:10px;flex:0 0 10px;margin-top:5px;border-radius:50%;background:#27856b;box-shadow:0 0 0 4px rgba(39,133,107,.12);animation:aiPulse 1.4s ease-in-out infinite}.ai-activity-copy{min-width:0;flex:1}.ai-activity-title{font-weight:700;font-size:13px}.ai-activity-stage{font-size:12px;color:var(--muted);margin-top:3px}.ai-activity-track{height:3px;border-radius:99px;background:rgba(39,133,107,.12);overflow:hidden;margin-top:9px}.ai-activity-track span{display:block;width:35%;height:100%;background:#27856b;border-radius:99px;animation:aiTravel 1.7s ease-in-out infinite}.ai-activity-time{font-variant-numeric:tabular-nums;font-size:11px;color:var(--muted);white-space:nowrap}@keyframes aiPulse{50%{opacity:.45;transform:scale(.85)}}@keyframes aiTravel{0%{transform:translateX(-110%)}100%{transform:translateX(320%)}}.ai-chat-thinking{border-left:3px solid #27856b;padding:10px 12px;background:rgba(39,133,107,.06);border-radius:8px;margin:8px 0}.ai-chat-thinking .ai-activity-track{max-width:230px}
 
-.assistant-welcome{padding:17px;background:linear-gradient(145deg,#eef5ed,#fffefa);border-bottom:1px solid var(--line)}
+.assistant-welcome{padding:17px;background:linear-gradient(145deg,#eef5ed,#fffefa);border-bottom:1px solid var(--line);flex:0 0 auto}
 .assistant-kicker{font-size:10px;letter-spacing:.16em;color:var(--green);font-weight:800}
 .assistant-welcome h3{font:25px 'Playfair Display',serif;margin:5px 0}
 .assistant-welcome p{font-size:12px;color:var(--muted);margin:4px 0 12px}
@@ -133,28 +133,16 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 .assistant-cap-grid>div{background:#fffefa;border:1px solid var(--line);border-radius:12px;padding:10px}
 .assistant-cap-grid b{display:block;font-size:11px;margin-bottom:4px;color:var(--green)}
 .assistant-cap-grid span{display:block;font-size:11px;line-height:1.45;color:var(--muted)}
-.assistant-examples{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:12px}
-.assistant-examples>span{font-size:10px;color:var(--muted);font-weight:700}
-.assistant-examples button{border:1px solid #cbdccf;background:#fff;border-radius:99px;padding:6px 9px;color:var(--green);font:600 10px 'DM Sans';cursor:pointer}
-.assistant-welcome{flex:0 0 auto}.assistant-tools{padding:10px 14px 0;background:#f7f6f0;max-height:43%;overflow:auto;flex:0 1 auto}
-.assistant-tool{border:1px solid var(--line);background:#fffefa;border-radius:12px;margin:0 0 9px;overflow:hidden}
-.assistant-tool summary{cursor:pointer;list-style:none;padding:11px 13px;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.assistant-tool summary::-webkit-details-marker{display:none}
-.assistant-tool summary span{font-size:13px;font-weight:700;color:var(--green)}
-.assistant-tool summary small{font-size:10px;color:var(--muted);text-align:right}
-.assistant-tool[open] summary{border-bottom:1px solid var(--line);background:#f4f7f1}
-.assistant-tool>.card{border:0;box-shadow:none;margin:0!important;padding:13px}
-.assistant-tool .hotel-filter-options{gap:6px}
-.assistant-tool .hotel-filter-options label{padding:7px;font-size:11px}
-#floating-chat-log{min-height:90px;flex:1 1 auto;}
-#floating-chat-form{background:#fffefa}
-@media(max-width:600px){.assistant-cap-grid{grid-template-columns:1fr}.assistant-tool summary{align-items:flex-start;flex-direction:column;gap:3px}.assistant-tool summary small{text-align:left}.trip-bot-panel{right:8px;bottom:76px;width:calc(100vw - 16px);height:88vh;max-height:88vh}.assistant-welcome{padding:12px}}
+.assistant-shortcuts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.assistant-shortcuts button{border:1px solid #cbdccf;background:#fff;border-radius:99px;padding:8px 11px;color:var(--green);font:700 11px 'DM Sans';cursor:pointer}
+#floating-chat-log{min-height:100px;flex:1 1 auto}
+@media(max-width:600px){.assistant-cap-grid{grid-template-columns:1fr}.trip-bot-panel{right:8px;bottom:76px;width:calc(100vw - 16px);height:88vh;max-height:88vh}.assistant-welcome{padding:12px}}
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 </head>
 <body>
 <header class="hero"><div class="wrap hero-inner"><div class="eyebrow">A family journey · Gujarat, India</div><h1>Gujarat, at a gentler pace.</h1><p>Temple mornings, coastal sunsets and time together. A thoughtfully paced family escape through Dwarka, Somnath and Diu.</p><div class="chips"><span class="chip">28 Dec 2026 – 2 Jan 2027 · Gujarat trip</span><span class="chip">6 adults + 1 little traveller</span><span class="chip">5 nights · 6 days</span></div></div></header>
-<nav><div class="wrap nav"><button class="active" data-tab="plan">The journey</button><button data-tab="hotels">Places to stay</button><button data-tab="travel">Getting around</button><button data-tab="checklist">Travel checklist</button><button data-tab="costs">Trip cost</button></div></nav>
+<nav><div class="wrap nav"><button class="active" data-tab="plan">The journey</button><button data-tab="hotels">Places to stay</button><button data-tab="travel">Getting around</button><button data-tab="checklist">Travel checklist</button><button data-tab="costs">Trip cost</button><button data-tab="reviews">Ratings & feedback</button></div></nav>
 <main class="wrap">
 <section id="plan" class="section active">
 <div class="section-head"><div><div class="tag">The itinerary</div><h2>Six days, one beautiful route</h2><p class="intro">A flexible family-first plan. Keep meal, nap and washroom breaks; timings are targets, not commitments.</p></div></div>
@@ -217,7 +205,33 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 <section id="hotels" class="section">
 <div class="section-head"><div><div class="tag">Rest well</div><h2>Places to stay</h2><p class="intro">Two rooms at every stop: Room 1 for four adults; Room 2 for you, your wife and baby. Prices are published reference rates, not confirmed quotes for these festive dates.</p></div></div>
 <div class="card" style="margin-bottom:17px"><h3>Room plan & dates</h3><div class="route"><span>Dwarka · 29–31 December 2026 · 2 nights</span><b class="km">2 rooms</b></div><div class="route"><span>Somnath · 31 December–1 January · 1 night</span><b class="km">2 rooms</b></div><div class="route"><span>Diu · 1–2 January 2027 · 1 night</span><b class="km">2 rooms</b></div><ul><li><b>Room 1:</b> Family room for 4 adults.</li><li><b>Room 2:</b> Double room for 2 adults + baby. Confirm child policy and request a cot/extra mattress.</li></ul></div>
-<div class="grid">
+<div class="card hotel-discovery" style="margin:18px 0">
+ <div class="tag">AI-powered hotel discovery</div><h3>Find hotels that match your family</h3>
+ <p class="small">Choose a destination and tap the preferences you care about. We'll build the search prompt for you and check current public sources.</p>
+ <form id="hotel-search-form" class="hotel-search-form">
+  <div class="hotel-filter-grid">
+   <label>Destination<select id="hotel-destination"><option value="Dwarka">Dwarka</option><option value="Somnath">Somnath</option><option value="Diu">Diu</option><option value="all">All Gujarat stops</option></select></label>
+   <label>Nightly budget<select id="hotel-budget"><option value="Any budget">Any budget</option><option value="under ₹2,000 per room">Under ₹2,000 / room</option><option value="under ₹3,000 per room">Under ₹3,000 / room</option><option value="under ₹5,000 per room">Under ₹5,000 / room</option></select></label>
+  </div>
+  <div class="filter-label">What matters most? <span class="small">Choose multiple</span></div>
+  <div class="hotel-filter-options">
+   <label><input type="checkbox" name="hotel-pref" value="family rooms suitable for 6 adults and a toddler" checked> Family rooms</label>
+   <label><input type="checkbox" name="hotel-pref" value="secure on-site parking" checked> Parking</label>
+   <label><input type="checkbox" name="hotel-pref" value="close to the main temple or key attractions" checked> Near temple / attractions</label>
+   <label><input type="checkbox" name="hotel-pref" value="consistently good cleanliness feedback" checked> Clean rooms</label>
+   <label><input type="checkbox" name="hotel-pref" value="breakfast included or available"> Breakfast</label>
+   <label><input type="checkbox" name="hotel-pref" value="lift or ground-floor access"> Lift / easy access</label>
+   <label><input type="checkbox" name="hotel-pref" value="family and toddler friendly facilities"> Toddler friendly</label>
+   <label><input type="checkbox" name="hotel-pref" value="strong recent guest ratings and review volume"> Good guest reviews</label>
+   <label><input type="checkbox" name="hotel-pref" value="good value for money"> Value for money</label>
+  </div>
+  <label class="filter-label" for="hotel-search-extra">Anything else? <span class="small">Optional</span></label>
+  <input id="hotel-search-extra" maxlength="220" placeholder="e.g. two rooms, refundable booking, sea view">
+  <button class="btn" type="submit">Find matching hotels</button>
+ </form>
+ <div id="hotel-search-status" class="hotel-search-status small" aria-live="polite"></div><div id="hotel-search-activity" class="ai-activity" role="status" aria-live="polite" hidden><span class="ai-activity-dot"></span><div class="ai-activity-copy"><div class="ai-activity-title">AI is searching for matching hotels</div><div class="ai-activity-stage">Checking public hotel listings and guest-review sources…</div><div class="ai-activity-track"><span></span></div></div><span class="ai-activity-time" id="hotel-search-elapsed">0s</span></div>
+ <div id="hotel-search-results" class="hotel-results"></div>
+</div><div class="grid">
 <article class="card"><div class="stay-image" style="background-image:url('https://assets.simplotel.com/simplotel/image/upload/w_1600%2Cdpr_1%2Cf_auto%2Cfl_progressive%2Cc_limit/dwarkadhish-lords-eco-inn/DWARKADHISH_TEMPLE_b9c0695c')"></div><div class="date">DWARKA · 2 NIGHTS</div><h3>Hotel Laxmi Niwas</h3><p><b>Room 1:</b> 2 Bed River View Deluxe AC, double bed + 2 mattresses, max 4 — ₹1,890/night + taxes.</p><p><b>Room 2:</b> 2 Bed AC, double bed + 1 mattress, max 3 — ₹1,575/night + taxes.</p><p><b>Reference total:</b> ₹3,465/night; ₹6,930 for 2 nights, before taxes.</p><p class="small">Published YatraDham rates. Listing says about 700 m from Dwarkadhish Mandir. Confirm baby occupancy and festive availability.</p><div class="actions"><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/travel/search?q=Hotel%20Laxmi%20Niwas%20Dwarka&checkin=2026-12-29&checkout=2026-12-31">Check 29–31 Dec dates</a><a class="btn alt" target="_blank" rel="noopener" href="https://yatradham.org/dwarka-hotel-laxmi-niwas.html">Hotel listing</a></div></article>
 <article class="card"><div class="stay-image" style="background-image:url('https://static.wixstatic.com/media/d37a82_54e4d42fc67b4ecfb48d4f9813753ba6~mv2.jpg/v1/fill/w_980%2Ch_704%2Cal_c%2Cq_85%2Cusm_0.66_1.00_0.01%2Cenc_auto/d37a82_54e4d42fc67b4ecfb48d4f9813753ba6~mv2.jpg')"></div><div class="date">SOMNATH · 1 NIGHT</div><h3>Hotel Sukhnath</h3><p><b>Room 1:</b> 4 Bed AC Family Room, 2 double beds, max 4 — ₹1,800/night + ₹90 tax.</p><p><b>Room 2:</b> 2 Bed AC Room, double bed, max 2 — ₹1,200/night + ₹60 tax.</p><p><b>Reference total:</b> ₹3,000/night; ₹3,150 including listed taxes.</p><p class="small">Published YatraDham starting rates. Confirm actual festive-date rates, baby policy and cancellation terms.</p><div class="actions"><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/travel/search?q=Hotel%20Sukhnath%20Somnath&checkin=2026-12-31&checkout=2027-01-01">Check 31 Dec–1 Jan dates</a><a class="btn alt" target="_blank" rel="noopener" href="https://yatradham.org/somnath-hotel-sukhnath.html">Hotel listing</a></div></article>
 <article class="card"><div class="stay-image" style="background-image:url('https://media.assettype.com/outlooktraveller/2024-09-04/4kzh5xcz/Daman%20%26%20Diu.jpg?auto=format%2Ccompress&dpr=1.0&fit=max&format=webp&w=1200')"></div><div class="date">DIU · 1 NIGHT · NEW YEAR</div><h3>Hotel Ankur</h3><p><b>Room 1:</b> Super Executive Family Room with Balcony, 2 king beds, max 5 — recent Goibibo reference ₹5,133/night + ₹908 taxes.</p><p><b>Room 2:</b> Super Deluxe Room with Balcony, 1 king bed, max 3 — recent Goibibo reference ₹3,159/night + ₹558 taxes.</p><p><b>Reference total:</b> ₹8,292/night; ₹9,758 including listed taxes.</p><p class="small">Recent published snapshot, not a quote for 1 Jan 2027. Confirm room types, baby occupancy and cancellation terms.</p><div class="actions"><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/travel/search?q=Hotel%20Ankur%20Diu&checkin=2027-01-01&checkout=2027-01-02">Check 1–2 Jan dates</a><a class="btn alt" target="_blank" rel="noopener" href="https://www.goibibo.com/hotels/ankur-hotel-in-diu-795205463544381628/">Goibibo listing</a><a class="btn alt" target="_blank" rel="noopener" href="https://www.makemytrip.com/hotels/hotel_ankur-details-diu.html">MakeMyTrip</a></div></article>
@@ -292,6 +306,30 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
  <div class="route"><span>Local travel, auto/cab & transfers</span><b><span class="cost-pending">Amount not entered</span></b></div>
  <div class="route"><span>Other expenses / buffer</span><b><span class="cost-pending">Amount not entered</span></b></div>
 </div>
+</section>
+<section id="reviews" class="section">
+<div class="section-head"><div><div class="tag">Independent guest feedback</div><h2>Hotel ratings & guest experiences</h2><p class="intro">Explore publicly available ratings and review themes for the recommended stays. Results are fetched when requested and link back to their original sources.</p></div></div>
+<div class="card">
+ <h3>Check guest feedback</h3>
+ <p class="small">The most useful review categories are already selected. Change them if you want a narrower comparison.</p>
+ <form id="hotel-review-search-form" class="hotel-search-form">
+  <label>Hotel<select id="hotel-review-hotel"><option>Hotel Laxmi Niwas, Dwarka</option><option>Hotel Sukhnath, Somnath</option><option>Hotel Ankur, Diu</option></select></label>
+  <div class="hotel-filter-options review-filter-options">
+   <label><input type="checkbox" name="review-pref" value="overall rating, review count and recent review dates" checked> Ratings & review volume</label>
+   <label><input type="checkbox" name="review-pref" value="cleanliness and room condition" checked> Cleanliness</label>
+   <label><input type="checkbox" name="review-pref" value="location and walking distance to attractions" checked> Location</label>
+   <label><input type="checkbox" name="review-pref" value="staff behaviour and service" checked> Staff & service</label>
+   <label><input type="checkbox" name="review-pref" value="family suitability, toddler comfort and noise" checked> Family / toddler comfort</label>
+   <label><input type="checkbox" name="review-pref" value="parking availability and ease of access"> Parking</label>
+   <label><input type="checkbox" name="review-pref" value="breakfast and food quality"> Food / breakfast</label>
+   <label><input type="checkbox" name="review-pref" value="value for money and hidden charges"> Value for money</label>
+  </div>
+  <button class="btn" type="submit">Compare guest feedback</button>
+ </form>
+ <div id="hotel-review-status" class="hotel-search-status small" aria-live="polite"></div><div id="hotel-review-activity" class="ai-activity" role="status" aria-live="polite" hidden><span class="ai-activity-dot"></span><div class="ai-activity-copy"><div class="ai-activity-title">AI is analysing guest feedback</div><div class="ai-activity-stage">Checking ratings, review themes and source links…</div><div class="ai-activity-track"><span></span></div></div><span class="ai-activity-time" id="hotel-review-elapsed">0s</span></div>
+ <div id="hotel-review-results" class="hotel-results"></div>
+</div>
+<div class="note"><b>How to read these results:</b> Ratings and review themes are attributed to the linked public sources when available. Scores can differ by platform and change over time. We do not create, store or publish visitor-submitted reviews here.</div>
 </section>
 <section id="checklist" class="section">
 <div class="section-head"><div><div class="tag">Before you go</div><h2>Family travel checklist</h2><p class="intro">Tick things off as you prepare. Progress is saved in this browser on this device.</p></div></div>
@@ -458,70 +496,20 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
  <div class="assistant-welcome">
   <div class="assistant-kicker">YOUR AI TRIP COMPANION</div>
   <h3>What would you like help with?</h3>
-  <p>Ask naturally, or open one of the tools below. Your trip plan and family context are already included.</p>
+  <p>Ask naturally about your Gujarat trip, or jump straight to a specialist tool. Your itinerary and family context are ready.</p>
   <div class="assistant-cap-grid">
    <div><b>✓ I can help with</b><span>Itinerary questions, route planning, hotel discovery, public guest-review research, train and retiring-room information, food ideas and trip-cost estimates.</span></div>
-   <div><b>! Important limits</b><span>I cannot book or pay, guarantee live room availability or prices, access private booking accounts, or confirm train/temple changes unless an official source provides them.</span></div>
+   <div><b>! Important limits</b><span>I cannot book or pay, guarantee live room availability or prices, access private booking accounts, or confirm schedule changes without reliable official information.</span></div>
   </div>
-  <div class="assistant-examples"><span>Try asking</span><button type="button" data-ask="Plan a relaxed day in Dwarka with our toddler">Day plan</button><button type="button" data-ask="Find a family hotel in Dwarka with parking">Find hotels</button><button type="button" data-ask="What should we verify before booking?">Booking checks</button></div>
+  <div class="assistant-shortcuts"><button type="button" data-open-tab="hotels">🏨 Open hotel finder</button><button type="button" data-open-tab="reviews">⭐ Check guest reviews</button></div>
  </div>
- <div class="assistant-tools">
-  <details class="assistant-tool"><summary><span>🏨 Hotel finder</span><small>Search public listings using your filters</small></summary><div class="card hotel-discovery">
- <div class="tag">AI-powered hotel discovery</div><h3>Find hotels that match your family</h3>
- <p class="small">Choose a destination and tap the preferences you care about. We'll build the search prompt for you and check current public sources.</p>
- <form id="hotel-search-form" class="hotel-search-form">
-  <div class="hotel-filter-grid">
-   <label>Destination<select id="hotel-destination"><option value="Dwarka">Dwarka</option><option value="Somnath">Somnath</option><option value="Diu">Diu</option><option value="all">All Gujarat stops</option></select></label>
-   <label>Nightly budget<select id="hotel-budget"><option value="Any budget">Any budget</option><option value="under ₹2,000 per room">Under ₹2,000 / room</option><option value="under ₹3,000 per room">Under ₹3,000 / room</option><option value="under ₹5,000 per room">Under ₹5,000 / room</option></select></label>
-  </div>
-  <div class="filter-label">What matters most? <span class="small">Choose multiple</span></div>
-  <div class="hotel-filter-options">
-   <label><input type="checkbox" name="hotel-pref" value="family rooms suitable for 6 adults and a toddler" checked> Family rooms</label>
-   <label><input type="checkbox" name="hotel-pref" value="secure on-site parking" checked> Parking</label>
-   <label><input type="checkbox" name="hotel-pref" value="close to the main temple or key attractions" checked> Near temple / attractions</label>
-   <label><input type="checkbox" name="hotel-pref" value="consistently good cleanliness feedback" checked> Clean rooms</label>
-   <label><input type="checkbox" name="hotel-pref" value="breakfast included or available"> Breakfast</label>
-   <label><input type="checkbox" name="hotel-pref" value="lift or ground-floor access"> Lift / easy access</label>
-   <label><input type="checkbox" name="hotel-pref" value="family and toddler friendly facilities"> Toddler friendly</label>
-   <label><input type="checkbox" name="hotel-pref" value="strong recent guest ratings and review volume"> Good guest reviews</label>
-   <label><input type="checkbox" name="hotel-pref" value="good value for money"> Value for money</label>
-  </div>
-  <label class="filter-label" for="hotel-search-extra">Anything else? <span class="small">Optional</span></label>
-  <input id="hotel-search-extra" maxlength="220" placeholder="e.g. two rooms, refundable booking, sea view">
-  <button class="btn" type="submit">Find matching hotels</button>
- </form>
- <div id="hotel-search-status" class="hotel-search-status small" aria-live="polite"></div><div id="hotel-search-activity" class="ai-activity" role="status" aria-live="polite" hidden><span class="ai-activity-dot"></span><div class="ai-activity-copy"><div class="ai-activity-title">AI is searching for matching hotels</div><div class="ai-activity-stage">Checking public hotel listings and guest-review sources…</div><div class="ai-activity-track"><span></span></div></div><span class="ai-activity-time" id="hotel-search-elapsed">0s</span></div>
- <div id="hotel-search-results" class="hotel-results"></div>
-</div></details>
-  <details class="assistant-tool"><summary><span>⭐ Guest-review checker</span><small>Compare public ratings and recurring feedback</small></summary><div class="card hotel-review-tool">
- <h3>Check guest feedback</h3>
- <p class="small">The most useful review categories are already selected. Change them if you want a narrower comparison.</p>
- <form id="hotel-review-search-form" class="hotel-search-form">
-  <label>Hotel<select id="hotel-review-hotel"><option>Hotel Laxmi Niwas, Dwarka</option><option>Hotel Sukhnath, Somnath</option><option>Hotel Ankur, Diu</option></select></label>
-  <div class="hotel-filter-options review-filter-options">
-   <label><input type="checkbox" name="review-pref" value="overall rating, review count and recent review dates" checked> Ratings & review volume</label>
-   <label><input type="checkbox" name="review-pref" value="cleanliness and room condition" checked> Cleanliness</label>
-   <label><input type="checkbox" name="review-pref" value="location and walking distance to attractions" checked> Location</label>
-   <label><input type="checkbox" name="review-pref" value="staff behaviour and service" checked> Staff & service</label>
-   <label><input type="checkbox" name="review-pref" value="family suitability, toddler comfort and noise" checked> Family / toddler comfort</label>
-   <label><input type="checkbox" name="review-pref" value="parking availability and ease of access"> Parking</label>
-   <label><input type="checkbox" name="review-pref" value="breakfast and food quality"> Food / breakfast</label>
-   <label><input type="checkbox" name="review-pref" value="value for money and hidden charges"> Value for money</label>
-  </div>
-  <button class="btn" type="submit">Compare guest feedback</button>
- </form>
- <div id="hotel-review-status" class="hotel-search-status small" aria-live="polite"></div><div id="hotel-review-activity" class="ai-activity" role="status" aria-live="polite" hidden><span class="ai-activity-dot"></span><div class="ai-activity-copy"><div class="ai-activity-title">AI is analysing guest feedback</div><div class="ai-activity-stage">Checking ratings, review themes and source links…</div><div class="ai-activity-track"><span></span></div></div><span class="ai-activity-time" id="hotel-review-elapsed">0s</span></div>
- <div id="hotel-review-results" class="hotel-results"></div>
-</div>
-<div class="note"><b>How to read these results:</b> Ratings and review themes are attributed to the linked public sources when available. Scores can differ by platform and change over time. We do not create, store or publish visitor-submitted reviews here.</div></details>
- </div>
- <div id="floating-chat-log" aria-live="polite"><p>Hello! Ask me anything about this trip, or use the hotel and guest-review tools above.</p></div>
+ <div id="floating-chat-log" aria-live="polite"><p>Hello! I can help with the itinerary, trains, hotels, retiring rooms, food, transport and estimated costs. What would you like to know?</p></div>
  <form id="floating-chat-form"><input id="floating-chat-input" maxlength="1000" required placeholder="Ask a trip question…"><button class="btn" type="submit">Send</button></form>
 </div>
 <script>
 (function(){
  const panel=document.getElementById('trip-bot-panel'),launcher=document.getElementById('trip-bot-launcher');
- launcher.addEventListener('click',()=>panel.classList.toggle('open'));document.querySelectorAll('[data-ask]').forEach(b=>b.addEventListener('click',()=>{const input=document.getElementById('floating-chat-input');input.value=b.dataset.ask;input.focus();}));document.getElementById('trip-bot-close').addEventListener('click',()=>panel.classList.remove('open'));
+ launcher.addEventListener('click',()=>panel.classList.toggle('open'));document.querySelectorAll('[data-open-tab]').forEach(b=>b.addEventListener('click',()=>{panel.classList.remove('open');const tab=document.querySelector('[data-tab="'+b.dataset.openTab+'"]');if(tab)tab.click();}));document.getElementById('trip-bot-close').addEventListener('click',()=>panel.classList.remove('open'));
  document.getElementById('floating-chat-form').addEventListener('submit',async e=>{e.preventDefault();const input=document.getElementById('floating-chat-input'),log=document.getElementById('floating-chat-log'),form=e.currentTarget,button=form.querySelector('button'),q=input.value.trim();if(!q||button.disabled)return;const user=document.createElement('p');user.className='user';user.textContent=q;log.appendChild(user);input.value='';button.disabled=true;button.textContent='Thinking…';const waiting=document.createElement('div');waiting.className='ai-chat-thinking';const title=document.createElement('b');title.textContent='Trip assistant is thinking';const stage=document.createElement('div');stage.className='ai-activity-stage';stage.textContent='Reading your question and checking the trip context…';const track=document.createElement('div');track.className='ai-activity-track';const bar=document.createElement('span');track.appendChild(bar);waiting.append(title,stage,track);log.appendChild(waiting);log.scrollTop=log.scrollHeight;const started=Date.now();try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Assistant unavailable');waiting.className='assistant-reply';waiting.textContent=d.reply||'I could not prepare an answer.';}catch(err){waiting.className='assistant-reply';waiting.textContent=err.message;}finally{button.disabled=false;button.textContent='Send';}log.scrollTop=log.scrollHeight;});
 })();
 </script>
