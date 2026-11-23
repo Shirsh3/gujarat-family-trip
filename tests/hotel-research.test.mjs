@@ -85,3 +85,20 @@ test("chat memory migration creates non-destructive conversation and summary tab
   assert.match(migration, /CREATE TABLE IF NOT EXISTS trip_chat_summary/);
   assert.match(migration, /INSERT OR IGNORE INTO trip_chat_summary/);
 });
+
+
+test("chat history and rolling summaries are isolated by authenticated username", () => {
+  assert.match(worker, /getUserChatContext\(env,user\.username\)/);
+  assert.match(worker, /saveUserChatMessage\(env,user\.username/);
+  assert.match(worker, /WHERE username=\? ORDER BY id DESC LIMIT 20/);
+  assert.match(worker, /WHERE username=\? ORDER BY id ASC LIMIT \?/);
+  assert.match(worker, /DELETE FROM trip_chat_messages WHERE username=\? AND id<=\?/);
+  assert.match(worker, /SELECT role,content,sources_json,created_at FROM trip_chat_messages WHERE username=\?/);
+});
+
+test("per-user chat summary migration matches the worker schema", () => {
+  const migration = read("../migrations/0004_user_chat_summary.sql");
+  assert.match(migration, /CREATE TABLE IF NOT EXISTS trip_chat_user_summary/);
+  assert.match(migration, /username TEXT PRIMARY KEY/);
+  assert.match(migration, /ON trip_chat_messages\(username, id DESC\)/);
+});
