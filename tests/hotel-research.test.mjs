@@ -23,7 +23,7 @@ test("hotel research rules prohibit invented ratings, counts, dates and availabi
 test("hotel research response returns timestamp and deduplicated direct HTTP source links", () => {
   assert.match(worker, /researchedAt:new Date\(\)\.toISOString\(\)/);
   assert.match(worker, /sourceCount:sources\.length/);
-  assert.match(worker, /!\^https\?:/);
+  assert.match(worker, /url\.startsWith\("https:\/\/"\)/);
   assert.match(worker, /sources\.some\(x=>x\.url===url\)/);
 });
 
