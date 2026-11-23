@@ -115,7 +115,13 @@ export default {
    const user=await currentUser(request,env);
    if(!user)return url.pathname.startsWith("/api/")?json({error:"Please sign in to continue."},401):new Response("Sign in required", {status:302,headers:{Location:"/login.html?next="+encodeURIComponent(url.pathname+url.search),"Cache-Control":"no-store"}});
   }
-  if(url.pathname==="/api/health"&&request.method==="GET")return json({ok:true,service:"gujarat-trip-assistant",aiConfigured:Boolean(env.OPENAI_API_KEY)});
+  if(url.pathname==="/api/health"&&request.method==="GET"){
+   let databaseConnected=false;
+   try{if(env.DB){const result=await env.DB.prepare("SELECT 1 AS ok").first();databaseConnected=Boolean(result&&result.ok===1)}}catch(error){console.error("Health database check failed",error)}
+   const aiConfigured=Boolean(env.OPENAI_API_KEY);
+   const ok=databaseConnected&&aiConfigured;
+   return json({ok,service:"gujarat-trip-assistant",databaseConnected,aiConfigured},ok?200:503);
+  }
   if(url.pathname==="/api/hotels/search"){
    if(request.method!=="POST")return json({error:"Method not allowed"},405);
    const ip=request.headers.get("CF-Connecting-IP")||"unknown",now=Date.now(),recent=(requestCounts.get("hotel:"+ip)||[]).filter(t=>now-t<60000);
