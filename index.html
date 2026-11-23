@@ -621,7 +621,7 @@ function refreshFamilyDashboard(){
  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
  set('dash-hotels',count(['hotel'])+' / 3');set('dash-rail',(count(['train'])+count(['retiring']))+' / 5');
  set('dash-pending',Math.max(0,16-checks.length)+' tasks');
- let actual=0;document.querySelectorAll('.expense-row .expense-display').forEach(e=>{const n=Number((e.textContent||'').replace(/[^0-9.]/g,''));if(Number.isFinite(n))actual+=n});
+ let actual=0;document.querySelectorAll('.expense-row .expense-display').forEach(e=>{const raw=(e.textContent||'').trim();if(raw!=='Not entered'){const n=Number(raw.replace(/[^0-9.]/g,''));if(Number.isFinite(n))actual+=n}});
  set('dash-actual','₹'+actual.toLocaleString('en-IN'));
 }
 document.addEventListener('click',e=>{if(e.target.closest('.expense-save,.expense-edit,.expense-cancel,.expense-row'))setTimeout(refreshFamilyDashboard,50)});
