@@ -453,38 +453,6 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
 </div>
 <script>
 (function(){
- const list=document.getElementById('public-review-list');
- if(list){
-  let reviews=[];
-  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  async function loadReviews(){
-   try{const r=await fetch('/api/reviews');if(!r.ok)throw new Error('Reviews are temporarily unavailable');const d=await r.json();reviews=d.reviews||[];renderReviews();}
-   catch(e){list.innerHTML='<article class="card"><p>'+esc(e.message)+'</p><p class="small">Shared reviews will appear here once the review database is connected.</p></article>';}
-  }
-  function renderReviews(){
-   const cat=document.getElementById('review-filter').value,sort=document.getElementById('review-sort').value;
-   let rows=reviews.filter(x=>cat==='all'||x.category===cat);
-   rows.sort((a,b)=>sort==='rating'?b.rating-a.rating:sort==='low'?a.rating-b.rating:sort==='recent'?b.created_at.localeCompare(a.created_at):(b.rating*2+Math.min(b.body.length,500)/500)-(a.rating*2+Math.min(a.body.length,500)/500));
-   const avg=reviews.length?reviews.reduce((n,x)=>n+x.rating,0)/reviews.length:0;
-   document.getElementById('review-average').textContent=reviews.length?avg.toFixed(1)+' / 5':'—';
-   document.getElementById('review-count').textContent=reviews.length+' public review'+(reviews.length===1?'':'s');
-   const counts={};reviews.forEach(x=>counts[x.category]=(counts[x.category]||0)+1);
-   const loved=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
-   document.getElementById('review-loved').textContent=loved?loved[0]:'—';
-   if(!rows.length){list.innerHTML='<article class="card"><h3>No reviews yet</h3><p class="small">Be the first to share a genuine experience.</p></article>';return;}
-   list.innerHTML=rows.map(x=>'<article class="card review-card"><div class="review-meta">'+esc(x.category)+' · '+new Date(x.created_at).toLocaleDateString()+'</div><div class="review-stars">'+('★'.repeat(x.rating))+('☆'.repeat(5-x.rating))+'</div><h3>'+esc(x.title)+'</h3><p>'+esc(x.body)+'</p><div class="review-meta">Public community review</div></article>').join('');
-  }
-  document.getElementById('review-filter').addEventListener('change',renderReviews);
-  document.getElementById('review-sort').addEventListener('change',renderReviews);
-  document.getElementById('public-review-form').addEventListener('submit',async e=>{
-   e.preventDefault();const status=document.getElementById('review-submit-status');status.textContent='Publishing…';
-   const payload={category:document.getElementById('review-category').value,rating:Number(document.getElementById('review-rating').value),title:document.getElementById('review-title').value.trim(),body:document.getElementById('review-body').value.trim()};
-   try{const r=await fetch('/api/reviews',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const d=await r.json();if(!r.ok)throw new Error(d.error||'Could not publish review');e.target.reset();status.textContent='Your review is now public. Thank you!';await loadReviews();}
-   catch(err){status.textContent=err.message;}
-  });
-  document.getElementById('summarise-reviews').addEventListener('click',async()=>{const el=document.getElementById('review-ai-summary');el.textContent='Preparing an AI summary…';try{const r=await fetch('/api/reviews/summary',{method:'POST'});const d=await r.json();if(!r.ok)throw new Error(d.error||'Summary unavailable');el.textContent=d.summary;}catch(e){el.textContent=e.message;}});
-  loadReviews();
- }
  const panel=document.getElementById('trip-bot-panel'),launcher=document.getElementById('trip-bot-launcher');
  launcher.addEventListener('click',()=>panel.classList.toggle('open'));document.getElementById('trip-bot-close').addEventListener('click',()=>panel.classList.remove('open'));
  document.getElementById('floating-chat-form').addEventListener('submit',async e=>{e.preventDefault();const input=document.getElementById('floating-chat-input'),log=document.getElementById('floating-chat-log'),q=input.value.trim();if(!q)return;const user=document.createElement('p');user.className='user';user.textContent=q;log.appendChild(user);input.value='';const waiting=document.createElement('p');waiting.textContent='Let me check that for you…';log.appendChild(waiting);log.scrollTop=log.scrollHeight;try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Assistant unavailable');waiting.textContent=d.reply;}catch(err){waiting.textContent=err.message;}log.scrollTop=log.scrollHeight;});
