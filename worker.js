@@ -101,10 +101,38 @@ async function compactUserChatMemory(env,username){
  await env.DB.prepare("DELETE FROM trip_chat_messages WHERE username=? AND id<=?").bind(username,maxId).run();
 }
 function tripContextBlock(){return "STRUCTURED TRIP CONTEXT (source of truth):\n"+JSON.stringify(TRIP_CONTEXT);}
+async function fetchOpenAIResponse(key,payload,maxRetries=2){
+ const endpoint="https://api.openai.com/v1/responses";
+ let lastResponse=null;
+ for(let attempt=0;attempt<=maxRetries;attempt++){
+  let response;
+  try{
+   response=await fetch(endpoint,{method:"POST",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:JSON.stringify(payload),signal:AbortSignal.timeout(45000)});
+   if(response.ok)return response;
+   if(response.status===400&&payload.reasoning){
+    const detail=await response.clone().text();
+    if(/reasoning|unknown parameter|unsupported parameter|invalid.*effort/i.test(detail)){
+     const compatible={...payload};delete compatible.reasoning;
+     response=await fetch(endpoint,{method:"POST",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:JSON.stringify(compatible),signal:AbortSignal.timeout(45000)});
+     if(response.ok)return response;
+    }
+   }
+   lastResponse=response;
+   if(![408,429,500,502,503,504].includes(response.status)||attempt===maxRetries)return response;
+   const retryAfter=Number(response.headers.get("Retry-After"));
+   const delay=Number.isFinite(retryAfter)&&retryAfter>0?Math.min(4000,retryAfter*1000):Math.min(2500,500*Math.pow(2,attempt));
+   await new Promise(resolve=>setTimeout(resolve,delay));
+  }catch(error){
+   if(attempt===maxRetries)throw new Error(error&&error.name==="TimeoutError"?"The AI service took too long to respond. Please retry.":"The AI service is temporarily unreachable. Please retry.");
+   await new Promise(resolve=>setTimeout(resolve,Math.min(2000,500*Math.pow(2,attempt))));
+  }
+ }
+ return lastResponse;
+}
 async function callAI(env,instructions,input,maxTokens=350){
  // gpt-4.1-mini Responses requests must not send unsupported reasoning.effort.
  const key=await env.OPENAI_API_KEY.get();
- const r=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:JSON.stringify({model:"gpt-4.1-mini",instructions,input,max_output_tokens:maxTokens})});
+ const r=await fetchOpenAIResponse(key,{model:"gpt-4.1-mini",instructions,input,max_output_tokens:maxTokens});
  if(!r.ok)throw new Error(r.status===429?"AI is busy. Please try again shortly.":"AI service could not complete the request.");
  const data=await r.json();return (data.output||[]).flatMap(x=>x.content||[]).filter(x=>x.type==="output_text").map(x=>x.text).join("\n").trim();
 }
@@ -207,12 +235,8 @@ export default {
     };
     // Astra may accept reasoning.effort; omit if the upstream rejects it on retry below.
     if(thinkHarder)payload.reasoning={effort:"high"};
-    let upstream=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:JSON.stringify(payload)});
-    if(!upstream.ok&&thinkHarder){
-     delete payload.reasoning;
-     upstream=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:JSON.stringify(payload)});
-    }
-    if(!upstream.ok)return json({error:upstream.status===429?"Hotel search is busy. Please try again shortly.":"Live hotel search could not be completed."},502);
+    const upstream=await fetchOpenAIResponse(key,payload);
+    if(!upstream.ok)return json({error:upstream.status===429||upstream.status>=500?"Hotel search is temporarily busy after retries. Your question was not lost; please try again.":"Hotel search could not be completed. Please check the request and retry.",retryable:[408,429,500,502,503,504].includes(upstream.status)},upstream.status===429?429:upstream.status>=500?503:502);
     const result=await upstream.json();
     const messages=(result.output||[]).filter(x=>x.type==="message");
     const answer=messages.flatMap(x=>x.content||[]).filter(x=>x.type==="output_text").map(x=>x.text).join("\n").trim();
@@ -258,9 +282,8 @@ export default {
       input:hotelResearchPrompt("Conversation context (resolve references only):\n"+contextText+"\n\nQuestion: "+message,thinkHarder)
      };
      if(thinkHarder)payload.reasoning={effort:"high"};
-     let upstream=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:JSON.stringify(payload)});
-     if(!upstream.ok&&payload.reasoning){delete payload.reasoning;upstream=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:JSON.stringify(payload)});}
-     if(!upstream.ok)return json({error:upstream.status===429?"Hotel research is busy. Please try again shortly.":"Live hotel research could not be completed."},502);
+     const upstream=await fetchOpenAIResponse(key,payload);
+     if(!upstream.ok)return json({error:upstream.status===429||upstream.status>=500?"Hotel research is temporarily busy after retries. Your question was not lost; please try again.":"Hotel research could not be completed. Please check the request and retry.",retryable:[408,429,500,502,503,504].includes(upstream.status)},upstream.status===429?429:upstream.status>=500?503:502);
      const result=await upstream.json();
      const messages=(result.output||[]).filter(x=>x.type==="message");
      const reply=messages.flatMap(x=>x.content||[]).filter(x=>x.type==="output_text").map(x=>x.text).join("\n").trim();
