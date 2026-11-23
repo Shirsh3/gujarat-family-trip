@@ -18,8 +18,16 @@ function toBase64Url(bytes){let s="";for(const b of bytes)s+=String.fromCharCode
 function fromHex(value){if(!/^(?:[0-9a-f]{2})+$/i.test(value))return new Uint8Array();return new Uint8Array(value.match(/.{2}/g).map(x=>parseInt(x,16)));}
 function hex(bytes){return Array.from(new Uint8Array(bytes)).map(x=>x.toString(16).padStart(2,"0")).join("");}
 async function derivePassword(password,salt,iterations=PBKDF2_ITERATIONS){
- const material=await crypto.subtle.importKey("raw",encoder.encode(password),"PBKDF2",false,["deriveBits"]);
- return new Uint8Array(await crypto.subtle.deriveBits({name:"PBKDF2",hash:"SHA-256",salt,iterations},material,256));
+ if(!(salt instanceof Uint8Array)||salt.length!==16)throw new Error("Invalid password salt format");
+ if(!Number.isSafeInteger(iterations)||iterations<10000||iterations>1000000)throw new Error("Invalid PBKDF2 iteration count");
+ let material;
+ try{
+  material=await crypto.subtle.importKey("raw",encoder.encode(password),{name:"PBKDF2"},false,["deriveBits"]);
+ }catch(error){throw new Error("PBKDF2 key import failed: "+(error&&error.message||String(error)));}
+ try{
+  const bits=await crypto.subtle.deriveBits({name:"PBKDF2",hash:"SHA-256",salt,iterations},material,256);
+  return new Uint8Array(bits);
+ }catch(error){throw new Error("PBKDF2 deriveBits failed: "+(error&&error.message||String(error)));}
 }
 async function signSession(payload,secret){
  const key=await crypto.subtle.importKey("raw",encoder.encode(secret),{name:"HMAC",hash:"SHA-256"},false,["sign"]);
@@ -93,7 +101,7 @@ export default {
    return new Response(JSON.stringify({ok:true,user:{username:user.username,displayName:user.display_name,role:user.role}}),{headers:{...JSON_HEADERS,"Set-Cookie":sessionCookie(token)}});
    }catch(error){
     console.error("Login handler failed at stage:",loginStage,error&&error.stack?error.stack:String(error));
-    return json({error:"Login request failed. Please try again or contact the administrator.",stage:loginStage},500);
+    return json({error:"Login request failed.",stage:loginStage,detail:error&&error.message?String(error.message).slice(0,240):String(error).slice(0,240)},500);
    }
   }
   if(url.pathname==="/api/auth/logout"&&request.method==="POST")return new Response(JSON.stringify({ok:true}),{headers:{...JSON_HEADERS,"Set-Cookie":clearSessionCookie()}});
