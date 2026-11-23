@@ -137,6 +137,22 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 .assistant-shortcuts button{border:1px solid #cbdccf;background:#fff;border-radius:99px;padding:8px 11px;color:var(--green);font:700 11px 'DM Sans';cursor:pointer}
 #floating-chat-log{min-height:100px;flex:1 1 auto}
 @media(max-width:600px){.assistant-cap-grid{grid-template-columns:1fr}.trip-bot-panel{right:8px;bottom:76px;width:calc(100vw - 16px);height:88vh;max-height:88vh}.assistant-welcome{padding:12px}}
+
+.expense-row{align-items:center;gap:12px}
+.expense-entry{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}
+.expense-entry strong{font-size:13px;white-space:nowrap}
+.expense-entry button{border:1px solid #cbdccf;background:#fff;border-radius:8px;padding:6px 10px;color:var(--green);font:700 11px 'DM Sans';cursor:pointer}
+.expense-entry .expense-save{background:var(--green);color:white}
+.expense-input{width:145px;max-width:40vw;padding:8px;border:1px solid var(--line);border-radius:8px;font:inherit}
+.expense-total-note{font-size:12px;color:var(--muted);margin-top:10px}
+@media(max-width:600px){.expense-row{align-items:flex-start;flex-direction:column}.expense-entry{justify-content:flex-start}}
+.chat-reply{background:#fff;border-radius:12px;padding:11px 13px;margin:8px 0;max-width:95%;font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+.chat-reply h2,.chat-reply h3{font:600 17px 'Playfair Display',serif;margin:8px 0 5px;color:var(--deep)}
+.chat-reply p{margin:5px 0}
+.chat-reply ul,.chat-reply ol{padding-left:19px;margin:6px 0}
+.chat-reply li{margin:3px 0}
+.chat-reply strong{color:var(--deep)}
+.chat-reply a{color:var(--green);text-decoration:underline}
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 </head>
@@ -300,11 +316,12 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
  <div class="route"><span>Dwarka + Somnath + Diu hotels</span><b>₹19,838+</b></div>
  <div class="route"><span>Multi-day vehicle</span><b>₹28,000–30,000 · estimate</b></div>
  <div class="route"><span>Jaipur Railway Station retiring rooms · 2 rooms · 3 Jan, 2–8 PM</span><b>₹1,728 · confirmed</b></div>
- <div class="route"><span>Train tickets</span><b><span class="cost-pending">Amount not entered</span></b></div>
- <div class="route"><span>Meals & refreshments</span><b><span class="cost-pending">Amount not entered</span></b></div>
- <div class="route"><span>Tolls & parking</span><b><span class="cost-pending">Amount not entered</span></b></div>
- <div class="route"><span>Local travel, auto/cab & transfers</span><b><span class="cost-pending">Amount not entered</span></b></div>
- <div class="route"><span>Other expenses / buffer</span><b><span class="cost-pending">Amount not entered</span></b></div>
+ <div class="route expense-row" data-expense="train"><span>Train tickets</span><div class="expense-entry"><strong class="expense-display cost-pending">Not entered</strong><input class="expense-input" type="number" min="0" step="1" inputmode="numeric" placeholder="Amount in ₹" aria-label="Train tickets amount" hidden><button type="button" class="expense-edit">Edit</button><button type="button" class="expense-save" hidden>Save</button><button type="button" class="expense-cancel" hidden>Cancel</button></div></div>
+ <div class="route expense-row" data-expense="meals"><span>Meals & refreshments</span><div class="expense-entry"><strong class="expense-display cost-pending">Not entered</strong><input class="expense-input" type="number" min="0" step="1" inputmode="numeric" placeholder="Amount in ₹" aria-label="Meals & refreshments amount" hidden><button type="button" class="expense-edit">Edit</button><button type="button" class="expense-save" hidden>Save</button><button type="button" class="expense-cancel" hidden>Cancel</button></div></div>
+ <div class="route expense-row" data-expense="tolls"><span>Tolls & parking</span><div class="expense-entry"><strong class="expense-display cost-pending">Not entered</strong><input class="expense-input" type="number" min="0" step="1" inputmode="numeric" placeholder="Amount in ₹" aria-label="Tolls & parking amount" hidden><button type="button" class="expense-edit">Edit</button><button type="button" class="expense-save" hidden>Save</button><button type="button" class="expense-cancel" hidden>Cancel</button></div></div>
+ <div class="route expense-row" data-expense="local"><span>Local travel, auto/cab & transfers</span><div class="expense-entry"><strong class="expense-display cost-pending">Not entered</strong><input class="expense-input" type="number" min="0" step="1" inputmode="numeric" placeholder="Amount in ₹" aria-label="Local travel, auto/cab & transfers amount" hidden><button type="button" class="expense-edit">Edit</button><button type="button" class="expense-save" hidden>Save</button><button type="button" class="expense-cancel" hidden>Cancel</button></div></div>
+ <div class="route expense-row" data-expense="other"><span>Other expenses / buffer</span><div class="expense-entry"><strong class="expense-display cost-pending">Not entered</strong><input class="expense-input" type="number" min="0" step="1" inputmode="numeric" placeholder="Amount in ₹" aria-label="Other expenses / buffer amount" hidden><button type="button" class="expense-edit">Edit</button><button type="button" class="expense-save" hidden>Save</button><button type="button" class="expense-cancel" hidden>Cancel</button></div>
+ <p class="expense-total-note" id="expense-entered-total" aria-live="polite">No additional expenses entered yet.</p></div>
 </div>
 </section>
 <section id="reviews" class="section">
@@ -507,10 +524,31 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
  <form id="floating-chat-form"><input id="floating-chat-input" maxlength="1000" required placeholder="Ask a trip question…"><button class="btn" type="submit">Send</button></form>
 </div>
 <script>
+
+function renderChatReply(container,markdown){
+ container.className='chat-reply';container.replaceChildren();
+ const lines=String(markdown||'').replace(/\r/g,'').split('\n');let list=null,listType='';
+ const inline=(parent,value)=>{
+  const parts=String(value).split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
+  for(const part of parts){if(!part)continue;
+   if(part.startsWith('**')&&part.endsWith('**')){const b=document.createElement('strong');b.textContent=part.slice(2,-2);parent.appendChild(b)}
+   else if(part.startsWith('*')&&part.endsWith('*')){const em=document.createElement('em');em.textContent=part.slice(1,-1);parent.appendChild(em)}
+   else parent.appendChild(document.createTextNode(part));
+  }
+ };
+ for(const raw of lines){const line=raw.trim();if(!line){list=null;listType='';continue}
+  const heading=line.match(/^(#{1,3})\s+(.+)/);
+  if(heading){list=null;const el=document.createElement(heading[1].length===1?'h2':'h3');inline(el,heading[2]);container.appendChild(el);continue}
+  const bullet=line.match(/^[-*•]\s+(.+)/),number=line.match(/^\d+[.)]\s+(.+)/);
+  if(bullet||number){const type=bullet?'ul':'ol';if(!list||listType!==type){list=document.createElement(type);container.appendChild(list);listType=type}const li=document.createElement('li');inline(li,(bullet||number)[1]);list.appendChild(li);continue}
+  list=null;listType='';const p=document.createElement('p');inline(p,line);container.appendChild(p);
+ }
+}
+
 (function(){
  const panel=document.getElementById('trip-bot-panel'),launcher=document.getElementById('trip-bot-launcher');
  launcher.addEventListener('click',()=>panel.classList.toggle('open'));document.querySelectorAll('[data-open-tab]').forEach(b=>b.addEventListener('click',()=>{panel.classList.remove('open');const tab=document.querySelector('[data-tab="'+b.dataset.openTab+'"]');if(tab)tab.click();}));document.getElementById('trip-bot-close').addEventListener('click',()=>panel.classList.remove('open'));
- document.getElementById('floating-chat-form').addEventListener('submit',async e=>{e.preventDefault();const input=document.getElementById('floating-chat-input'),log=document.getElementById('floating-chat-log'),form=e.currentTarget,button=form.querySelector('button'),q=input.value.trim();if(!q||button.disabled)return;const user=document.createElement('p');user.className='user';user.textContent=q;log.appendChild(user);input.value='';button.disabled=true;button.textContent='Thinking…';const waiting=document.createElement('div');waiting.className='ai-chat-thinking';const title=document.createElement('b');title.textContent='Trip assistant is thinking';const stage=document.createElement('div');stage.className='ai-activity-stage';stage.textContent='Reading your question and checking the trip context…';const track=document.createElement('div');track.className='ai-activity-track';const bar=document.createElement('span');track.appendChild(bar);waiting.append(title,stage,track);log.appendChild(waiting);log.scrollTop=log.scrollHeight;const started=Date.now();try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Assistant unavailable');waiting.className='assistant-reply';waiting.textContent=d.reply||'I could not prepare an answer.';}catch(err){waiting.className='assistant-reply';waiting.textContent=err.message;}finally{button.disabled=false;button.textContent='Send';}log.scrollTop=log.scrollHeight;});
+ document.getElementById('floating-chat-form').addEventListener('submit',async e=>{e.preventDefault();const input=document.getElementById('floating-chat-input'),log=document.getElementById('floating-chat-log'),form=e.currentTarget,button=form.querySelector('button'),q=input.value.trim();if(!q||button.disabled)return;const user=document.createElement('p');user.className='user';user.textContent=q;log.appendChild(user);input.value='';button.disabled=true;button.textContent='Thinking…';const waiting=document.createElement('div');waiting.className='ai-chat-thinking';const title=document.createElement('b');title.textContent='Trip assistant is thinking';const stage=document.createElement('div');stage.className='ai-activity-stage';stage.textContent='Reading your question and checking the trip context…';const track=document.createElement('div');track.className='ai-activity-track';const bar=document.createElement('span');track.appendChild(bar);waiting.append(title,stage,track);log.appendChild(waiting);log.scrollTop=log.scrollHeight;const started=Date.now();try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Assistant unavailable');renderChatReply(waiting,d.reply||'I could not prepare an answer.');}catch(err){waiting.className='assistant-reply';waiting.textContent=err.message;}finally{button.disabled=false;button.textContent='Send';}log.scrollTop=log.scrollHeight;});
 })();
 </script>
 
@@ -568,4 +606,45 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
   runHotelSearch(query,byId('hotel-review-status'),byId('hotel-review-results'),'hotel-review-activity');
  });
 })();
-</script></body></html>
+</script>
+function renderChatReply(container,markdown){
+ container.className='chat-reply';container.replaceChildren();
+ const lines=String(markdown||'').replace(/\r/g,'').split('\n');let list=null,listType='';
+ const inline=(parent,value)=>{
+  const parts=String(value).split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
+  for(const part of parts){if(!part)continue;
+   if(part.startsWith('**')&&part.endsWith('**')){const b=document.createElement('strong');b.textContent=part.slice(2,-2);parent.appendChild(b)}
+   else if(part.startsWith('*')&&part.endsWith('*')){const em=document.createElement('em');em.textContent=part.slice(1,-1);parent.appendChild(em)}
+   else parent.appendChild(document.createTextNode(part));
+  }
+ };
+ for(const raw of lines){const line=raw.trim();if(!line){list=null;listType='';continue}
+  const heading=line.match(/^(#{1,3})\s+(.+)/);
+  if(heading){list=null;const el=document.createElement(heading[1].length===1?'h2':'h3');inline(el,heading[2]);container.appendChild(el);continue}
+  const bullet=line.match(/^[-*•]\s+(.+)/),number=line.match(/^\d+[.)]\s+(.+)/);
+  if(bullet||number){const type=bullet?'ul':'ol';if(!list||listType!==type){list=document.createElement(type);container.appendChild(list);listType=type}const li=document.createElement('li');inline(li,(bullet||number)[1]);list.appendChild(li);continue}
+  list=null;listType='';const p=document.createElement('p');inline(p,line);container.appendChild(p);
+ }
+}
+
+<script>
+(function(){
+ const key="gujarat-trip-extra-expenses-v1";
+ const labels={train:"Train tickets",meals:"Meals & refreshments",tolls:"Tolls & parking",local:"Local travel, auto/cab & transfers",other:"Other expenses / buffer"};
+ let saved={};try{saved=JSON.parse(localStorage.getItem(key)||"{}")||{}}catch(e){saved={}}
+ const money=n=>"₹"+Math.round(n).toLocaleString("en-IN");
+ document.querySelectorAll(".expense-row").forEach(row=>{
+  const id=row.dataset.expense,display=row.querySelector(".expense-display"),input=row.querySelector(".expense-input"),edit=row.querySelector(".expense-edit"),save=row.querySelector(".expense-save"),cancel=row.querySelector(".expense-cancel");
+  const paint=()=>{const value=Number(saved[id]);if(Number.isFinite(value)&&value>=0&&saved[id]!==""&&saved[id]!==undefined){display.textContent=money(value);display.className="expense-display cost-exact"}else{display.textContent="Not entered";display.className="expense-display cost-pending"}};
+  const toggle=on=>{input.hidden=!on;save.hidden=!on;cancel.hidden=!on;edit.hidden=on;display.hidden=on};
+  paint();
+  edit.addEventListener("click",()=>{input.value=saved[id]??"";toggle(true);input.focus()});
+  cancel.addEventListener("click",()=>{input.value=saved[id]??"";toggle(false)});
+  save.addEventListener("click",()=>{const raw=input.value.trim();if(raw===""||!Number.isFinite(Number(raw))||Number(raw)<0){input.focus();return}saved[id]=Math.round(Number(raw));localStorage.setItem(key,JSON.stringify(saved));paint();toggle(false);updateTotal()});
+ });
+ const totalEl=document.getElementById("expense-entered-total");
+ function updateTotal(){if(!totalEl)return;const total=Object.values(saved).reduce((sum,v)=>sum+(Number.isFinite(Number(v))?Number(v):0),0);const count=Object.keys(saved).filter(k=>Number.isFinite(Number(saved[k]))&&Number(saved[k])>=0).length;totalEl.textContent=count?money(total)+" entered across "+count+" categories":"No additional expenses entered yet";}
+ updateTotal();
+})();
+</script>
+</body></html>
