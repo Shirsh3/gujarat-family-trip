@@ -133,18 +133,25 @@ export default {
     const upstream=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:JSON.stringify({
      model:"gpt-6.2-astra",
      tools:[{type:"web_search",search_context_size:"low",user_location:{type:"approximate",country:"IN",region:"Gujarat"}}],
-     input:"Search the live public web for this hotel request: "+query+"\\n\\nGive practical results for a family traveller. For each property, include name, exact area, independently reported platform ratings and review counts only when visible, recurring guest praise and complaints, price only when a dated/current source shows it, family suitability, and a direct source link. Compare platforms separately; never average incompatible scores. State when a fact is unavailable. Do not invent hotels, ratings, review counts, prices, room availability or review quotes. Availability and prices can change; tell the visitor to confirm on the provider site. Keep the answer under 700 words, use short headings and compact bullet points, and avoid introductory filler."
+     input:"Research this hotel request using live public web sources: "+query+"\\n\\nRESEARCH METHOD: Identify the exact property first (full name, city/area, and address or official website where available) so similarly named properties are not mixed. Search each relevant platform independently: Google Maps/Google reviews, Tripadvisor, Booking.com, Agoda, and the property's official site; include other credible sources only when useful. Do not imply you checked a platform unless you found a page or search result for this exact property on it.\\n\\nEVIDENCE RULES: For every rating, show the platform name, exact score and scale (for example 4.2/5), review count, and a direct URL only when those details are visible in the source. Keep platforms separate; never average scores or transfer a score from one platform to another. Give the latest review date only when the date of an actual review is visible; do not treat page update dates or search dates as review dates. Summarise recurring positive and negative themes only when supported by multiple accessible reviews; label single-review observations as isolated. Do not invent quotations, ratings, counts, dates, prices, amenities, hotel identity, or availability.\\n\\nOUTPUT: Start with a short property identity check. Then use a compact table with columns Platform, Rating, Review count, Latest visible review date, Evidence/limitations. Mark each missing field 'Not verified' and explain whether the platform page was unavailable, the property could not be matched confidently, or the detail was not displayed. Follow with repeated praise, repeated complaints, family/toddler suitability (only evidence-backed), and a short practical verdict. Attach citations/source links next to the claims they support and list the most useful direct source links at the end. If you cannot verify ratings or review counts, say so plainly rather than filling the table with estimates. Current prices and room availability must be dated and sourced; otherwise mark them 'Not verified' and tell the visitor to confirm directly. Keep under 700 words, concise and factual."
     })});
     if(!upstream.ok)return json({error:upstream.status===429?"Hotel search is busy. Please try again shortly.":"Live hotel search could not be completed."},502);
     const result=await upstream.json();
     const messages=(result.output||[]).filter(x=>x.type==="message");
     const answer=messages.flatMap(x=>x.content||[]).filter(x=>x.type==="output_text").map(x=>x.text).join("\n").trim();
     const sources=[];
-    for(const message of messages)for(const content of message.content||[])for(const annotation of content.annotations||[]){
-     if(annotation.type==="url_citation"&&annotation.url&&!sources.some(x=>x.url===annotation.url))sources.push({title:annotation.title||annotation.url,url:annotation.url});
+    const addSource=(title,url)=>{
+     if(typeof url!=="string"||!/^https?:\\/\\//i.test(url)||sources.some(x=>x.url===url))return;
+     sources.push({title:typeof title==="string"&&title.trim()?title.trim():new URL(url).hostname,url});
+    };
+    for(const item of result.output||[]){
+     for(const source of item.action?.sources||[])addSource(source.title,source.url);
+     for(const content of item.content||[])for(const annotation of content.annotations||[]){
+      if(annotation.type==="url_citation")addSource(annotation.title,annotation.url);
+     }
     }
     if(!answer)return json({error:"No hotel results were returned. Try a more specific search."},502);
-    return json({answer,sources});
+    return json({answer,sources,researchedAt:new Date().toISOString(),sourceCount:sources.length});
    }catch(e){return json({error:"Hotel search is temporarily unavailable."},502)}
   }
   if(url.pathname==="/api/chat"){
