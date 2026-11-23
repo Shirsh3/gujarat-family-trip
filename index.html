@@ -48,14 +48,19 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 .map-card{overflow:hidden;padding:0;margin:0 0 26px}
 .map-card iframe{display:block;width:100%;height:280px;border:0}
 .map-caption{padding:16px 19px}
-details.day-details{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
-details.day-details summary{cursor:pointer;color:var(--green);font-weight:700;font-size:13px;list-style:none}
-details.day-details summary:after{content:"＋";float:right}
-details.day-details[open] summary:after{content:"−"}
-details.day-details ul{margin-bottom:0}
+.day-activities{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+.day-activities ul{margin:8px 0 0;padding-left:17px}
+.day-activities li{font-size:13px;line-height:1.5;margin:5px 0}
 .day h3{margin-bottom:5px}
 @media(max-width:760px){.train-grid,.budget-grid{grid-template-columns:1fr}.map-card iframe{height:220px}}
+
+#trip-map{height:430px;width:100%;border-radius:0;z-index:1}
+.map-legend{display:flex;flex-wrap:wrap;gap:18px;padding:12px 18px;background:#f8f7f1;font-size:12px;color:var(--muted)}
+.leaflet-popup-content{font:13px/1.55 'DM Sans',sans-serif;min-width:190px}
+.leaflet-popup-content b{color:var(--green)}
+@media(max-width:760px){#trip-map{height:340px}}
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 </head>
 <body>
 <header class="hero"><div class="wrap hero-inner"><div class="eyebrow">A family journey · Gujarat, India</div><h1>Gujarat, at a gentler pace.</h1><p>Temple mornings, coastal sunsets and time together. A thoughtfully paced family escape through Dwarka, Somnath and Diu.</p><div class="chips"><span class="chip">28 Dec 2026 – 2 Jan 2027 · Gujarat trip</span><span class="chip">6 adults + 1 little traveller</span><span class="chip">5 nights · 6 days</span></div></div></header>
@@ -81,8 +86,10 @@ details.day-details ul{margin-bottom:0}
   <div class="budget-card"><div class="overview-label">Combined planning subtotal</div><strong>₹47,838–49,838+</strong><div class="small">Hotels + transport only; excludes food, toll/parking differences and other expenses</div></div>
 </div>
 <div class="card map-card">
-  <iframe title="Gujarat family trip route map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?output=embed&q=Jamnagar%20Railway%20Station%20to%20Dwarka%20to%20Somnath%20to%20Diu%20to%20Porbandar"></iframe>
-  <div class="map-caption"><div class="tag">Your road journey</div><b>Jamnagar → Dwarka → Somnath → Diu → Porbandar</b><p class="small">Open the full route in Google Maps for directions and updated travel estimates.</p><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/Jamnagar+Railway+Station/Dwarka+Gujarat/Somnath+Temple/Diu/Porbandar+Railway+Station/">Open full route</a></div>
+  <div class="map-caption"><div class="tag">Interactive trip map</div><h3 style="margin:4px 0">Your Gujarat journey</h3><p class="small">Select a marker to see hotel, stay dates, indicative price and route details. Distances and drive times are planning estimates.</p></div>
+  <div id="trip-map" role="application" aria-label="Interactive Gujarat trip map"></div>
+  <div class="map-legend"><span>🏨 Hotel / overnight stop</span><span>📍 Sightseeing / transit stop</span></div>
+  <div class="map-caption"><b>Jamnagar → Dwarka → Somnath → Diu → Porbandar</b><p class="small">Road routing and live navigation open in Google Maps.</p><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/Jamnagar+Railway+Station/Dwarka+Gujarat/Somnath+Temple/Diu/Porbandar+Railway+Station/">Open full route</a></div>
 </div>
 <div class="feature-grid">
 <div class="feature" style="background-image:url('https://assets.simplotel.com/simplotel/image/upload/w_1600%2Cdpr_1%2Cf_auto%2Cfl_progressive%2Cc_limit/dwarkadhish-lords-eco-inn/DWARKADHISH_TEMPLE_b9c0695c')"><div><b>Dwarka</b><span>Faith, sea breeze & ancient stories</span></div></div>
@@ -90,12 +97,12 @@ details.day-details ul{margin-bottom:0}
 <div class="feature" style="background-image:url('https://media.assettype.com/outlooktraveller/2024-09-04/4kzh5xcz/Daman%20%26%20Diu.jpg?auto=format%2Ccompress&dpr=1.0&fit=max&format=webp&w=1200')"><div><b>Diu</b><span>Slow coastal moments</span></div></div>
 </div>
 <div class="grid">
-<article class="card day"><div class="date">Monday · 28 December</div><h3>Delhi → Jamnagar</h3><p><b>Train 20938 · DEE–PBR Express</b></p><details class="day-details"><summary>View day details</summary><ul><li>Departure: Delhi Sarai Rohilla, 8:10 AM</li><li>Overnight train journey</li><li>Keep baby essentials and medicines in a small day bag</li></ul></details></article>
-<article class="card day"><div class="date">Tuesday · 29 December</div><h3>Arrive & settle in Dwarka</h3><details class="day-details"><summary>View day details</summary><ul><li>5:25 AM: scheduled arrival at Jamnagar</li><li>Pre-booked vehicle to Dwarka; allow roughly 2–3 hours</li><li>Hotel, breakfast and rest / early check-in</li><li>Afternoon/evening: Dwarkadhish Temple</li><li>Rukmini Devi and Bhadkeshwar Mahadev if energy and darshan timings permit</li></ul></details></article>
-<article class="card day"><div class="date">Wednesday · 30 December</div><h3>Dwarka & the coast</h3><details class="day-details"><summary>View day details</summary><ul><li>Morning: Nageshwar Jyotirlinga</li><li>Optional: Bet Dwarka / other local sights</li><li>Return for lunch and afternoon rest</li><li>Evening: Shivrajpur Beach</li></ul></details></article>
-<article class="card day"><div class="date">Thursday · 31 December</div><h3>Dwarka → Somnath</h3><details class="day-details"><summary>View day details</summary><ul><li>Start around 7:00 AM after breakfast</li><li>Allow 5–6 hours including comfort breaks</li><li>Hotel check-in, lunch and rest</li><li>Evening: Somnath Jyotirlinga darshan</li><li>Light & sound show, subject to operating schedule</li></ul></details></article>
-<article class="card day"><div class="date">Friday · 1 January</div><h3>Somnath → Diu</h3><details class="day-details"><summary>View day details</summary><ul><li>Breakfast and drive to Diu</li><li>Hotel check-in and rest</li><li>Afternoon: Diu Fort, St. Paul's Church; Naida Caves / INS Khukri Memorial optional</li><li>Evening: Nagoa Beach</li></ul></details></article>
-<article class="card day"><div class="date">Saturday · 2 January</div><h3>Diu → Porbandar</h3><details class="day-details"><summary>View day details</summary><ul><li>Early morning: Gangeshwar Mahadev</li><li>Breakfast and checkout</li><li>Leave for Porbandar early; allow road and meal breaks</li><li>Target station arrival by 3:30–4:00 PM for the planned 7 PM train</li><li>Confirm exact return train and station before travel</li></ul></details></article>
+<article class="card day"><div class="date">Monday · 28 December</div><h3>Delhi → Jamnagar</h3><p><b>Train 20938 · DEE–PBR Express</b></p><div class="day-activities"><ul><li>Departure: Delhi Sarai Rohilla, 8:10 AM</li><li>Overnight train journey</li><li>Keep baby essentials and medicines in a small day bag</li></ul></div></article>
+<article class="card day"><div class="date">Tuesday · 29 December</div><h3>Arrive & settle in Dwarka</h3><div class="day-activities"><ul><li>5:25 AM: scheduled arrival at Jamnagar</li><li>Pre-booked vehicle to Dwarka; allow roughly 2–3 hours</li><li>Hotel, breakfast and rest / early check-in</li><li>Afternoon/evening: Dwarkadhish Temple</li><li>Rukmini Devi and Bhadkeshwar Mahadev if energy and darshan timings permit</li></ul></div></article>
+<article class="card day"><div class="date">Wednesday · 30 December</div><h3>Dwarka & the coast</h3><div class="day-activities"><ul><li>Morning: Nageshwar Jyotirlinga</li><li>Optional: Bet Dwarka / other local sights</li><li>Return for lunch and afternoon rest</li><li>Evening: Shivrajpur Beach</li></ul></div></article>
+<article class="card day"><div class="date">Thursday · 31 December</div><h3>Dwarka → Somnath</h3><div class="day-activities"><ul><li>Start around 7:00 AM after breakfast</li><li>Allow 5–6 hours including comfort breaks</li><li>Hotel check-in, lunch and rest</li><li>Evening: Somnath Jyotirlinga darshan</li><li>Light & sound show, subject to operating schedule</li></ul></div></article>
+<article class="card day"><div class="date">Friday · 1 January</div><h3>Somnath → Diu</h3><div class="day-activities"><ul><li>Breakfast and drive to Diu</li><li>Hotel check-in and rest</li><li>Afternoon: Diu Fort, St. Paul's Church; Naida Caves / INS Khukri Memorial optional</li><li>Evening: Nagoa Beach</li></ul></div></article>
+<article class="card day"><div class="date">Saturday · 2 January</div><h3>Diu → Porbandar</h3><div class="day-activities"><ul><li>Early morning: Gangeshwar Mahadev</li><li>Breakfast and checkout</li><li>Leave for Porbandar early; allow road and meal breaks</li><li>Target station arrival by 3:30–4:00 PM for the planned 7 PM train</li><li>Confirm exact return train and station before travel</li></ul></div></article>
 
 </div>
 </section>
@@ -172,4 +179,26 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
   probe.src=match[1];
 });
 </script>
-</body></html>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+(function(){
+ const el=document.getElementById('trip-map'); if(!el||!window.L)return;
+ const stops=[
+  {name:'Jamnagar Railway Station',coords:[22.468,70.066],type:'Transit arrival',detail:'Train arrival planned for 29 December · transfer to Dwarka',link:'https://www.google.com/maps/dir/Jamnagar+Railway+Station/Dwarka+Gujarat/'},
+  {name:'Dwarka · Hotel Laxmi Niwas',coords:[22.244,68.968],type:'Hotel · 29–31 December',detail:'2 nights · 2 rooms · reference ₹6,930 before taxes',link:'https://yatradham.org/dwarka-hotel-laxmi-niwas.html'},
+  {name:'Nageshwar Jyotirlinga',coords:[22.336,69.085],type:'Sightseeing',detail:'Optional morning visit from Dwarka',link:'https://www.google.com/maps/dir/Dwarka+Gujarat/Nageshwar+Jyotirlinga/'},
+  {name:'Shivrajpur Beach',coords:[22.335,68.948],type:'Sightseeing',detail:'Optional beach visit from Dwarka',link:'https://www.google.com/maps/dir/Dwarka+Gujarat/Shivrajpur+Beach/'},
+  {name:'Somnath · Hotel Sukhnath',coords:[20.889,70.401],type:'Hotel · 31 December–1 January',detail:'1 night · 2 rooms · reference ₹3,150 including listed taxes',link:'https://yatradham.org/somnath-hotel-sukhnath.html'},
+  {name:'Diu · Hotel Ankur',coords:[20.714,70.987],type:'Hotel · 1–2 January',detail:'1 night · 2 rooms · reference ₹9,758 including listed taxes',link:'https://www.goibibo.com/hotels/ankur-hotel-in-diu-795205463544381628/'},
+  {name:'Nagoa Beach',coords:[20.716,70.920],type:'Sightseeing',detail:'Evening beach visit in Diu',link:'https://www.google.com/maps/dir/Hotel+Ankur+Diu/Nagoa+Beach+Diu/'},
+  {name:'Porbandar Railway Station',coords:[21.641,69.609],type:'Transit / return connection',detail:'Target arrival 3:30–4:00 PM on 2 January; train details still to be confirmed',link:'https://www.google.com/maps/dir/Diu/Porbandar+Railway+Station/'}
+ ];
+ const map=L.map(el,{scrollWheelZoom:false}).setView([21.55,69.95],7);
+ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+ const pts=stops.map((s,i)=>{const marker=L.marker(s.coords).addTo(map);marker.bindPopup('<b>'+s.name+'</b><br>'+s.type+'<br>'+s.detail+'<br><a target="_blank" rel="noopener" href="'+s.link+'">Details / directions ↗</a>');return s.coords;});
+ const route=L.polyline(pts,{color:'#1f594d',weight:4,opacity:.78,dashArray:'8 7'}).addTo(map);
+ map.fitBounds(route.getBounds().pad(.12));
+ document.querySelectorAll('[data-tab]').forEach(btn=>btn.addEventListener('click',()=>{if(btn.dataset.tab==='plan')setTimeout(()=>map.invalidateSize(),250)}));
+})();
+</script></body></html>
