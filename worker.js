@@ -163,7 +163,7 @@ export default {
    const message=typeof body.message==="string"?body.message.trim():"";if(!message||message.length>1000)return json({error:"Enter a question up to 1,000 characters."},400);
    if(containsSensitiveRequest(message))return json({reply:"I can help with trip planning, but cannot share private passenger, identity, contact or booking identifiers."});
    try{
-    const hotelIntent=/\\b(hotel|hotels|stay|stays|accommodation|guest house|resort|laxmi niwas|sukhnath|hotel ankur|hotel reviews?|tripadvisor|booking\\.com|agoda)\\b/i.test(message);
+    const hotelIntent=/\b(hotel|hotels|stay|stays|accommodation|guest house|resort|laxmi niwas|sukhnath|hotel ankur|hotel reviews?|tripadvisor|booking\.com|agoda)\b/i.test(message);
     if(hotelIntent){
      const key=await env.OPENAI_API_KEY.get();
      const upstream=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{authorization:"Bearer "+key,"content-type":"application/json"},body:JSON.stringify({
