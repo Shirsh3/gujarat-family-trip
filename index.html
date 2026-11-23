@@ -40,7 +40,7 @@ input[type=number]{width:100%;padding:10px;border:1px solid #d9d1c3;border-radiu
 <div class="pills"><span class="pill">28 Dec 2026 – 2 Jan 2027</span><span class="pill">6 adults + 1 baby</span><span class="pill">Train + road trip</span></div>
 </div></header>
 <nav><div class="wrap nav">
-<button class="active" data-tab="plan">Itinerary</button><button data-tab="hotels">Hotels</button><button data-tab="travel">Travel & routes</button><button data-tab="checklist">Checklist</button><button data-tab="budget">Budget</button>
+<button class="active" data-tab="plan">Itinerary</button><button data-tab="hotels">Hotels</button><button data-tab="travel">Travel & routes</button><button data-tab="checklist">Checklist</button>
 </div></nav>
 <main class="wrap">
 <section id="plan" class="section active">
@@ -129,11 +129,7 @@ input[type=number]{width:100%;padding:10px;border:1px solid #d9d1c3;border-radiu
 <h2>Family checklist</h2><p class="intro">Tick items as you prepare. Progress is saved in this browser on this device.</p>
 <div class="card"><div style="display:flex;justify-content:space-between"><b>Preparation progress</b><span id="count" class="muted">0 / 16</span></div><div class="progress" style="margin:10px 0 14px"><span id="bar"></span></div><div id="checks"></div></div>
 </section>
-<section id="budget" class="section">
-<h2>Trip budget tracker</h2><p class="intro">Enter estimates or actual costs in INR. Values are saved locally on this device only.</p>
-<div class="grid" id="expenses"></div>
-<div class="card" style="margin-top:14px"><div class="muted">Total entered</div><h2 id="total">₹0</h2><p class="small">This is a simple local tracker, not a shared live ledger. Each family member's browser has its own saved values.</p></div>
-</section>
+
 </main>
 <footer>Gujarat Family Yatra · Verify train schedules, temple timings, local rules and road conditions before departure.</footer>
 <script>
@@ -143,8 +139,7 @@ const items=['Confirm all train tickets and return train details','Book Jamnagar
 const saved=JSON.parse(localStorage.getItem('gujarat-checks')||'[]');const root=document.getElementById('checks');
 items.forEach((t,i)=>{const l=document.createElement('label');l.className='check';const c=document.createElement('input');c.type='checkbox';c.checked=saved.includes(i);c.addEventListener('change',()=>{const a=[...root.querySelectorAll('input')].map((x,j)=>x.checked?j:null).filter(x=>x!==null);localStorage.setItem('gujarat-checks',JSON.stringify(a));progress();});const s=document.createElement('span');s.textContent=t;l.append(c,s);root.append(l);});
 function progress(){const n=root.querySelectorAll('input:checked').length;document.getElementById('count').textContent=n+' / '+items.length;document.getElementById('bar').style.width=(n/items.length*100)+'%'}progress();
-const cats=['Train tickets','Road vehicle','Hotels','Fuel / tolls','Food & refreshments','Sightseeing / parking','Other'];
-const ex=document.getElementById('expenses');cats.forEach((name,i)=>{const d=document.createElement('div');d.className='card';const l=document.createElement('label');l.textContent=name;const inp=document.createElement('input');inp.type='number';inp.min='0';inp.placeholder='Enter amount in ₹';inp.value=localStorage.getItem('gujarat-cost-'+i)||'';inp.addEventListener('input',()=>{localStorage.setItem('gujarat-cost-'+i,inp.value);sum();});d.append(l,inp);ex.append(d);});
+});d.append(l,inp);ex.append(d);});
 function sum(){let n=0;cats.forEach((_,i)=>n+=Number(localStorage.getItem('gujarat-cost-'+i)||0));document.getElementById('total').textContent='₹'+n.toLocaleString('en-IN')}sum();
 </script>
 </body></html>
