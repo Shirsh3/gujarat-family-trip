@@ -180,8 +180,8 @@ export default {
    const user=await currentUser(request,env);if(!user)return json({error:"Please sign in to access the family conversation."},401);
    try{
     const context=await getUserChatContext(env,user.username);
-    const saved=await env.DB.prepare("undefined").all();
-    return json({summary:context.summary,messages:(saved.results||[]).map(x=>({role:x.role,content:x.content,sources:JSON.parse(x.sources_json||"[]"),createdAt:x.created_at}))});
+    const saved=await env.DB.prepare("SELECT role,content,sources_json,created_at FROM trip_chat_messages WHERE username=? ORDER BY id ASC").bind(user.username).all();
+    return json({username:user.username,summary:context.summary,messages:(saved.results||[]).map(x=>({role:x.role,content:x.content,sources:JSON.parse(x.sources_json||"[]"),createdAt:x.created_at}))});
    }catch(e){return json({error:"Could not load the family conversation."},500)}
   }
   if(url.pathname==="/api/chat"){
