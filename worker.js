@@ -141,7 +141,7 @@ export default {
     const answer=messages.flatMap(x=>x.content||[]).filter(x=>x.type==="output_text").map(x=>x.text).join("\n").trim();
     const sources=[];
     const addSource=(title,url)=>{
-     if(typeof url!=="string"||!/^https?:\\/\\//i.test(url)||sources.some(x=>x.url===url))return;
+     if(typeof url!=="string"||!(url.startsWith("https://")||url.startsWith("http://"))||sources.some(x=>x.url===url))return;
      sources.push({title:typeof title==="string"&&title.trim()?title.trim():new URL(url).hostname,url});
     };
     for(const item of result.output||[]){
