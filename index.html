@@ -500,7 +500,7 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
  });
  const allCoords=Object.values(places).map(p=>p.coords).filter(c=>Array.isArray(c)&&c.length===2&&c.every(Number.isFinite));
  // Keep the full Gujarat journey in view on initial load without excessive zoom-out.
- if(allCoords.length)map.fitBounds(L.latLngBounds(allCoords).pad(.12),{maxZoom:7});
+ if(allCoords.length)map.fitBounds(L.latLngBounds(allCoords).pad(.12),{maxZoom:8});
  const picker=document.getElementById('trip-day-picker'), list=document.getElementById('trip-place-list'), title=document.getElementById('trip-day-title'), subtitle=document.getElementById('trip-day-subtitle'), legsEl=document.getElementById('trip-route-legs'), status=document.getElementById('trip-route-status'), weatherEl=document.getElementById('trip-weather');
  let routeLayer=null, activeDay=1;
  days.forEach((d,i)=>{const b=document.createElement('button');b.textContent=d.label;b.addEventListener('click',()=>selectDay(i));picker.appendChild(b)});
@@ -525,7 +525,7 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
    const route=data.routes[0];
    if(routeLayer)map.removeLayer(routeLayer);
    routeLayer=L.geoJSON({type:'Feature',properties:{},geometry:route.geometry},{style:{color:'#1f594d',weight:5,opacity:.82}}).addTo(map);
-   const bounds=routeLayer.getBounds();d.places.forEach(id=>bounds.extend(places[id].coords));map.fitBounds(bounds.pad(.1));
+   const bounds=routeLayer.getBounds();d.places.forEach(id=>bounds.extend(places[id].coords));map.fitBounds(bounds.pad(.12),{maxZoom:9});
    route.legs.forEach((leg,i)=>{
     const from=d.route[i],to=d.route[i+1],km=(leg.distance/1000).toFixed(1),duration=formatDuration(leg.duration);
     const div=document.createElement('div');div.className='trip-leg';
@@ -586,7 +586,7 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
   if(!d.places.length){const p=document.createElement('p');p.className='small';p.style.padding='15px';p.textContent=i===0?'Train departure from Delhi Sarai Rohilla at 8:10 AM; scheduled Jamnagar arrival next morning.':'Return trains depart from Jaipur; see the train cards above.';list.appendChild(p)}
   d.places.forEach(addPlaceRow);
   if(d.ferryNote){const note=document.createElement('p');note.className='small';note.style.padding='0 15px';note.textContent=d.ferryNote;list.appendChild(note)}
-  if(d.places.length){const bounds=L.latLngBounds(d.places.map(id=>places[id].coords));map.fitBounds(bounds.pad(.2));}
+  if(d.places.length){const bounds=L.latLngBounds(d.places.map(id=>places[id].coords));map.fitBounds(bounds.pad(.12),{maxZoom:9});}
   if(routeLayer){map.removeLayer(routeLayer);routeLayer=null}
   loadRoadRoute(d);loadCurrentWeather(d);loadWeather(d);
  }
