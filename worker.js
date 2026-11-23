@@ -211,7 +211,14 @@ export default {
       max_tool_calls:thinkHarder?8:4,
       reasoning:{effort:thinkHarder?"high":"low"},
       tools:[{type:"web_search",search_context_size:thinkHarder?"high":"low",user_location:{type:"approximate",country:"IN",region:"Gujarat"}}],
-      input:(thinkHarder?"Perform a DETAILED hotel evidence investigation for the Gujarat family trip.":"Perform a QUICK hotel evidence check for the Gujarat family trip.")+ Resolve the exact property first. Conversation context (only to resolve references): "+contextText+"\\n\\nQuestion: "+message+"\\n\\nUse at most four focused searches, one per platform where possible: Google Maps/Google reviews, Tripadvisor, Booking.com and Agoda. Prioritise fast exact-property matching; do not browse long review pages. Verify exact-property matches. Return a compact answer (maximum 350 words): property identity; each platform's visible rating/scale and review count; latest actual review date only if immediately visible; two or three repeated review themes only when supported by multiple reviews; family suitability only when evidenced; direct source links. Mark unavailable values Not verified. Never guess or average platform ratings. Skip detailed amenities/prices/availability unless the question specifically asks. If identity is ambiguous, say so and ask for location. In detailed mode, investigate exact listings more carefully and include the latest three actual review dates only when individually visible; never infer dates. Use clear Markdown headings, bullets and tables. In quick mode, prioritise a concise answer."
+      input:(thinkHarder
+       ? "Perform a DETAILED hotel evidence investigation for the Gujarat family trip. "
+       : "Perform a QUICK hotel evidence check for the Gujarat family trip. ")
+       + "Resolve the exact property first. Conversation context (only to resolve references): "+contextText
+       + "\\n\\nQuestion: "+message
+       + "\\n\\nUse at most "+(thinkHarder?"eight":"four")+" focused searches across Google Maps/Google reviews, Tripadvisor, Booking.com and Agoda. Prioritise exact-property matching and distinguish properties with similar names. "
+       + "Return a clear Markdown response with a compact platform table: visible rating/scale, review count, latest actual review date (latest three dates in detailed mode only when individually visible), and direct source links. Summarise repeated themes only when supported by multiple reviews; assess family/toddler suitability only from evidence. Mark unavailable values Not verified. Never guess or average ratings, counts, dates, prices, amenities or availability. If identity is ambiguous, ask for location. "
+       + (thinkHarder?"Include evidence gaps, listing-match confidence and a careful family suitability assessment; maximum 700 words.":"Keep under 350 words and prioritise a useful quick answer.");
      })});
      if(!upstream.ok)return json({error:upstream.status===429?"Hotel research is busy. Please try again shortly.":"Live hotel research could not be completed."},502);
      const result=await upstream.json();
