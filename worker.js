@@ -66,7 +66,10 @@ export default {
  async fetch(request,env){
   const url=new URL(request.url);
   if(url.pathname==="/api/auth/login"&&request.method==="POST"){
+   let loginStage="configuration";
+   try{
    if(!env.DB||!env.SESSION_SECRET)return json({error:"Login service is not configured yet."},503);
+   loginStage="request-validation";
    const origin=request.headers.get("Origin");if(origin&&new URL(origin).host!==url.host)return json({error:"Request not allowed."},403);
    let body;try{body=await request.json()}catch{return json({error:"Invalid login."},400)}
    const username=typeof body.username==="string"?body.username.trim().toLowerCase():"";
@@ -74,17 +77,24 @@ export default {
    if(!/^[a-z0-9._-]{3,40}$/.test(username)||password.length<1||password.length>128)return json({error:"Enter your username and password."},400);
    const ip=request.headers.get("CF-Connecting-IP")||"unknown",now=Date.now(),recent=(requestCounts.get("login:"+ip)||[]).filter(t=>now-t<900000);
    if(recent.length>=10)return json({error:"Too many login attempts. Try again in 15 minutes."},429);recent.push(now);requestCounts.set("login:"+ip,recent);
+   loginStage="database-query";
    const user=await env.DB.prepare("SELECT username,display_name,role,password_salt,password_hash,iterations,active FROM trip_users WHERE username=?").bind(username).first();
    if(!user||user.active!==1)return json({error:"Incorrect username or password."},401);
    const salt=fromHex(user.password_salt),expected=fromHex(user.password_hash);
    if(salt.length!==16||expected.length!==32)return json({error:"Account credentials need to be reset by the administrator."},401);
+   loginStage="password-derivation";
    const actual=await derivePassword(password,salt,Number(user.iterations)||PBKDF2_ITERATIONS);
    if(actual.length!==expected.length||!crypto.subtle.timingSafeEqual) {
     let diff=0;for(let i=0;i<Math.min(actual.length,expected.length);i++)diff|=actual[i]^expected[i];
     if(diff!==0||actual.length!==expected.length)return json({error:"Incorrect username or password."},401);
    } else if(!crypto.subtle.timingSafeEqual(actual,expected))return json({error:"Incorrect username or password."},401);
+   loginStage="session-signing";
    const token=await signSession({sub:user.username,role:user.role,exp:Math.floor(Date.now()/1000)+SESSION_TTL_SECONDS},env.SESSION_SECRET);
    return new Response(JSON.stringify({ok:true,user:{username:user.username,displayName:user.display_name,role:user.role}}),{headers:{...JSON_HEADERS,"Set-Cookie":sessionCookie(token)}});
+   }catch(error){
+    console.error("Login handler failed at stage:",loginStage,error&&error.stack?error.stack:String(error));
+    return json({error:"Login request failed. Please try again or contact the administrator.",stage:loginStage},500);
+   }
   }
   if(url.pathname==="/api/auth/logout"&&request.method==="POST")return new Response(JSON.stringify({ok:true}),{headers:{...JSON_HEADERS,"Set-Cookie":clearSessionCookie()}});
   if(url.pathname==="/api/auth/me"&&request.method==="GET"){
