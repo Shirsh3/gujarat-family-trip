@@ -85,7 +85,12 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 .trip-place small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
 .trip-place .place-time{margin-left:auto;white-space:nowrap;color:var(--green);font-size:11px;font-weight:700}
 .trip-place .place-distance{display:block;color:var(--green);font-size:10px;font-weight:700;margin-top:5px}
+.weather-stack{display:grid;gap:10px;padding:12px}
 .trip-weather{padding:16px;background:#f1f5ef;border-top:1px solid var(--line)}
+.current-weather{background:#eaf2f8;border:1px solid #d7e5ef;border-radius:12px}
+.forecast-weather{background:#f1f5ef;border:1px solid #dce8d8;border-radius:12px}
+.weather-status{font-size:11px;color:var(--muted);margin-top:7px}
+
 .trip-weather b{display:block;margin:5px 0;font-size:14px}
 .trip-weather p{margin:4px 0}
 .weather-metrics{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;margin-top:9px}
@@ -140,7 +145,10 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
     <div class="trip-place-panel">
       <div class="trip-panel-heading"><b id="trip-day-title">29 December · Dwarka</b><span class="small" id="trip-day-subtitle">Day 2 · Tuesday</span></div>
       <div id="trip-place-list" class="trip-place-list"></div>
-      <div class="trip-weather" id="trip-weather"><div class="tag">Destination weather</div><b>Forecast not available yet</b><p class="small">Daily forecasts for these dates will appear closer to departure.</p></div>
+      <div class="weather-stack">
+        <div class="trip-weather current-weather" id="current-weather"><div class="tag">Current weather · selected destination</div><b>Loading current conditions…</b><p class="small">Live conditions update when you select a day.</p></div>
+        <div class="trip-weather forecast-weather" id="trip-weather"><div class="tag">Trip-date weather</div><b>Checking forecast / typical conditions…</b><p class="small">Forecast and historical reference are shown separately from current weather.</p></div>
+      </div>
     </div>
     <div class="trip-map-panel">
       <div id="trip-map" role="application" aria-label="Interactive Gujarat trip map"></div>
@@ -325,30 +333,37 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
   }
  }
  function formatDuration(seconds){const mins=Math.round(seconds/60);const h=Math.floor(mins/60),m=mins%60;return h?(h+' h '+(m?m+' min':'')):m+' min'}
+ async function loadCurrentWeather(d){
+  const el=document.getElementById('current-weather');
+  const id=d.weather|| (d.date==='2026-12-28'?'jam':d.date==='2027-01-03'?'jaipur':'porbandar');
+  const p=places[id]||{name:'Jaipur',coords:[26.9124,75.7873]};
+  el.innerHTML='<div class="tag">Current weather · '+p.name+'</div><b>Fetching live conditions…</b><p class="small">This is the weather right now, not the forecast for your travel date.</p>';
+  try{
+   const url='https://api.open-meteo.com/v1/forecast?latitude='+p.coords[0]+'&longitude='+p.coords[1]+'&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,weather_code,wind_speed_10m&timezone=Asia%2FKolkata';
+   const res=await fetch(url);if(!res.ok)throw new Error('Weather service returned '+res.status);
+   const data=await res.json(),v=data.current;if(!v)throw new Error('No current conditions returned');
+   el.innerHTML='<div class="tag">Current weather · '+p.name+'</div><b>'+weatherDescription(v.weather_code)+' · '+v.temperature_2m+'°C</b><div class="weather-metrics"><span>🌡️ Feels like '+v.apparent_temperature+'°C</span><span>💧 Humidity '+v.relative_humidity_2m+'%</span><span>🌧️ Rain '+v.precipitation+' mm</span><span>💨 Wind '+v.wind_speed_10m+' km/h</span></div><p class="weather-status">Live current conditions · Open-Meteo · updated '+v.time.replace('T',' ')+'</p>';
+  }catch(e){el.innerHTML='<div class="tag">Current weather · '+p.name+'</div><b>Could not load current conditions</b><p class="small">Check your internet connection or reload the trip page. Weather service: '+String(e.message||e)+'</p>'}
+ }
  async function loadWeather(d){
-  weatherEl.innerHTML='<div class="tag">Destination weather · '+d.city+'</div><b>Checking forecast availability…</b>';
-  if(!d.weather){weatherEl.innerHTML='<div class="tag">Destination weather</div><b>No overnight weather location for this date</b><p class="small">Train travel day. Check Jaipur weather closer to departure.</p>';return}
-  const p=places[d.weather],date=d.date;
+  weatherEl.innerHTML='<div class="tag">Trip-date weather · '+d.city+' · '+d.date+'</div><b>Checking forecast availability…</b>';
+  const p=places[d.weather]|| (d.date==='2027-01-03'?{name:'Jaipur',coords:[26.9124,75.7873]}:places.jam);
+  const date=d.date;
   try{
    const url='https://api.open-meteo.com/v1/forecast?latitude='+p.coords[0]+'&longitude='+p.coords[1]+'&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,wind_speed_10m_max&timezone=Asia%2FKolkata&start_date='+date+'&end_date='+date;
-   const res=await fetch(url);if(!res.ok)throw new Error('Forecast not available');
-   const data=await res.json();const i=data.daily?.time?.indexOf(date);
+   const res=await fetch(url);if(!res.ok)throw new Error('Forecast not available');const data=await res.json(),i=data.daily?.time?.indexOf(date);
    if(i===undefined||i<0)throw new Error('Outside forecast window');
-   const code=data.daily.weather_code[i],desc=weatherDescription(code);
-   weatherEl.innerHTML='<div class="tag">Live forecast · '+d.city+'</div><b>'+desc+' · '+data.daily.temperature_2m_min[i]+'°C to '+data.daily.temperature_2m_max[i]+'°C</b><div class="weather-metrics"><span>🌧️ Rain chance: '+(data.daily.precipitation_probability_max?.[i]??'—')+'%</span><span>💨 Max wind: '+(data.daily.wind_speed_10m_max?.[i]??'—')+' km/h</span></div><p class="small">Open-Meteo forecast for '+date+'. Forecast may change.</p>';
+   weatherEl.innerHTML='<div class="tag">Trip-date forecast · '+p.name+'</div><b>'+weatherDescription(data.daily.weather_code[i])+' · '+data.daily.temperature_2m_min[i]+'°C to '+data.daily.temperature_2m_max[i]+'°C</b><div class="weather-metrics"><span>🌧️ Rain chance '+(data.daily.precipitation_probability_max?.[i]??'—')+'%</span><span>💨 Max wind '+(data.daily.wind_speed_10m_max?.[i]??'—')+' km/h</span></div><p class="weather-status">Forecast for '+date+' · Open-Meteo. This becomes available closer to the date.</p>';
   }catch(e){
    try{
     const histUrl='https://archive-api.open-meteo.com/v1/archive?latitude='+p.coords[0]+'&longitude='+p.coords[1]+'&start_date=2016-01-01&end_date=2025-12-31&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max&timezone=Asia%2FKolkata&models=ERA5-Land';
     const histRes=await fetch(histUrl);if(!histRes.ok)throw new Error('Historical weather unavailable');
-    const hist=await histRes.json(), target=date.slice(5), indices=(hist.daily?.time||[]).map((v,i)=>v.slice(5)===target?i:-1).filter(i=>i>=0);
+    const hist=await histRes.json(),target=date.slice(5),indices=(hist.daily?.time||[]).map((v,i)=>v.slice(5)===target?i:-1).filter(i=>i>=0);
     if(!indices.length)throw new Error('No historical reference values');
     const avg=k=>indices.reduce((sum,i)=>sum+(Number(hist.daily[k]?.[i])||0),0)/indices.length;
     const rainy=indices.filter(i=>(Number(hist.daily.precipitation_sum?.[i])||0)>=1).length;
-    const lo=avg('temperature_2m_min'),hi=avg('temperature_2m_max'),rain=avg('precipitation_sum'),wind=avg('wind_speed_10m_max');
-    weatherEl.innerHTML='<div class="tag">Typical weather reference · '+d.city+'</div><b>About '+lo.toFixed(1)+'°C to '+hi.toFixed(1)+'°C</b><div class="weather-metrics"><span>🌧️ Rain on '+Math.round(rainy/indices.length*100)+'% of matching dates</span><span>💧 Avg rain: '+rain.toFixed(1)+' mm</span><span>💨 Avg max wind: '+wind.toFixed(1)+' km/h</span></div><p class="small">Historical ERA5-Land reference for this calendar date across '+indices.length+' years (2016–2025). This is a typical-weather guide, not a forecast for '+date+'.</p>';
-   }catch(histError){
-    weatherEl.innerHTML='<div class="tag">Destination weather · '+d.city+'</div><b>Weather data temporarily unavailable</b><p class="small">A live forecast will be shown when the date enters the 16-day forecast window. Historical reference could not be loaded right now.</p>';
-   }
+    weatherEl.innerHTML='<div class="tag">Typical trip-date weather · '+p.name+'</div><b>Typical range '+avg('temperature_2m_min').toFixed(1)+'°C to '+avg('temperature_2m_max').toFixed(1)+'°C</b><div class="weather-metrics"><span>🌧️ Rain on '+Math.round(rainy/indices.length*100)+'% of matching dates</span><span>💧 Avg rain '+avg('precipitation_sum').toFixed(1)+' mm</span><span>💨 Avg max wind '+avg('wind_speed_10m_max').toFixed(1)+' km/h</span></div><p class="weather-status">Historical same-date average, 2016–2025 · not a forecast for '+date+'.</p>';
+   }catch(histError){weatherEl.innerHTML='<div class="tag">Trip-date weather · '+p.name+'</div><b>Forecast not available yet</b><p class="small">The daily forecast opens within 16 days of '+date+'. Historical weather could not be fetched right now. Current weather is shown separately above.</p>'}
   }
  }
  function weatherDescription(c){if(c===0)return'Sunny / clear';if([1,2].includes(c))return'Partly cloudy';if(c===3)return'Overcast';if([45,48].includes(c))return'Fog';if([51,53,55,56,57].includes(c))return'Drizzle';if([61,63,65,66,67,80,81,82].includes(c))return'Rain showers';if([71,73,75,77,85,86].includes(c))return'Snow / snow showers';if([95,96,99].includes(c))return'Thunderstorm';return'Weather update'}
@@ -361,7 +376,7 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
   if(d.ferryNote){const note=document.createElement('p');note.className='small';note.style.padding='0 15px';note.textContent=d.ferryNote;list.appendChild(note)}
   if(d.places.length){const bounds=L.latLngBounds(d.places.map(id=>places[id].coords));map.fitBounds(bounds.pad(.2));}
   if(routeLayer){map.removeLayer(routeLayer);routeLayer=null}
-  loadRoadRoute(d);loadWeather(d);
+  loadRoadRoute(d);loadCurrentWeather(d);loadWeather(d);
  }
  selectDay(activeDay);
  document.querySelectorAll('[data-tab]').forEach(btn=>btn.addEventListener('click',()=>{if(btn.dataset.tab==='plan')setTimeout(()=>map.invalidateSize(),250)}));
