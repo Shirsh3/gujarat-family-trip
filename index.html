@@ -450,6 +450,7 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
 </script>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://unpkg.com/esri-leaflet@3.0.15/dist/esri-leaflet.js" crossorigin=""></script>
 <script>
 (function(){
  const el=document.getElementById('trip-map'); if(!el||!window.L)return;
@@ -489,6 +490,18 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
   maxZoom:18,
   attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
  }).addTo(map);
+ // Official India national boundary overlay: India AdminBoundary FeatureServer,
+ // layer 0, credited to Survey of India / Esri India. Keep OSM for roads/labels.
+ // This boundary overlay is authoritative for political depiction; the OSM basemap
+ // remains the navigational background.
+ if(window.L.esri){
+  L.esri.featureLayer({
+   url:'https://services2.arcgis.com/fQDJ6zNJPJ0yhFjv/arcgis/rest/services/IND_AdminBoundary/FeatureServer/0',
+   style:()=>({color:'#9b1c1c',weight:3,opacity:0.95,fill:false,fillOpacity:0,interactive:false})
+  }).addTo(map);
+ }else{
+  console.warn('Official India boundary overlay could not load; Esri Leaflet is unavailable.');
+ }
  const markers={};
  Object.entries(places).forEach(([id,p])=>{
   if(!Array.isArray(p.coords)||p.coords.length!==2||!p.coords.every(Number.isFinite)){
