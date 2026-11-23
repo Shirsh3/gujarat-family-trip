@@ -175,7 +175,21 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 .voice-field .voice-mic:disabled{opacity:.45;cursor:not-allowed}
 @keyframes micPulse{50%{box-shadow:0 0 0 5px #d66a6622}}
 @media(max-width:600px){.voice-field .voice-mic{flex-basis:44px;width:44px}}
- .booking-row{display:grid;grid-template-columns:1.2fr 1fr 1fr auto;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.booking-row:last-child{border-bottom:0}.booking-row strong{display:block}.booking-row small{display:block;color:var(--muted);overflow-wrap:anywhere}.booking-row button{border:1px solid var(--line);background:white;border-radius:8px;padding:7px 10px;cursor:pointer}@media(max-width:700px){.booking-row{grid-template-columns:1fr 1fr}.booking-row button{justify-self:start}}</style>
+ .booking-row{display:grid;grid-template-columns:1.2fr 1fr 1fr auto;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.booking-row:last-child{border-bottom:0}.booking-row strong{display:block}.booking-row small{display:block;color:var(--muted);overflow-wrap:anywhere}.booking-row button{border:1px solid var(--line);background:white;border-radius:8px;padding:7px 10px;cursor:pointer}@media(max-width:700px){.booking-row{grid-template-columns:1fr 1fr}.booking-row button{justify-self:start}}@media(max-width:700px){
+ .wrap{width:min(100% - 24px,1120px)}main{padding:26px 0 60px}
+ .hero{min-height:420px}.hero-inner{padding:60px 0 34px}
+ .nav{gap:4px}.nav button{padding:9px 12px;font-size:12px}
+ .grid,.budget-grid,.review-summary-grid,.itinerary-cards{grid-template-columns:1fr!important}
+ .card{padding:16px}.train-card{padding:16px}
+ #trip-map{height:320px!important}.trip-dashboard-layout{grid-template-columns:1fr!important}
+ .trip-bot-launcher{right:12px;bottom:12px}.trip-bot-panel,.trip-bot-panel.open{right:0;bottom:0;width:100vw;height:100dvh;max-height:100dvh;border-radius:0}
+ .trip-bot-panel.expanded{right:0;bottom:0;width:100vw;height:100dvh;max-height:100dvh}
+ #floating-chat-form{padding-bottom:max(10px,env(safe-area-inset-bottom))}
+ #floating-chat-form input{font-size:16px;min-height:44px}#floating-chat-form button{min-height:44px}
+ .hotel-filter-grid,.hotel-filter-options{grid-template-columns:1fr!important}
+ .actions{gap:8px}.actions .btn{flex:1 1 100%;text-align:center}
+ .chat-table-wrap{overflow-x:auto}.chat-table{min-width:560px}
+}</style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 </head>
 <body>
@@ -317,7 +331,14 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
   <div class="note"><b>My recommendation:</b> get a written fixed-price quote for a 12-seater Tempo Traveller or a properly configured Force Toofan/Urbania. With 6 adults, a baby and 4 large suitcases, do not book based only on the advertised passenger count. Ask for actual vehicle photos, seat-belt count, luggage arrangement, child-seat compatibility and an itemised total including driver, night halt, tolls, parking, state tax and GST.</div>
 </div>
 </section>
-<section id="costs" class="section">
+<section id="costs" class="section"><div class="budget-grid" id="family-dashboard" style="margin-top:18px">
+ <div class="budget-card"><div class="overview-label">Next travel date</div><strong>28 Dec 2026</strong><div class="small">Delhi → Jamnagar · family of 7</div></div>
+ <div class="budget-card"><div class="overview-label">Hotel confirmations</div><strong id="dash-hotels">0 / 3</strong><div class="small">Mark stays booked in the tracker</div></div>
+ <div class="budget-card"><div class="overview-label">Train / room confirmations</div><strong id="dash-rail">0 / 5</strong><div class="small">Four trains + Jaipur retiring rooms</div></div>
+ <div class="budget-card"><div class="overview-label">Pending preparation</div><strong id="dash-pending">16 tasks</strong><div class="small">From your family checklist</div></div>
+ <div class="budget-card"><div class="overview-label">Estimated trip cost</div><strong>₹49,566–51,566+</strong><div class="small">Planning subtotal, not final spend</div></div>
+ <div class="budget-card"><div class="overview-label">Actual expenses entered</div><strong id="dash-actual">₹0</strong><div class="small">Local expense entries on this device</div></div>
+</div>
 <div class="section-head"><div><div class="tag">Budget tracker</div><h2>Estimated trip cost so far</h2><p class="intro">Known amounts and planning estimates from the information collected so far. Unconfirmed items are not treated as paid or booked.</p></div></div>
 <div class="budget-grid">
  <div class="budget-card"><div class="overview-label">Hotels · listed stays</div><strong>₹19,838+</strong><div class="small">Dwarka, Somnath and Diu; Dwarka taxes still excluded.</div></div>
@@ -591,7 +612,19 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
  el('booking-add').addEventListener('click',()=>{rows.push({kind:el('booking-kind').value,status:el('booking-status').value,provider:el('booking-provider').value.trim(),paid:el('booking-paid').value,due:el('booking-due').value,ref:el('booking-ref').value.trim(),notes:el('booking-notes').value.trim()});save();['booking-provider','booking-paid','booking-due','booking-ref','booking-notes'].forEach(id=>el(id).value='');el('booking-feedback').textContent='Saved in this browser.'});
  el('booking-export').addEventListener('click',()=>{const cols=['Item','Status','Provider','Amount paid','Balance due','Reference','Notes'];const esc=v=>'"'+String(v??'').replace(/"/g,'""')+'"';const csv=[cols,...rows.map(r=>[r.kind,r.status,r.provider,r.paid,r.due,r.ref,r.notes])].map(row=>row.map(esc).join(',')).join('\n');const url=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));const a=document.createElement('a');a.href=url;a.download='gujarat-trip-bookings.csv';a.click();URL.revokeObjectURL(url)});
  draw();
+ refreshFamilyDashboard();
 })();
+function refreshFamilyDashboard(){
+ const get=k=>{try{return JSON.parse(localStorage.getItem(k)||'[]')}catch(e){return []}};
+ const bookings=get('gujarat-booking-tracker-v1'),checks=get('gujarat-checks');
+ const count=names=>bookings.filter(x=>names.some(n=>x.kind.toLowerCase().includes(n))&&['Booked','Partially paid','Paid'].includes(x.status)).length;
+ const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
+ set('dash-hotels',count(['hotel'])+' / 3');set('dash-rail',(count(['train'])+count(['retiring']))+' / 5');
+ set('dash-pending',Math.max(0,16-checks.length)+' tasks');
+ let actual=0;document.querySelectorAll('.expense-row .expense-display').forEach(e=>{const n=Number((e.textContent||'').replace(/[^0-9.]/g,''));if(Number.isFinite(n))actual+=n});
+ set('dash-actual','₹'+actual.toLocaleString('en-IN'));
+}
+document.addEventListener('click',e=>{if(e.target.closest('.expense-save,.expense-edit,.expense-cancel,.expense-row'))setTimeout(refreshFamilyDashboard,50)});
 function renderChatReply(container,markdown){
  container.className='chat-reply';container.replaceChildren();
  const source=String(markdown||'').replace(/\r/g,'').replace(/\\\|/g,'|').replace(/\\\(/g,'(').replace(/\\\)/g,')');
