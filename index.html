@@ -122,6 +122,8 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 @media(max-width:600px){.review-summary-grid{grid-template-columns:1fr}.review-controls{flex-direction:column}.review-controls select{max-width:none}.trip-bot-launcher{right:12px;bottom:12px}.trip-bot-panel{right:10px;bottom:82px}}
 .cost-legend{display:flex;flex-wrap:wrap;gap:9px;margin:10px 0}.cost-exact,.cost-estimated,.cost-pending{display:inline-block;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700}.cost-exact{background:#e4f3e9;color:#17663a}.cost-estimated{background:#fff0d6;color:#875000}.cost-pending{background:#eceff1;color:#53616a}
 .hotel-filter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.hotel-search-form label{display:block;font-size:12px;font-weight:700;color:var(--muted)}.hotel-search-form input:not([type=checkbox]),.hotel-search-form select{display:block;width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink);margin:5px 0 12px}.filter-label{display:block;font-size:13px;font-weight:700;margin:8px 0}.filter-label .small{font-weight:400}.hotel-filter-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0 15px}.hotel-filter-options label{display:flex;align-items:center;gap:8px;background:#f7f6f0;border:1px solid var(--line);border-radius:10px;padding:10px;color:var(--ink);font-size:12px;font-weight:600}.hotel-filter-options input{accent-color:var(--green);width:16px;height:16px}.hotel-search-status{margin-top:12px;padding:9px 0}.hotel-results{display:grid;gap:12px;margin-top:12px}.hotel-result-card{padding:19px}.hotel-result-card h3{margin-top:0}.hotel-result-card p{margin:7px 0}.hotel-result-card ul{margin:8px 0}.hotel-sources{background:#f8f7f1}.review-filter-options{margin-top:14px}@media(max-width:600px){.hotel-filter-grid,.hotel-filter-options{grid-template-columns:1fr}}
+
+.ai-activity{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;margin:10px 0;border:1px solid var(--line);border-radius:12px;background:var(--surface,#f8f7f1)}.ai-activity[hidden]{display:none}.ai-activity-dot{width:10px;height:10px;flex:0 0 10px;margin-top:5px;border-radius:50%;background:#27856b;box-shadow:0 0 0 4px rgba(39,133,107,.12);animation:aiPulse 1.4s ease-in-out infinite}.ai-activity-copy{min-width:0;flex:1}.ai-activity-title{font-weight:700;font-size:13px}.ai-activity-stage{font-size:12px;color:var(--muted);margin-top:3px}.ai-activity-track{height:3px;border-radius:99px;background:rgba(39,133,107,.12);overflow:hidden;margin-top:9px}.ai-activity-track span{display:block;width:35%;height:100%;background:#27856b;border-radius:99px;animation:aiTravel 1.7s ease-in-out infinite}.ai-activity-time{font-variant-numeric:tabular-nums;font-size:11px;color:var(--muted);white-space:nowrap}@keyframes aiPulse{50%{opacity:.45;transform:scale(.85)}}@keyframes aiTravel{0%{transform:translateX(-110%)}100%{transform:translateX(320%)}}.ai-chat-thinking{border-left:3px solid #27856b;padding:10px 12px;background:rgba(39,133,107,.06);border-radius:8px;margin:8px 0}.ai-chat-thinking .ai-activity-track{max-width:230px}
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 </head>
@@ -214,7 +216,7 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
   <input id="hotel-search-extra" maxlength="220" placeholder="e.g. two rooms, refundable booking, sea view">
   <button class="btn" type="submit">Find matching hotels</button>
  </form>
- <div id="hotel-search-status" class="hotel-search-status small" aria-live="polite"></div>
+ <div id="hotel-search-status" class="hotel-search-status small" aria-live="polite"></div><div id="hotel-search-activity" class="ai-activity" role="status" aria-live="polite" hidden><span class="ai-activity-dot"></span><div class="ai-activity-copy"><div class="ai-activity-title">AI is searching for matching hotels</div><div class="ai-activity-stage">Checking public hotel listings and guest-review sources…</div><div class="ai-activity-track"><span></span></div></div><span class="ai-activity-time" id="hotel-search-elapsed">0s</span></div>
  <div id="hotel-search-results" class="hotel-results"></div>
 </div><div class="grid">
 <article class="card"><div class="stay-image" style="background-image:url('https://assets.simplotel.com/simplotel/image/upload/w_1600%2Cdpr_1%2Cf_auto%2Cfl_progressive%2Cc_limit/dwarkadhish-lords-eco-inn/DWARKADHISH_TEMPLE_b9c0695c')"></div><div class="date">DWARKA · 2 NIGHTS</div><h3>Hotel Laxmi Niwas</h3><p><b>Room 1:</b> 2 Bed River View Deluxe AC, double bed + 2 mattresses, max 4 — ₹1,890/night + taxes.</p><p><b>Room 2:</b> 2 Bed AC, double bed + 1 mattress, max 3 — ₹1,575/night + taxes.</p><p><b>Reference total:</b> ₹3,465/night; ₹6,930 for 2 nights, before taxes.</p><p class="small">Published YatraDham rates. Listing says about 700 m from Dwarkadhish Mandir. Confirm baby occupancy and festive availability.</p><div class="actions"><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/travel/search?q=Hotel%20Laxmi%20Niwas%20Dwarka&checkin=2026-12-29&checkout=2026-12-31">Check 29–31 Dec dates</a><a class="btn alt" target="_blank" rel="noopener" href="https://yatradham.org/dwarka-hotel-laxmi-niwas.html">Hotel listing</a></div></article>
@@ -311,7 +313,7 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
   </div>
   <button class="btn" type="submit">Compare guest feedback</button>
  </form>
- <div id="hotel-review-status" class="hotel-search-status small" aria-live="polite"></div>
+ <div id="hotel-review-status" class="hotel-search-status small" aria-live="polite"></div><div id="hotel-review-activity" class="ai-activity" role="status" aria-live="polite" hidden><span class="ai-activity-dot"></span><div class="ai-activity-copy"><div class="ai-activity-title">AI is analysing guest feedback</div><div class="ai-activity-stage">Checking ratings, review themes and source links…</div><div class="ai-activity-track"><span></span></div></div><span class="ai-activity-time" id="hotel-review-elapsed">0s</span></div>
  <div id="hotel-review-results" class="hotel-results"></div>
 </div>
 <div class="note"><b>How to read these results:</b> Ratings and review themes are attributed to the linked public sources when available. Scores can differ by platform and change over time. We do not create, store or publish visitor-submitted reviews here.</div>
@@ -330,7 +332,7 @@ const root=document.getElementById('checks');let saved=[];try{saved=JSON.parse(l
 items.forEach((t,i)=>{const l=document.createElement('label');l.className='check';const c=document.createElement('input');c.type='checkbox';c.checked=saved.includes(i);c.addEventListener('change',()=>{saved=[...root.querySelectorAll('input')].map((x,j)=>x.checked?j:null).filter(x=>x!==null);localStorage.setItem('gujarat-checks',JSON.stringify(saved));progress()});const s=document.createElement('span');s.textContent=t;l.append(c,s);root.append(l)});
 function progress(){const n=root.querySelectorAll('input:checked').length;document.getElementById('count').textContent=n+' / '+items.length;document.getElementById('bar').style.width=(n/items.length*100)+'%'}progress();
 // Chat UI deliberately calls only a same-origin backend route. No browser-side API key.
-document.getElementById('trip-chat-form').addEventListener('submit',async e=>{e.preventDefault();const input=document.getElementById('trip-chat-input'),log=document.getElementById('chat-log'),status=document.getElementById('chat-status'),question=input.value.trim();if(!question)return;const user=document.createElement('p');user.textContent='You: '+question;log.appendChild(user);input.value='';status.textContent='Sending question securely…';try{const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:question})});if(!res.ok)throw new Error('Chat service is not configured yet (HTTP '+res.status+').');const data=await res.json();const reply=document.createElement('p');reply.textContent='Trip assistant: '+(data.reply||'I could not prepare an answer.');log.appendChild(reply);status.textContent='Answer generated from trip information.';}catch(err){status.textContent='The chat interface is ready, but its secure Worker endpoint /api/chat still needs to be deployed. '+err.message;}log.scrollTop=log.scrollHeight;});
+document.getElementById('trip-chat-form').addEventListener('submit',async e=>{e.preventDefault();const input=document.getElementById('trip-chat-input'),log=document.getElementById('chat-log'),status=document.getElementById('chat-status'),form=e.currentTarget,button=form.querySelector('button'),question=input.value.trim();if(!question||button.disabled)return;const user=document.createElement('p');user.textContent='You: '+question;log.appendChild(user);input.value='';button.disabled=true;button.textContent='Thinking…';status.textContent='AI is reading your question and preparing a trip-specific answer…';const started=Date.now();try{const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:question})});const data=await res.json();if(!res.ok)throw new Error(data.error||'Assistant unavailable');const reply=document.createElement('p');reply.textContent='Trip assistant: '+(data.reply||'I could not prepare an answer.');log.appendChild(reply);status.textContent='Answer ready · '+Math.max(1,Math.round((Date.now()-started)/1000))+' seconds.';}catch(err){status.textContent=err.message;}finally{button.disabled=false;button.textContent='Send';}log.scrollTop=log.scrollHeight;});
 // If a remote photo fails, retain a visible, branded image treatment instead of a blank area.
 document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
   const bg=getComputedStyle(el).backgroundImage;
@@ -484,7 +486,7 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
 (function(){
  const panel=document.getElementById('trip-bot-panel'),launcher=document.getElementById('trip-bot-launcher');
  launcher.addEventListener('click',()=>panel.classList.toggle('open'));document.getElementById('trip-bot-close').addEventListener('click',()=>panel.classList.remove('open'));
- document.getElementById('floating-chat-form').addEventListener('submit',async e=>{e.preventDefault();const input=document.getElementById('floating-chat-input'),log=document.getElementById('floating-chat-log'),q=input.value.trim();if(!q)return;const user=document.createElement('p');user.className='user';user.textContent=q;log.appendChild(user);input.value='';const waiting=document.createElement('p');waiting.textContent='Let me check that for you…';log.appendChild(waiting);log.scrollTop=log.scrollHeight;try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Assistant unavailable');waiting.textContent=d.reply;}catch(err){waiting.textContent=err.message;}log.scrollTop=log.scrollHeight;});
+ document.getElementById('floating-chat-form').addEventListener('submit',async e=>{e.preventDefault();const input=document.getElementById('floating-chat-input'),log=document.getElementById('floating-chat-log'),form=e.currentTarget,button=form.querySelector('button'),q=input.value.trim();if(!q||button.disabled)return;const user=document.createElement('p');user.className='user';user.textContent=q;log.appendChild(user);input.value='';button.disabled=true;button.textContent='Thinking…';const waiting=document.createElement('div');waiting.className='ai-chat-thinking';const title=document.createElement('b');title.textContent='Trip assistant is thinking';const stage=document.createElement('div');stage.className='ai-activity-stage';stage.textContent='Reading your question and checking the trip context…';const track=document.createElement('div');track.className='ai-activity-track';const bar=document.createElement('span');track.appendChild(bar);waiting.append(title,stage,track);log.appendChild(waiting);log.scrollTop=log.scrollHeight;const started=Date.now();try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Assistant unavailable');waiting.className='assistant-reply';waiting.textContent=d.reply||'I could not prepare an answer.';}catch(err){waiting.className='assistant-reply';waiting.textContent=err.message;}finally{button.disabled=false;button.textContent='Send';}log.scrollTop=log.scrollHeight;});
 })();
 </script>
 
@@ -510,16 +512,18 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
   }
   if(sources&&sources.length){const box=document.createElement('article');box.className='card hotel-result-card hotel-sources';addText(box,'h3','Sources & booking checks');const ul=document.createElement('ul');sources.forEach(s=>{const li=document.createElement('li');const a=document.createElement('a');a.href=s.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent=s.title||s.url;li.appendChild(a);ul.appendChild(li)});box.appendChild(ul);resultEl.appendChild(box)}
  }
- async function runHotelSearch(query,statusEl,resultEl){
-  statusEl.textContent='Searching the web… This can take around 15–40 seconds when sources need to be checked.';resultEl.replaceChildren();
-  const started=Date.now();
+ async function runHotelSearch(query,statusEl,resultEl,activityId){
+  const activity=byId(activityId),timer=byId(activityId.replace('-activity','-elapsed'));
+  const started=Date.now();let ticker=null;
+  statusEl.textContent='';resultEl.replaceChildren();if(activity){activity.hidden=false;if(timer)timer.textContent='0s';ticker=setInterval(()=>{if(timer)timer.textContent=Math.floor((Date.now()-started)/1000)+'s'},1000)}
   try{
    const response=await fetch('/api/hotels/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query})});
    const data=await response.json();if(!response.ok)throw new Error(data.error||'Hotel search is unavailable.');
    renderAnswer(data.answer,data.sources,resultEl);
    const seconds=Math.max(1,Math.round((Date.now()-started)/1000));
-   statusEl.textContent='Search completed in '+seconds+' seconds. Ratings, prices and availability can change; use the source links to confirm.';
+   statusEl.textContent='Completed in '+seconds+' seconds. Use the source links to verify current prices, ratings and availability.';
   }catch(error){statusEl.textContent=error.message;}
+  finally{if(ticker)clearInterval(ticker);if(activity)activity.hidden=true}
  }
  const hf=byId('hotel-search-form');
  if(hf)hf.addEventListener('submit',e=>{
@@ -529,7 +533,7 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
   const extra=byId('hotel-search-extra').value.trim();
   const places=destination==='all'?'Dwarka, Somnath and Diu':destination;
   const query='Find and compare current public hotel options in '+places+' for our family trip (6 adults and one toddler), 2 rooms where possible. Budget: '+budget+'. Priorities: '+(prefs.length?prefs.join('; '):'general family suitability')+'. Additional requirements: '+(extra||'none')+'. Dates: Dwarka 29–31 Dec 2026, Somnath 31 Dec 2026–1 Jan 2027, Diu 1–2 Jan 2027. Return concise hotel options with name, area, separate platform ratings and review counts when available, room suitability, parking, distance to key attractions, current indicative price and taxes, key pros/cons, and source links. Never invent missing details or claim availability is confirmed.';
-  runHotelSearch(query,byId('hotel-search-status'),byId('hotel-search-results'));
+  runHotelSearch(query,byId('hotel-search-status'),byId('hotel-search-results'),'hotel-search-activity');
  });
  const rf=byId('hotel-review-search-form');
  if(rf)rf.addEventListener('submit',e=>{
@@ -537,7 +541,7 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
   const name=byId('hotel-review-hotel').value;
   const prefs=[...document.querySelectorAll('input[name="review-pref"]:checked')].map(x=>x.value);
   const query='Research current public guest feedback for '+name+'. Compare Google, Tripadvisor, Booking.com, Agoda and other credible sources where available. Focus on: '+(prefs.length?prefs.join('; '):'overall guest experience')+'. Show each platform rating separately with review count and review date when visible. Summarise repeated positive themes and repeated complaints, note family/toddler suitability only when supported, and include source links. Do not invent scores, counts, quotes or availability.';
-  runHotelSearch(query,byId('hotel-review-status'),byId('hotel-review-results'));
+  runHotelSearch(query,byId('hotel-review-status'),byId('hotel-review-results'),'hotel-review-activity');
  });
 })();
 </script></body></html>
