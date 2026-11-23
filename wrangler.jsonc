@@ -3,7 +3,6 @@
   "name": "gujarat-family-trip",
   "main": "./worker.js",
   "compatibility_date": "2026-11-23",
-  "migrations_dir": "./migrations",
   "assets": {
     "directory": "./",
     "binding": "ASSETS",
@@ -13,7 +12,8 @@
     {
       "binding": "DB",
       "database_name": "gujarat-trip-reviews",
-      "database_id": "6903edf4-e024-4bdd-b480-132362972180"
+      "database_id": "6903edf4-e024-4bdd-b480-132362972180",
+      "migrations_dir": "./migrations"
     }
   ],
   "secrets_store_secrets": [
