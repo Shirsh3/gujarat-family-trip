@@ -320,8 +320,8 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
  <div class="route expense-row" data-expense="meals"><span>Meals & refreshments</span><div class="expense-entry"><strong class="expense-display cost-pending">Not entered</strong><input class="expense-input" type="number" min="0" step="1" inputmode="numeric" placeholder="Amount in ₹" aria-label="Meals & refreshments amount" hidden><button type="button" class="expense-edit">Edit</button><button type="button" class="expense-save" hidden>Save</button><button type="button" class="expense-cancel" hidden>Cancel</button></div></div>
  <div class="route expense-row" data-expense="tolls"><span>Tolls & parking</span><div class="expense-entry"><strong class="expense-display cost-pending">Not entered</strong><input class="expense-input" type="number" min="0" step="1" inputmode="numeric" placeholder="Amount in ₹" aria-label="Tolls & parking amount" hidden><button type="button" class="expense-edit">Edit</button><button type="button" class="expense-save" hidden>Save</button><button type="button" class="expense-cancel" hidden>Cancel</button></div></div>
  <div class="route expense-row" data-expense="local"><span>Local travel, auto/cab & transfers</span><div class="expense-entry"><strong class="expense-display cost-pending">Not entered</strong><input class="expense-input" type="number" min="0" step="1" inputmode="numeric" placeholder="Amount in ₹" aria-label="Local travel, auto/cab & transfers amount" hidden><button type="button" class="expense-edit">Edit</button><button type="button" class="expense-save" hidden>Save</button><button type="button" class="expense-cancel" hidden>Cancel</button></div></div>
- <div class="route expense-row" data-expense="other"><span>Other expenses / buffer</span><div class="expense-entry"><strong class="expense-display cost-pending">Not entered</strong><input class="expense-input" type="number" min="0" step="1" inputmode="numeric" placeholder="Amount in ₹" aria-label="Other expenses / buffer amount" hidden><button type="button" class="expense-edit">Edit</button><button type="button" class="expense-save" hidden>Save</button><button type="button" class="expense-cancel" hidden>Cancel</button></div>
- <p class="expense-total-note" id="expense-entered-total" aria-live="polite">No additional expenses entered yet.</p></div>
+ <div class="route expense-row" data-expense="other"><span>Other expenses / buffer</span><div class="expense-entry"><strong class="expense-display cost-pending">Not entered</strong><input class="expense-input" type="number" min="0" step="1" inputmode="numeric" placeholder="Amount in ₹" aria-label="Other expenses / buffer amount" hidden><button type="button" class="expense-edit">Edit</button><button type="button" class="expense-save" hidden>Save</button><button type="button" class="expense-cancel" hidden>Cancel</button></div></div>
+ <p class="expense-total-note" id="expense-entered-total" aria-live="polite">No additional expenses entered yet.</p>
 </div>
 </section>
 <section id="reviews" class="section">
@@ -607,25 +607,6 @@ function renderChatReply(container,markdown){
  });
 })();
 </script>
-function renderChatReply(container,markdown){
- container.className='chat-reply';container.replaceChildren();
- const lines=String(markdown||'').replace(/\r/g,'').split('\n');let list=null,listType='';
- const inline=(parent,value)=>{
-  const parts=String(value).split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g);
-  for(const part of parts){if(!part)continue;
-   if(part.startsWith('**')&&part.endsWith('**')){const b=document.createElement('strong');b.textContent=part.slice(2,-2);parent.appendChild(b)}
-   else if(part.startsWith('*')&&part.endsWith('*')){const em=document.createElement('em');em.textContent=part.slice(1,-1);parent.appendChild(em)}
-   else parent.appendChild(document.createTextNode(part));
-  }
- };
- for(const raw of lines){const line=raw.trim();if(!line){list=null;listType='';continue}
-  const heading=line.match(/^(#{1,3})\s+(.+)/);
-  if(heading){list=null;const el=document.createElement(heading[1].length===1?'h2':'h3');inline(el,heading[2]);container.appendChild(el);continue}
-  const bullet=line.match(/^[-*•]\s+(.+)/),number=line.match(/^\d+[.)]\s+(.+)/);
-  if(bullet||number){const type=bullet?'ul':'ol';if(!list||listType!==type){list=document.createElement(type);container.appendChild(list);listType=type}const li=document.createElement('li');inline(li,(bullet||number)[1]);list.appendChild(li);continue}
-  list=null;listType='';const p=document.createElement('p');inline(p,line);container.appendChild(p);
- }
-}
 
 <script>
 (function(){
