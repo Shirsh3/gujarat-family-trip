@@ -1,0 +1,170 @@
+name: Cloudflare production monitor
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_run:
+    workflows: ["Test and deploy to Cloudflare"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  issues: write
+
+concurrency:
+  group: cloudflare-production-monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    name: Check deployment and production health
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inspect Cloudflare deployment and health
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const workerUrl = "https://gujarat-family-trip.shirsh3.workers.dev";
+            const healthUrl = workerUrl + "/api/health";
+
+            async function findOpenIssue(marker) {
+              const issues = await github.paginate(github.rest.issues.listForRepo, {
+                owner, repo, state: "open", per_page: 100
+              });
+              return issues.find(issue => !issue.pull_request && (issue.body || "").includes(marker));
+            }
+
+            async function upsertIssue(marker, title, body) {
+              const existing = await findOpenIssue(marker);
+              if (existing) {
+                await github.rest.issues.update({ owner, repo, issue_number: existing.number, title, body });
+                core.info("Updated monitoring issue #" + existing.number);
+              } else {
+                const created = await github.rest.issues.create({ owner, repo, title, body });
+                core.warning("Created monitoring issue #" + created.data.number);
+              }
+            }
+
+            async function closeIssue(marker, resolution) {
+              const existing = await findOpenIssue(marker);
+              if (existing) {
+                await github.rest.issues.createComment({
+                  owner, repo, issue_number: existing.number,
+                  body: resolution
+                });
+                await github.rest.issues.update({
+                  owner, repo, issue_number: existing.number, state: "closed", state_reason: "completed"
+                });
+                core.info("Closed resolved monitoring issue #" + existing.number);
+              }
+            }
+
+            // 1) Inspect the latest production deployment workflow.
+            const runsResponse = await github.rest.actions.listWorkflowRuns({
+              owner, repo, workflow_id: "deploy-cloudflare.yml", branch: "main", per_page: 1
+            });
+            const latestRun = runsResponse.data.workflow_runs[0];
+
+            if (latestRun && latestRun.status === "completed" && latestRun.conclusion !== "success") {
+              const jobsResponse = await github.rest.actions.listJobsForWorkflowRun({
+                owner, repo, run_id: latestRun.id, per_page: 100
+              });
+              const failedJobs = jobsResponse.data.jobs
+                .filter(job => job.conclusion && job.conclusion !== "success" && job.conclusion !== "skipped")
+                .map(job => {
+                  const failedSteps = (job.steps || [])
+                    .filter(step => step.conclusion && step.conclusion !== "success" && step.conclusion !== "skipped")
+                    .map(step => "- " + step.name + " (" + step.conclusion + ")");
+                  return "### " + job.name + " — " + job.conclusion +
+                    "\nJob: " + (job.html_url || latestRun.html_url) +
+                    (failedSteps.length ? "\n" + failedSteps.join("\n") : "");
+                });
+              const deploymentBody = [
+                "<!-- cloudflare-deployment-monitor -->",
+                "## Cloudflare deployment failed",
+                "",
+                "- **Workflow:** " + latestRun.name,
+                "- **Run:** [#" + latestRun.run_number + "](" + latestRun.html_url + ")",
+                "- **Commit:** [" + latestRun.head_sha.slice(0, 12) + "](" + latestRun.head_commit?.url + ")",
+                "- **Branch:** " + latestRun.head_branch,
+                "- **Conclusion:** " + latestRun.conclusion,
+                "- **Updated:** " + new Date().toISOString(),
+                "",
+                "### Failed jobs and steps",
+                failedJobs.length ? failedJobs.join("\n\n") : "GitHub reported a failed run; open the workflow link above for full logs.",
+                "",
+                "### Production endpoint",
+                healthUrl,
+                "",
+                "This issue is maintained by the Cloudflare production monitor. Review the failing step and logs, fix the root cause, then push to `main`. A successful deployment automatically closes this incident."
+              ].join("\n");
+              await upsertIssue(
+                "<!-- cloudflare-deployment-monitor -->",
+                "[Cloudflare] Deployment pipeline failing",
+                deploymentBody
+              );
+            } else if (latestRun && latestRun.status === "completed" && latestRun.conclusion === "success") {
+              await closeIssue(
+                "<!-- cloudflare-deployment-monitor -->",
+                "The latest Cloudflare deployment completed successfully: " + latestRun.html_url
+              );
+            } else {
+              core.info("No completed deployment result to report yet.");
+            }
+
+            // 2) Probe the public Worker, D1 connectivity, and AI binding.
+            let health;
+            let healthError = null;
+            let httpStatus = null;
+            try {
+              const response = await fetch(healthUrl, { signal: AbortSignal.timeout(15000) });
+              httpStatus = response.status;
+              const raw = await response.text();
+              try { health = JSON.parse(raw); }
+              catch { health = { rawResponse: raw.slice(0, 2000) }; }
+            } catch (error) {
+              healthError = error.message;
+            }
+
+            const healthy = !healthError &&
+              httpStatus === 200 &&
+              health?.ok === true &&
+              health?.databaseConnected === true &&
+              health?.aiConfigured === true;
+
+            if (!healthy) {
+              const healthBody = [
+                "<!-- cloudflare-production-health-monitor -->",
+                "## Cloudflare production health check failed",
+                "",
+                "- **Worker:** " + workerUrl,
+                "- **Health endpoint:** " + healthUrl,
+                "- **Checked at:** " + new Date().toISOString(),
+                "- **HTTP status:** " + (httpStatus ?? "request failed"),
+                "- **Request error:** " + (healthError || "None"),
+                "",
+                "### Health response",
+                "```json",
+                JSON.stringify(health ?? null, null, 2),
+                "```",
+                "",
+                "The health endpoint checks Worker availability, D1 connectivity, and the configured OpenAI binding. Inspect Cloudflare Workers Observability and the latest GitHub deployment logs to diagnose the root cause. This issue closes automatically after a healthy check."
+              ].join("\n");
+              await upsertIssue(
+                "<!-- cloudflare-production-health-monitor -->",
+                "[Cloudflare] Production health check failing",
+                healthBody
+              );
+              core.setFailed("Cloudflare production health check failed.");
+            } else {
+              core.info("Cloudflare Worker, D1, and AI binding are healthy.");
+              await closeIssue(
+                "<!-- cloudflare-production-health-monitor -->",
+                "Production health recovered. Latest health response: " + JSON.stringify(health)
+              );
+            }
