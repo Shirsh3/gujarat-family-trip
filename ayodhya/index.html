@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ayodhya Family Journey | Four-day road trip</title>
+<meta name="theme-color" content="#102d29">
+<meta name="description" content="A separate, editable four-day family road-trip planner for Gorakhpur, Ayodhya, Sultanpur and Lucknow.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<style>
+:root{--ink:#172d2a;--muted:#697b75;--deep:#102d29;--green:#1f594d;--mint:#e6f0e9;--sand:#f7f5ef;--paper:#fffefa;--gold:#c99555;--line:#e9e5da;--shadow:0 18px 50px #16352a12}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--sand);color:var(--ink);font:15px/1.65 'DM Sans',sans-serif}a{color:var(--green)}button,input,textarea,select{font:inherit}.wrap{width:min(1120px,calc(100% - 40px));margin:auto}
+.hero{min-height:490px;color:white;position:relative;display:flex;align-items:flex-end;background:linear-gradient(90deg,#0b211ee8 0%,#0b211e9c 48%,#0b211e12 100%),url('https://images.unsplash.com/photo-1609948543911-7f01ff385be5?auto=format&fit=crop&w=2000&q=85') center 48%/cover}
+.hero:after{content:"";position:absolute;inset:auto 0 0;height:130px;background:linear-gradient(transparent,#0c211c80)}.hero-inner{position:relative;z-index:1;padding:82px 0 54px}.eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#e8c99b;font-weight:700}.hero h1{font:clamp(44px,7vw,78px)/1.02 'Playfair Display',serif;max-width:740px;margin:16px 0}.hero p{max-width:650px;color:#e9eeea;font-size:17px}.chips{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px}.chip{border:1px solid #ffffff60;background:#ffffff17;border-radius:99px;padding:8px 14px;font-size:13px;backdrop-filter:blur(8px)}
+nav{position:sticky;top:0;z-index:10;background:#fffefaed;backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}.nav{display:flex;gap:8px;overflow:auto;padding:12px 0}.nav button{border:0;background:transparent;color:var(--muted);font:600 14px 'DM Sans';padding:10px 16px;border-radius:99px;white-space:nowrap;cursor:pointer}.nav button.active{background:var(--deep);color:white}
+main{padding:42px 0 80px}.section{display:none}.section.active{display:block;animation:fade .3s ease}@keyframes fade{from{opacity:.4;transform:translateY(5px)}to{opacity:1;transform:none}}.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:25px}.section h2{font:clamp(30px,4vw,42px)/1.15 'Playfair Display',serif;margin:0}.intro{color:var(--muted);max-width:720px;margin:8px 0 0}.tag{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--green);font-weight:700}
+.overview-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:0 0 28px}.overview-card,.card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow)}.overview-card{min-height:118px;position:relative;overflow:hidden}.overview-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}.overview-value{font:22px/1.2 'Playfair Display',serif;margin-top:9px}.overview-sub{font-size:12px;color:var(--muted);margin-top:5px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(265px,1fr));gap:17px}.day{position:relative;overflow:hidden;border-radius:18px;padding:22px;border:1px solid var(--line);background:linear-gradient(155deg,#fffefa,#fbfaf5)}.day:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--gold)}.date{display:inline-flex;background:#f4eadb;padding:5px 10px;border-radius:99px;font-size:11px;color:#a36d32;font-weight:700}.day h3,.card h3{font:22px 'Playfair Display',serif;margin:9px 0}.muted,.small{color:var(--muted)}.small{font-size:12px}ul{padding-left:19px;margin:12px 0}li{margin:6px 0}.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}.btn{display:inline-block;background:var(--green);color:white;text-decoration:none;border-radius:10px;padding:10px 14px;font:600 13px 'DM Sans';border:0;cursor:pointer}.btn.alt{background:var(--mint);color:var(--green)}.note{background:#f1f4ed;border:1px solid #e2e9dd;border-radius:14px;padding:15px 17px;color:#52665b;margin:16px 0}
+#route-map{height:470px;width:100%;border-radius:16px;z-index:1}.map-card{padding:0;overflow:hidden}.map-caption{padding:16px 19px}.map-links{display:flex;gap:10px;flex-wrap:wrap;padding:0 19px 18px}
+.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px}.field input,.field select,.field textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:white;color:var(--ink)}.field textarea{min-height:90px;resize:vertical}
+.check{display:flex;gap:11px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}.check input{margin-top:5px;accent-color:var(--green);width:18px;height:18px}.progress{height:8px;background:#e8e7df;border-radius:20px;overflow:hidden}.progress span{display:block;height:100%;background:var(--green);width:0;transition:width .2s}
+.budget-row{display:grid;grid-template-columns:1fr 150px;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.budget-row input{width:100%;padding:10px;border:1px solid var(--line);border-radius:9px;text-align:right}.total{font:28px 'Playfair Display',serif}
+footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;font-size:12px}
+@media(max-width:900px){.overview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.wrap{width:calc(100% - 28px)}.hero{min-height:450px;background-position:58% center}.hero-inner{padding:65px 0 38px}.overview-grid{gap:10px}.overview-card{padding:15px;min-height:105px}.overview-value{font-size:19px}.section-head{display:block}.form-grid{grid-template-columns:1fr}#route-map{height:350px}.budget-row{grid-template-columns:1fr 115px}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap hero-inner">
+<div class="eyebrow">A family road journey · Uttar Pradesh</div>
+<h1>Ayodhya, with time to explore.</h1>
+<p>A separate trip space for the Gorakhpur → Ayodhya → Sultanpur → Lucknow → Gorakhpur circuit. Dates and planning figures are editable, so the itinerary can evolve with the family.</p>
+<div class="chips"><span class="chip">4-day circuit</span><span class="chip">Family-friendly pace</span><span class="chip">Dates to be confirmed</span><span class="chip">Private trip planner</span></div>
+</div></header>
+<nav><div class="wrap nav">
+<button class="active" data-tab="overview">Overview</button><button data-tab="itinerary">Itinerary</button><button data-tab="map">Route map</button><button data-tab="stays">Stays & notes</button><button data-tab="budget">Budget</button><button data-tab="checklist">Checklist</button>
+<a class="btn alt" href="/" style="margin-left:auto;white-space:nowrap">Gujarat trip ↗</a>
+</div></nav>
+<main class="wrap">
+<section class="section active" id="overview">
+<div class="section-head"><div><div class="tag">Your journey at a glance</div><h2>Four days, four stops.</h2><p class="intro">The route is set as a planning framework. Confirm dates, hotel choices and daily timings before treating anything as booked.</p></div></div>
+<div class="overview-grid">
+<div class="overview-card"><div class="overview-label">Trip duration</div><div class="overview-value">4 days</div><div class="overview-sub">Editable travel dates</div></div>
+<div class="overview-card"><div class="overview-label">Route</div><div class="overview-value">4 destinations</div><div class="overview-sub">GKP · Ayodhya · Sultanpur · Lucknow</div></div>
+<div class="overview-card"><div class="overview-label">Travel style</div><div class="overview-value">Road trip</div><div class="overview-sub">Private vehicle assumed, not booked</div></div>
+<div class="overview-card"><div class="overview-label">Trip status</div><div class="overview-value" id="trip-status">Planning</div><div class="overview-sub">No reservations recorded here</div></div>
+</div>
+<div class="grid">
+<article class="card"><div class="tag">The route</div><h3>Start and finish in Gorakhpur</h3><p>Gorakhpur → Ayodhya → Sultanpur → Lucknow → Gorakhpur.</p><p class="small">The route order can be changed if you want to reduce backtracking or add a night.</p><div class="actions"><button class="btn" data-jump="map">Open route map</button></div></article>
+<article class="card"><div class="tag">Dates</div><h3>Choose your travel window</h3><div class="field"><label for="start-date">Start date</label><input type="date" id="start-date"></div><div class="field" style="margin-top:10px"><label for="end-date">End date</label><input type="date" id="end-date"></div><p class="small" id="date-summary">Dates are not set yet. The itinerary remains date-neutral.</p></article>
+<article class="card"><div class="tag">Trip organiser</div><h3>Keep decisions in one place</h3><p>Use the stays, budget and checklist tabs to track what is planned and what still needs confirmation.</p><p class="small">Your edits are saved in this browser on this device.</p></article>
+</div>
+<div class="note"><b>Planning note:</b> the suggested daily sequence is a starting point, not a verified timed itinerary. Driving times, temple entry rules, aarti schedules, road conditions and hotel availability should be checked close to travel.</div>
+</section>
+<section class="section" id="itinerary">
+<div class="section-head"><div><div class="tag">Suggested four-day flow</div><h2>Day by day.</h2><p class="intro">A deliberately relaxed outline. Add exact dates and timings once the travel window is final.</p></div></div>
+<div class="grid" id="day-cards">
+<article class="day"><span class="date">Day 1 · Gorakhpur → Ayodhya</span><h3>Travel in, settle, then explore</h3><ul><li>Start from Gorakhpur at a family-comfortable time.</li><li>Check in and take a rest break before sightseeing.</li><li>Keep the evening for a gentle first visit around Ram Janmabhoomi / Ram Mandir area, subject to current access arrangements.</li><li>If energy allows, consider Saryu riverfront in the evening.</li></ul><p class="small">Avoid packing too many temple visits into the arrival day.</p><div class="actions"><a class="btn alt" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/Gorakhpur,+Uttar+Pradesh/Ayodhya,+Uttar+Pradesh/">Directions ↗</a></div></article>
+<article class="day"><span class="date">Day 2 · Ayodhya</span><h3>Full day for Ayodhya</h3><ul><li>Ram Mandir / Ram Janmabhoomi visit — check official entry guidance before leaving.</li><li>Hanuman Garhi and Kanak Bhawan, subject to crowd and access conditions.</li><li>Dashrath Mahal and nearby old-city sights if time permits.</li><li>Saryu ghat / evening aarti only after confirming the current schedule and crowd arrangements.</li></ul><p class="small">Build in meal, hydration and rest breaks; keep one optional attraction as a buffer.</p><div class="actions"><a class="btn alt" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Ayodhya+temples">Ayodhya places ↗</a></div></article>
+<article class="day"><span class="date">Day 3 · Ayodhya → Sultanpur → Lucknow</span><h3>Two road legs, one flexible stop</h3><ul><li>Leave Ayodhya after breakfast and drive towards Sultanpur.</li><li>Use Sultanpur as a break / family visit / lunch stop, depending on your purpose there.</li><li>Continue to Lucknow and check in.</li><li>Keep the evening light: dinner and rest, or a short local outing.</li></ul><p class="small">If Sultanpur is only a transit stop, keep the halt short to protect the Lucknow evening.</p><div class="actions"><a class="btn alt" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/Ayodhya,+Uttar+Pradesh/Sultanpur,+Uttar+Pradesh/Lucknow,+Uttar+Pradesh/">Directions ↗</a></div></article>
+<article class="day"><span class="date">Day 4 · Lucknow → Gorakhpur</span><h3>Return home</h3><ul><li>Breakfast and checkout.</li><li>Start for Gorakhpur with meal and washroom breaks planned.</li><li>Keep a generous buffer for traffic and any onward commitments.</li></ul><p class="small">If you want to explore Lucknow properly, consider extending the trip rather than rushing the return.</p><div class="actions"><a class="btn alt" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/Lucknow,+Uttar+Pradesh/Gorakhpur,+Uttar+Pradesh/">Directions ↗</a></div></article>
+</div>
+<div class="note">This outline does not assume any hotel, darshan slot, aarti ticket, guide, cab or restaurant is booked.</div>
+</section>
+<section class="section" id="map">
+<div class="section-head"><div><div class="tag">Geography & road legs</div><h2>The full circuit.</h2><p class="intro">Map pins show the four city stops. Use the direction links for turn-by-turn navigation; route timing is not represented as confirmed.</p></div></div>
+<div class="card map-card"><div id="route-map"></div><div class="map-caption"><b>Gorakhpur → Ayodhya → Sultanpur → Lucknow → Gorakhpur</b><p class="small">The line is a visual route guide. Live traffic, road closures and exact journey times are not included.</p></div><div class="map-links"><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/Gorakhpur,+Uttar+Pradesh/Ayodhya,+Uttar+Pradesh/Sultanpur,+Uttar+Pradesh/Lucknow,+Uttar+Pradesh/Gorakhpur,+Uttar+Pradesh/">Open full route in Google Maps ↗</a></div></div>
+</section>
+<section class="section" id="stays">
+<div class="section-head"><div><div class="tag">Accommodation & trip notes</div><h2>Stays and decisions.</h2><p class="intro">Record preferred properties and confirmation details here. Nothing is pre-filled as booked.</p></div></div>
+<div class="grid">
+<div class="card"><div class="tag">Ayodhya</div><h3>Ayodhya stay</h3><div class="field"><label>Preferred hotel / area</label><input data-save="ayodhya-hotel" placeholder="Add hotel or locality"></div><div class="field" style="margin-top:10px"><label>Check-in / check-out notes</label><textarea data-save="ayodhya-stay-notes" placeholder="Dates, room count, parking, lift, cancellation..."></textarea></div><p class="small">Prioritise access, parking, family room layout and walking distance only after checking actual entry routes.</p></div>
+<div class="card"><div class="tag">Sultanpur</div><h3>Stop or overnight?</h3><div class="field"><label>Plan</label><select data-save="sultanpur-plan"><option value="Transit / meal break">Transit / meal break</option><option value="Family visit">Family visit</option><option value="Overnight stay">Overnight stay</option></select></div><div class="field" style="margin-top:10px"><label>Notes</label><textarea data-save="sultanpur-notes" placeholder="Who to meet, stop duration, hotel if needed..."></textarea></div></div>
+<div class="card"><div class="tag">Lucknow</div><h3>Lucknow stay</h3><div class="field"><label>Preferred hotel / area</label><input data-save="lucknow-hotel" placeholder="Add hotel or locality"></div><div class="field" style="margin-top:10px"><label>Stay notes</label><textarea data-save="lucknow-notes" placeholder="Room count, parking, breakfast, check-in..."></textarea></div></div>
+</div>
+<div class="card" style="margin-top:18px"><div class="tag">Family requirements</div><h3>Notes for the driver / organiser</h3><div class="field"><textarea data-save="driver-notes" placeholder="Vehicle type, child seat, luggage, pickup time, breaks, accessibility needs..."></textarea></div></div>
+</section>
+<section class="section" id="budget">
+<div class="section-head"><div><div class="tag">Editable estimate</div><h2>Trip budget.</h2><p class="intro">Enter your own estimates. Totals update automatically and remain saved on this device.</p></div></div>
+<div class="card"><div class="budget-row"><div><b>Vehicle / driver</b><div class="small">Package, fuel or rental</div></div><input type="number" min="0" data-budget="vehicle" value="0"></div>
+<div class="budget-row"><div><b>Hotels</b><div class="small">All nights and rooms</div></div><input type="number" min="0" data-budget="hotels" value="0"></div>
+<div class="budget-row"><div><b>Food & refreshments</b></div><input type="number" min="0" data-budget="food" value="0"></div>
+<div class="budget-row"><div><b>Fuel / tolls / parking</b></div><input type="number" min="0" data-budget="road" value="0"></div>
+<div class="budget-row"><div><b>Darshan / local transport / misc.</b></div><input type="number" min="0" data-budget="misc" value="0"></div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding-top:20px"><div><div class="tag">Estimated total</div><div class="total" id="budget-total">₹0</div></div><button class="btn alt" id="reset-budget">Reset figures</button></div></div>
+<p class="small">Planning estimate only. Verify current prices and policies directly with service providers.</p>
+</section>
+<section class="section" id="checklist">
+<div class="section-head"><div><div class="tag">Before you leave</div><h2>Family trip checklist.</h2><p class="intro">Tick off essentials as they are completed.</p></div></div>
+<div class="card"><div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><b>Preparation progress</b><span class="small" id="check-progress-label">0 of 10 complete</span></div><div class="progress" style="margin:12px 0 8px"><span id="check-progress"></span></div>
+<div id="checks">
+<label class="check"><input type="checkbox" data-check="dates"><span><b>Confirm travel dates</b><br><span class="small">Set start and return dates in Overview.</span></span></label>
+<label class="check"><input type="checkbox" data-check="vehicle"><span><b>Confirm vehicle and driver</b><br><span class="small">Agree inclusions, daily hours, extra km, tolls and parking.</span></span></label>
+<label class="check"><input type="checkbox" data-check="rooms"><span><b>Confirm hotel rooms</b><br><span class="small">Check room count, occupancy, parking and cancellation policy.</span></span></label>
+<label class="check"><input type="checkbox" data-check="darshan"><span><b>Check current temple access guidance</b><br><span class="small">Use official updates for entry, prohibited items and crowd arrangements.</span></span></label>
+<label class="check"><input type="checkbox" data-check="aarti"><span><b>Verify Saryu aarti timing</b><br><span class="small">Confirm same-day timing and access locally.</span></span></label>
+<label class="check"><input type="checkbox" data-check="route"><span><b>Review route and road conditions</b><br><span class="small">Check live navigation before each departure.</span></span></label>
+<label class="check"><input type="checkbox" data-check="documents"><span><b>Carry ID and booking confirmations</b></span></label>
+<label class="check"><input type="checkbox" data-check="child"><span><b>Pack child / family essentials</b><br><span class="small">Food, water, medicines, spare clothes and comfort items.</span></span></label>
+<label class="check"><input type="checkbox" data-check="cash"><span><b>Keep payment options ready</b><br><span class="small">UPI, cards and some cash for small vendors / parking.</span></span></label>
+<label class="check"><input type="checkbox" data-check="buffer"><span><b>Share itinerary and emergency contacts</b></span></label>
+</div></div>
+</section>
+</main>
+<footer>Ayodhya Family Journey · Separate trip workspace · <a href="/" style="color:#e8c99b">Return to Gujarat trip</a></footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+(function(){
+ const KEY='ayodhya-trip-planner-v1';
+ const defaults={start:'',end:'',fields:{},budget:{vehicle:0,hotels:0,food:0,road:0,misc:0},checks:{}};
+ let state=defaults;try{state=Object.assign({},defaults,JSON.parse(localStorage.getItem(KEY)||'{}'));state.fields=state.fields||{};state.budget=Object.assign({},defaults.budget,state.budget||{});state.checks=state.checks||{}}catch(e){}
+ function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+ const tabs=[...document.querySelectorAll('[data-tab]')];
+ function showTab(id){tabs.forEach(b=>b.classList.toggle('active',b.dataset.tab===id));document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===id));if(id==='map'&&window.tripMap)setTimeout(()=>window.tripMap.invalidateSize(),120)}
+ tabs.forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+ document.querySelectorAll('[data-jump]').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.jump)));
+ const start=document.getElementById('start-date'),end=document.getElementById('end-date');
+ start.value=state.start||'';end.value=state.end||'';
+ function dates(){state.start=start.value;state.end=end.value;save();document.getElementById('date-summary').textContent=state.start&&state.end?'Selected window: '+state.start+' to '+state.end:state.start?'Start selected: '+state.start+' · add an end date':'Dates are not set yet. The itinerary remains date-neutral.'}
+ start.addEventListener('change',dates);end.addEventListener('change',dates);dates();
+ document.querySelectorAll('[data-save]').forEach(el=>{const k=el.dataset.save;el.value=state.fields[k]||'';el.addEventListener('input',()=>{state.fields[k]=el.value;save()})});
+ const budgetEls=[...document.querySelectorAll('[data-budget]')];
+ function budget(){let total=0;budgetEls.forEach(el=>{const v=Math.max(0,Number(el.value)||0);state.budget[el.dataset.budget]=v;total+=v});document.getElementById('budget-total').textContent='₹'+Math.round(total).toLocaleString('en-IN');save()}
+ budgetEls.forEach(el=>{el.value=state.budget[el.dataset.budget]||0;el.addEventListener('input',budget)});budget();
+ document.getElementById('reset-budget').addEventListener('click',()=>{budgetEls.forEach(el=>el.value=0);budget()});
+ const checks=[...document.querySelectorAll('[data-check]')];
+ function checkProgress(){let n=0;checks.forEach(el=>{const k=el.dataset.check;el.checked=Boolean(state.checks[k]);if(el.checked)n++});document.getElementById('check-progress-label').textContent=n+' of '+checks.length+' complete';document.getElementById('check-progress').style.width=(n/checks.length*100)+'%';save()}
+ checks.forEach(el=>el.addEventListener('change',()=>{state.checks[el.dataset.check]=el.checked;checkProgress()}));checkProgress();
+ if(window.L&&document.getElementById('route-map')){
+  const pts=[{name:'Gorakhpur',coords:[26.7606,83.3732],icon:'🚗',note:'Start and finish'},{name:'Ayodhya',coords:[26.7922,82.1998],icon:'🛕',note:'Main stay and temple visits'},{name:'Sultanpur',coords:[26.2648,82.0727],icon:'📍',note:'Flexible family / meal stop'},{name:'Lucknow',coords:[26.8467,80.9462],icon:'🏙️',note:'Final city stop before return'}];
+  const map=L.map('route-map',{scrollWheelZoom:false}).setView([26.7,82],7);window.tripMap=map;
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+  pts.forEach((p,i)=>L.marker(p.coords).addTo(map).bindPopup('<b>'+p.icon+' '+p.name+'</b><br>'+p.note));
+  const line=pts.map(p=>p.coords);line.push(pts[0].coords);
+  L.polyline(line,{color:'#1f594d',weight:4,opacity:.8,dashArray:'8 7'}).addTo(map);
+  map.fitBounds(L.latLngBounds(line).pad(.15));
+ }
+})();
+</script>
+</body></html>
