@@ -194,7 +194,7 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 </head>
 <body>
 <header class="hero"><div class="wrap hero-inner"><div class="eyebrow">A family journey · Gujarat, India</div><h1>Gujarat, at a calmer pace.</h1><p>Temple mornings, coastal sunsets and time together. A thoughtfully paced family escape through Dwarka, Somnath and Diu.</p><div class="chips"><span class="chip">28 Dec 2026 – 2 Jan 2027 · Gujarat trip</span><span class="chip">6 adults + 1 little traveller</span><span class="chip">5 nights · 6 days</span><span class="chip">Made for the whole family ✨</span></div></div></header>
-<nav><div class="wrap nav"><button class="active" data-tab="plan">The journey</button><button data-tab="hotels">Places to stay</button><button data-tab="travel">Getting around</button><button data-tab="checklist">Travel checklist</button><button data-tab="costs">Trip cost</button><button data-tab="reviews">Ratings & feedback</button><button type="button" id="sign-out-btn" class="sign-out-btn">Sign out</button></div></nav>
+<nav><div class="wrap nav"><button class="active" data-tab="plan">The journey</button><button data-tab="hotels">Places to stay</button><button data-tab="travel">Getting around</button><button data-tab="checklist">Travel checklist</button><button type="button" id="sign-out-btn" class="sign-out-btn">Sign out</button></div></nav>
 <main class="wrap">
 <section id="plan" class="section active">
 <div class="section-head"><div><div class="tag">The itinerary</div><h2>Six days, one beautiful route</h2><p class="intro">A flexible family-first plan. Keep meal, nap and washroom breaks; timings are targets, not commitments.</p></div></div>
@@ -231,11 +231,6 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
   <div class="overview-card"><div class="overview-label">Travellers</div><div class="overview-value">6 + 1</div><div class="overview-sub">Six adults and one toddler</div></div>
   <div class="overview-card"><div class="overview-label">Main route</div><div class="overview-value">Gujarat coast</div><div class="overview-sub">Jamnagar · Dwarka · Somnath · Diu</div></div>
   <div class="overview-card"><div class="overview-label">Return split</div><div class="overview-value">Jaipur</div><div class="overview-sub">You to Gurgaon · family to Chandigarh</div></div>
-</div>
-<div class="budget-grid">
-  <div class="budget-card"><div class="overview-label">Hotels</div><strong>Selected · 3 stays</strong><div class="small">Dwarkesh Homely Stay · Decent Somnath · Apana; prices not shown</div></div>
-  <div class="budget-card"><div class="overview-label">Taxi package</div><strong>₹22,300</strong><div class="small">5 days / 1,200 km · Ertiga + roof carrier; Diu toll extra</div></div>
-  <div class="budget-card"><div class="overview-label">Taxi package + Jaipur rooms</div><strong>₹24,028</strong><div class="small">₹22,300 taxi package + ₹1,728 Jaipur retiring rooms; excludes hotels and other costs</div></div>
 </div>
 <div class="card map-card trip-dashboard">
   <div class="map-caption"><div class="tag">Interactive trip dashboard</div><h3 style="margin:4px 0">Explore every stop on your journey</h3><p class="small">Choose a date to see that day's places, road route, driving distances, estimated times and destination weather. Select any place to focus the map.</p></div>
@@ -277,33 +272,6 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 <section id="hotels" class="section">
 <div class="section-head"><div><div class="tag">Rest well</div><h2>Places to stay</h2><p class="intro">Two rooms at every stop: Room 1 for four adults; Room 2 for you, your wife and baby. Prices are published reference rates, not confirmed quotes for these festive dates.</p></div></div>
 <div class="card" style="margin-bottom:17px"><h3>Room plan & dates</h3><div class="route"><span>Dwarka · 29–31 December 2026 · 2 nights</span><b class="km">2 rooms</b></div><div class="route"><span>Somnath · 31 December–1 January · 1 night</span><b class="km">2 rooms</b></div><div class="route"><span>Diu · 1–2 January 2027 · 1 night</span><b class="km">2 rooms</b></div><ul><li><b>Room 1:</b> Family room for 4 adults.</li><li><b>Room 2:</b> Double room for 2 adults + baby. Confirm child policy and request a cot/extra mattress.</li></ul></div>
-<div class="card hotel-discovery" style="margin:18px 0">
- <div class="tag">AI-powered hotel discovery</div><h3>Find hotels that match your family</h3>
- <p class="small">Choose a destination and tap the preferences you care about. We'll build the search prompt for you and check current public sources.</p>
- <form id="hotel-search-form" class="hotel-search-form">
-  <div class="hotel-filter-grid">
-   <label>Destination<select id="hotel-destination"><option value="Dwarka">Dwarka</option><option value="Somnath">Somnath</option><option value="Diu">Diu</option><option value="all">All Gujarat stops</option></select></label>
-   <label>Nightly budget<select id="hotel-budget"><option value="Any budget">Any budget</option><option value="under ₹2,000 per room">Under ₹2,000 / room</option><option value="under ₹3,000 per room">Under ₹3,000 / room</option><option value="under ₹5,000 per room">Under ₹5,000 / room</option></select></label>
-  </div>
-  <div class="filter-label">What matters most? <span class="small">Choose multiple</span></div>
-  <div class="hotel-filter-options">
-   <label><input type="checkbox" name="hotel-pref" value="family rooms suitable for 6 adults and a toddler" checked> Family rooms</label>
-   <label><input type="checkbox" name="hotel-pref" value="secure on-site parking" checked> Parking</label>
-   <label><input type="checkbox" name="hotel-pref" value="close to the main temple or key attractions" checked> Near temple / attractions</label>
-   <label><input type="checkbox" name="hotel-pref" value="consistently good cleanliness feedback" checked> Clean rooms</label>
-   <label><input type="checkbox" name="hotel-pref" value="breakfast included or available"> Breakfast</label>
-   <label><input type="checkbox" name="hotel-pref" value="lift or ground-floor access"> Lift / easy access</label>
-   <label><input type="checkbox" name="hotel-pref" value="family and toddler friendly facilities"> Toddler friendly</label>
-   <label><input type="checkbox" name="hotel-pref" value="strong recent guest ratings and review volume"> Good guest reviews</label>
-   <label><input type="checkbox" name="hotel-pref" value="good value for money"> Value for money</label>
-  </div>
-  <label class="filter-label" for="hotel-search-extra">Anything else? <span class="small">Optional</span></label>
-  <input id="hotel-search-extra" maxlength="220" placeholder="e.g. two rooms, refundable booking, sea view">
-  <button class="btn" type="submit">Find matching hotels</button>
- </form>
- <div id="hotel-search-status" class="hotel-search-status small" aria-live="polite"></div><div id="hotel-search-activity" class="ai-activity" role="status" aria-live="polite" hidden><span class="ai-activity-dot"></span><div class="ai-activity-copy"><div class="ai-activity-title">AI is searching for matching hotels</div><div class="ai-activity-stage">Checking public hotel listings and guest-review sources…</div><div class="ai-activity-track"><span></span></div></div><span class="ai-activity-time" id="hotel-search-elapsed">0s</span></div>
- <div id="hotel-search-results" class="hotel-results"></div>
-</div><div class="card" style="margin:18px 0"><div class="tag">Official hotel information & booking</div><h3>Direct hotel sources</h3><p class="small">Use these property-operated pages to verify room layouts and contact/booking details. These are direct sources, not independent guest-review ratings.</p><div class="actions"><span class="btn alt" aria-disabled="true" title="The previously listed PDF returned 404; no verified replacement is available">Hawthorn factsheet · unavailable</span><a class="btn alt" target="_blank" rel="noopener" href="https://www.lordshotels.com/eco-inn-dwarkadhish-dwarka/rooms">Dwarkadhish Lords · room types</a><a class="btn alt" target="_blank" rel="noopener" href="https://www.lordshotels.com/inn-somnath/rooms">Lords Inn Somnath · room types</a><a class="btn alt" target="_blank" rel="noopener" href="https://bookings.fernhotels.com/TheFernSeasideLuxuriousTentResortDiu">The Fern Seaside Diu · reservations</a></div><p class="small">Hawthorn and Lords are additional Dwarka/Somnath options; The Fern is an alternative Diu property, not one of the selected stays. Check festive-date rates and room availability directly.</p></div>
 <div class="grid">
 <article class="card"><div class="stay-image" style="background-image:url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80')"></div><div class="date">DWARKA · 2 NIGHTS · 29–31 DECEMBER</div><h3>Hotel Dwarkesh Homely Stay</h3><p><b>Selected hotel</b> for the Dwarka stay.</p><p class="small">Check-in planned: 29 Dec at 12 PM. Confirm the room configuration for six adults and one toddler directly with the property.</p><div class="actions"><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Hotel+Dwarkesh+Homely+Stay+Dwarka">Open in Google Maps</a><a class="btn alt" target="_blank" rel="noopener" href="https://www.google.com/search?q=Hotel+Dwarkesh+Homely+Stay+Dwarka">Property details</a></div></article>
 <article class="card"><div class="stay-image" style="background-image:url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80')"></div><div class="date">SOMNATH · 1 NIGHT · 31 DECEMBER–1 JANUARY</div><h3>Hotel Decent Somnath</h3><p><b>Selected hotel</b> for the Somnath stay.</p><p class="small">Check-in planned: 31 Dec at 1 PM. Confirm festive-date room availability, toddler policy and check-out time directly with the property.</p><div class="actions"><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Hotel+Decent+Somnath">Open in Google Maps</a><a class="btn alt" target="_blank" rel="noopener" href="https://www.google.com/search?q=Hotel+Decent+Somnath">Property details</a></div></article>
@@ -333,54 +301,7 @@ footer{background:var(--deep);color:#d8e3dc;text-align:center;padding:28px 20px;
 </div>
 
 </section>
- <section id="costs" class="section">
- <div class="section-head"><div><div class="tag">Final transport cost</div><h2>Taxi package</h2><p class="intro">Final package agreed for the Gujarat road trip.</p></div></div>
- <div class="card">
-  <div class="tag">Final package · 5 days / 1,200 km</div>
-  <h3 style="font-size:32px;margin:8px 0">₹22,300</h3>
-  <p><b>Ertiga with roof carrier · 6 adults + 1 toddler</b></p>
-  <p>Jamnagar Railway Station pickup · Porbandar final drop</p>
-  <div class="route"><span>Included</span><b class="km">Fuel, driver allowance, other tolls, parking and roof carrier</b></div>
-  <div class="route"><span>Extra distance</span><b class="km">₹13/km</b></div>
-  <div class="route"><span>Additional</span><b class="km">Diu toll tax</b></div>
- </div>
-</section>
-<section id="reviews" class="section">
-<div class="section-head"><div><div class="tag">Independent guest feedback</div><h2>Hotel ratings & guest experiences</h2><p class="intro">Explore publicly available ratings and review themes for the recommended stays. Results are fetched when requested and link back to their original sources.</p></div></div>
-<div class="card">
- <h3>Check guest feedback</h3>
- <p class="small">The most useful review categories are already selected. Change them if you want a narrower comparison.</p>
- <form id="hotel-review-search-form" class="hotel-search-form">
-  <label>Hotel<select id="hotel-review-hotel"><option>Hotel Dwarkesh Homely Stay, Dwarka</option><option>Hotel Decent Somnath, Somnath</option><option>Hotel Apana, Diu</option></select></label>
-  <div class="hotel-filter-options review-filter-options">
-   <label><input type="checkbox" name="review-pref" value="overall rating, review count and recent review dates" checked> Ratings & review volume</label>
-   <label><input type="checkbox" name="review-pref" value="cleanliness and room condition" checked> Cleanliness</label>
-   <label><input type="checkbox" name="review-pref" value="location and walking distance to attractions" checked> Location</label>
-   <label><input type="checkbox" name="review-pref" value="staff behaviour and service" checked> Staff & service</label>
-   <label><input type="checkbox" name="review-pref" value="family suitability, toddler comfort and noise" checked> Family / toddler comfort</label>
-   <label><input type="checkbox" name="review-pref" value="parking availability and ease of access"> Parking</label>
-   <label><input type="checkbox" name="review-pref" value="breakfast and food quality"> Food / breakfast</label>
-   <label><input type="checkbox" name="review-pref" value="value for money, hidden charges and whether the stay matched the advertised price"> Value for money</label>
-   <label><input type="checkbox" name="review-pref" value="bed comfort, mattress quality, linen and room size"> Beds, linen & room size</label>
-   <label><input type="checkbox" name="review-pref" value="bathroom cleanliness, water pressure and hot water reliability"> Bathroom & hot water</label>
-   <label><input type="checkbox" name="review-pref" value="noise levels, quietness at night and sleep quality"> Noise & sleep quality</label>
-   <label><input type="checkbox" name="review-pref" value="Wi-Fi and mobile network reliability"> Wi-Fi & connectivity</label>
-   <label><input type="checkbox" name="review-pref" value="maintenance, air conditioning, power backup and lift reliability"> Maintenance & facilities</label>
-   <label><input type="checkbox" name="review-pref" value="safety, security, lighting and family-friendly environment"> Safety & security</label>
-   <label><input type="checkbox" name="review-pref" value="check-in, check-out, booking accuracy and billing transparency"> Check-in & billing</label>
-   <label><input type="checkbox" name="review-pref" value="accessibility, stairs, lift access and ease for senior guests"> Accessibility for seniors</label>
-   <label><input type="checkbox" name="review-pref" value="crowding, cleanliness of common areas and overall upkeep"> Common areas & crowding</label>
-  </div>
-  <label class="filter-label" for="hotel-review-extra">Anything specific to check? <span class="small">Optional</span></label>
-  <input id="hotel-review-extra" maxlength="260" placeholder="e.g. early check-in, extra mattress, hot water, quiet room">
-  <button class="btn" type="submit">Compare guest feedback</button>
- </form>
- <div id="hotel-review-status" class="hotel-search-status small" aria-live="polite"></div><div id="hotel-review-activity" class="ai-activity" role="status" aria-live="polite" hidden><span class="ai-activity-dot"></span><div class="ai-activity-copy"><div class="ai-activity-title">AI is analysing guest feedback</div><div class="ai-activity-stage">Checking ratings, review themes and source links…</div><div class="ai-activity-track"><span></span></div></div><span class="ai-activity-time" id="hotel-review-elapsed">0s</span></div>
- <div id="hotel-review-results" class="hotel-results"></div>
-</div>
-<div class="note"><b>How to read these results:</b> Ratings and review themes are attributed to the linked public sources when available. Scores can differ by platform and change over time. We do not create, store or publish visitor-submitted reviews here.</div>
-</section>
-<section id="checklist" class="section">
+ <section id="checklist" class="section">
 <div class="section-head"><div><div class="tag">Before you go</div><h2>Family travel checklist</h2><p class="intro">Tick things off as you prepare. Progress is saved in this browser on this device.</p></div></div>
 <div class="card"><div style="display:flex;justify-content:space-between;gap:12px;margin-bottom:12px"><b>Preparation progress</b><span id="count" class="muted">0 / 16</span></div><div class="progress"><span id="bar"></span></div><div id="checks" style="margin-top:10px"></div></div>
 </section>
@@ -560,245 +481,9 @@ document.querySelectorAll('.hero,.feature,.stay-image').forEach(el=>{
  selectDay(activeDay);
  document.querySelectorAll('[data-tab]').forEach(btn=>btn.addEventListener('click',()=>{if(btn.dataset.tab==='plan')setTimeout(()=>map.invalidateSize(),250)}));
 })();
-</script><button class="trip-bot-launcher" id="trip-bot-launcher" aria-label="Open trip assistant"><span class="trip-bot-avatar">👩🏻</span><span>Ask trip assistant</span></button>
-<div class="trip-bot-panel" id="trip-bot-panel" role="dialog" aria-label="Trip assistant">
- <div class="trip-bot-head"><span class="trip-bot-avatar">👩🏻</span><span><b>Trip assistant</b><br><small>Ask me about your Gujarat journey</small></span><div class="chat-head-actions"><button type="button" id="trip-bot-expand" aria-label="Expand chatbot" title="Expand">⛶</button><button id="trip-bot-close" aria-label="Close" title="Close">×</button></div></div>
-
- <div class="assistant-welcome">
-  <div class="assistant-kicker">YOUR AI TRIP COMPANION</div>
-  <h3>What would you like help with?</h3>
-  <p>Ask naturally about your Gujarat trip, or jump straight to a specialist tool. Your itinerary and family context are ready.</p>
-  <div class="assistant-cap-grid">
-   <div><b>✓ I can help with</b><span>Itinerary questions, route planning, hotel discovery, public guest-review research, train and retiring-room information, food ideas and trip-cost estimates.</span></div>
-   <div><b>! Important limits</b><span>I cannot book or pay, guarantee live room availability or prices, access private booking accounts, or confirm schedule changes without reliable official information.</span></div>
-  </div>
-  <div class="assistant-shortcuts"><button type="button" data-open-tab="hotels">🏨 Open hotel finder</button><button type="button" data-open-tab="reviews">⭐ Check guest reviews</button></div>
- </div>
- <div id="floating-chat-log" aria-live="polite"><p>Hello! I can help with the itinerary, trains, hotels, retiring rooms, food, transport and estimated costs. What would you like to know?</p></div>
- <div class="chat-mode-row"><label for="chat-depth">Answer depth</label><select id="chat-depth" aria-label="Answer depth"><option value="quick">Quick answer</option><option value="deep">Think harder · deeper research</option></select><span class="small" id="chat-depth-hint">Quick is default. Deeper mode may take longer.</span></div><form id="floating-chat-form"><input id="floating-chat-input" maxlength="1000" required placeholder="Ask a trip question…"><button class="btn" type="submit">Send</button></form>
-</div>
-<script src="/markdown.js"></script>
-<script>
-
-function readThinkHarder(selectId){
- const el=document.getElementById(selectId||'chat-depth');
- return !!(el&&el.value==='deep');
-}
-function renderChatReply(container,markdown){
- if(window.TripMarkdown){window.TripMarkdown.renderMarkdown(container,markdown,{className:'chat-reply'});return;}
- container.className='chat-reply';container.textContent=String(markdown||'');
-}
+</script><script>
 (function(){
- let storageKey='gujarat-trip-expenses-v1:anonymous';
- let saved={};
- const builtIn=['train','meals','tolls','local','other'];
- const money=n=>'₹'+Math.round(n).toLocaleString('en-IN');
- async function resolveStorageKey(){
-  try{const r=await fetch('/api/auth/me');const d=await r.json();if(d.authenticated&&d.user?.username)return 'gujarat-trip-expenses-v1:'+d.user.username;}catch(e){}
-  return 'gujarat-trip-expenses-v1:anonymous';
- }
- function loadSaved(){try{saved=JSON.parse(localStorage.getItem(storageKey)||'{}')||{}}catch(e){saved={}}}
- function persist(){localStorage.setItem(storageKey,JSON.stringify(saved))}
- function updateTotal(){
-  const values=Object.values(saved).filter(v=>Number.isFinite(Number(v))&&Number(v)>=0);
-  const total=values.reduce((s,v)=>s+Number(v),0);
-  const note=document.getElementById('expense-entered-total');
-  if(note)note.textContent=values.length?('Additional expenses entered: '+money(total)+' across '+values.length+' categories. Saved in this browser for your username.'):'No additional expenses entered yet.';
-  const dash=document.getElementById('dash-actual');if(dash)dash.textContent=money(total);
- }
- function bindRow(row){
-  const id=row.dataset.expense,input=row.querySelector('.expense-input'),display=row.querySelector('.expense-display');
-  const edit=row.querySelector('.expense-edit'),save=row.querySelector('.expense-save'),cancel=row.querySelector('.expense-cancel'),remove=row.querySelector('.expense-remove');
-  if(!input||!display||!edit||!save||!cancel)return;
-  const show=()=>{input.hidden=false;save.hidden=false;cancel.hidden=false;edit.hidden=true;display.hidden=true;if(remove)remove.hidden=true;input.value=saved[id]??'';input.focus()};
-  const hide=()=>{input.hidden=true;save.hidden=true;cancel.hidden=true;edit.hidden=false;display.hidden=false;if(remove)remove.hidden=false};
-  const paint=()=>{if(saved[id]!==undefined&&saved[id]!==null&&saved[id]!==''){display.textContent=money(Number(saved[id]));display.classList.remove('cost-pending');display.classList.add('cost-exact')}else{display.textContent='Not entered';display.classList.remove('cost-exact');display.classList.add('cost-pending')}};
-  edit.onclick=show;
-  save.onclick=()=>{const raw=input.value.trim();if(raw===''||!Number.isFinite(Number(raw))||Number(raw)<0){input.focus();return}saved[id]=Math.round(Number(raw));persist();paint();hide();updateTotal();refreshFamilyDashboard()};
-  cancel.onclick=()=>{paint();hide()};
-  if(remove)remove.onclick=()=>{delete saved[id];persist();if(!builtIn.includes(id))row.remove();else paint();updateTotal();refreshFamilyDashboard()};
-  paint();
- }
- function renderCustom(){
-  const host=document.getElementById('custom-expense-list');if(!host)return;host.replaceChildren();
-  Object.keys(saved).filter(k=>!builtIn.includes(k)).forEach(id=>{
-   const row=document.createElement('div');row.className='route expense-row';row.dataset.expense=id;
-   row.innerHTML='<span></span><div class="expense-entry"><strong class="expense-display cost-pending">Not entered</strong><input class="expense-input" type="number" min="0" step="1" inputmode="numeric" placeholder="Amount in ₹" hidden><button type="button" class="expense-edit">Edit</button><button type="button" class="expense-save" hidden>Save</button><button type="button" class="expense-cancel" hidden>Cancel</button><button type="button" class="expense-remove">Remove</button></div>';
-   row.querySelector('span').textContent=id;
-   host.appendChild(row);bindRow(row);
-  });
- }
- function wireBuiltIns(){document.querySelectorAll('.expense-row[data-expense]').forEach(bindRow)}
- const addForm=document.getElementById('add-expense-form');
- if(addForm)addForm.addEventListener('submit',e=>{
-  e.preventDefault();
-  const label=(document.getElementById('new-expense-label').value||'').trim();
-  const amount=Number(document.getElementById('new-expense-amount').value);
-  if(!label||!Number.isFinite(amount)||amount<0)return;
-  if(builtIn.includes(label)||saved[label]!==undefined){document.getElementById('new-expense-label').focus();return}
-  saved[label]=Math.round(amount);persist();document.getElementById('new-expense-label').value='';document.getElementById('new-expense-amount').value='';renderCustom();updateTotal();refreshFamilyDashboard();
- });
- resolveStorageKey().then(key=>{storageKey=key;loadSaved();wireBuiltIns();renderCustom();updateTotal();refreshFamilyDashboard()});
-})();
-function refreshFamilyDashboard(){
- const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
- const totalChecks=document.querySelectorAll('#checks input[type=checkbox], #checklist input[type=checkbox]').length;
- const doneChecks=document.querySelectorAll('#checks input[type=checkbox]:checked, #checklist input[type=checkbox]:checked').length;
- set('dash-pending',Math.max(0,totalChecks-doneChecks)+' tasks');
- let actual=0;document.querySelectorAll('.expense-row .expense-display').forEach(e=>{const raw=(e.textContent||'').trim();if(raw!=='Not entered'){const n=Number(raw.replace(/[^0-9.]/g,''));if(Number.isFinite(n))actual+=n}});
- set('dash-actual','₹'+actual.toLocaleString('en-IN'));
-}
-document.addEventListener('click',e=>{if(e.target.closest('.expense-save,.expense-edit,.expense-cancel,.expense-remove,.expense-row'))setTimeout(refreshFamilyDashboard,50)});
-
-(function(){
- const panel=document.getElementById('trip-bot-panel'),launcher=document.getElementById('trip-bot-launcher');
- let historyLoaded=false;
- async function loadFamilyChatHistory(){
-  if(historyLoaded)return;const log=document.getElementById('floating-chat-log');
-  try{const response=await fetch('/api/chat/history');if(!response.ok){if(response.status===401)return;throw new Error('History unavailable')}
-   const data=await response.json();log.replaceChildren();
-   if(data.summary){const note=document.createElement('div');note.className='chat-memory-note';const label=document.createElement('strong');label.textContent='Family trip memory';const body=document.createElement('p');body.textContent=data.summary;note.append(label,body);log.appendChild(note)}
-   (data.messages||[]).slice(-20).forEach(message=>{
-    const node=document.createElement(message.role==='assistant'?'div':'p');
-    if(message.role==='assistant'){renderChatReply(node,message.content||'');if(Array.isArray(message.sources)&&message.sources.length&&window.TripMarkdown){window.TripMarkdown.renderSources(node,message.sources,{title:'Sources'})}else if(Array.isArray(message.sources)&&message.sources.length){const box=document.createElement('div');box.className='chat-source-links';const heading=document.createElement('strong');heading.textContent='Sources';box.appendChild(heading);message.sources.forEach(source=>{if(!source||typeof source.url!=='string'||!/^https?:\/\//.test(source.url))return;const link=document.createElement('a');link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=source.title||source.url;box.appendChild(link)});node.appendChild(box)}}
-    else{node.className='user';node.textContent=message.content||''}
-    log.appendChild(node);
-   });
-   if(!(data.messages||[]).length&&!data.summary){const welcome=document.createElement('p');welcome.textContent='Hello! I can help with your Gujarat family trip. Our family conversation will be remembered here.';log.appendChild(welcome)}
-   historyLoaded=true;log.scrollTop=log.scrollHeight;
-  }catch(error){console.warn('Could not restore family chat history',error)}
- }
- launcher.addEventListener('click',()=>{panel.classList.toggle('open');if(panel.classList.contains('open'))loadFamilyChatHistory()});document.querySelectorAll('[data-open-tab]').forEach(b=>b.addEventListener('click',()=>{panel.classList.remove('open');const tab=document.querySelector('[data-tab="'+b.dataset.openTab+'"]');if(tab)tab.click();}));document.getElementById('trip-bot-close').addEventListener('click',()=>{panel.classList.remove('open','expanded');document.getElementById('trip-bot-expand').textContent='⛶';document.getElementById('trip-bot-expand').setAttribute('aria-label','Expand chatbot')});document.getElementById('trip-bot-expand').addEventListener('click',()=>{const expanded=panel.classList.toggle('expanded');const control=document.getElementById('trip-bot-expand');control.textContent=expanded?'⊖':'⛶';control.title=expanded?'Restore chatbot':'Expand chatbot';control.setAttribute('aria-label',expanded?'Restore chatbot':'Expand chatbot')});
- document.getElementById('chat-depth')?.addEventListener('change',()=>{const hint=document.getElementById('chat-depth-hint');if(hint)hint.textContent=readThinkHarder()?'Think harder selected — deeper research, longer replies.':'Quick is default. Deeper mode may take longer.';});
- document.getElementById('floating-chat-form').addEventListener('submit',async e=>{
-  e.preventDefault();
-  const input=document.getElementById('floating-chat-input'),log=document.getElementById('floating-chat-log'),form=e.currentTarget;
-  const button=form.querySelector('button.btn[type="submit"]');
-  const q=input.value.trim();if(!q||!button||button.disabled)return;
-  const thinkHarder=readThinkHarder('chat-depth');
-  const user=document.createElement('p');user.className='user';user.textContent=q;log.appendChild(user);input.value='';
-  button.disabled=true;button.textContent='•••';button.title='Assistant is working';
-  const waiting=document.createElement('div');waiting.className='ai-chat-thinking';
-  const title=document.createElement('b');title.textContent=thinkHarder?'Working on a deeper answer':'Working on your question';
-  const stage=document.createElement('div');stage.className='ai-activity-stage';
-  const hotelQuestion=/\b(hotel|hotels|stay|accommodation|guest house|resort|laxmi niwas|sukhnath|hotel ankur|reviews?|tripadvisor|booking\.com|agoda)\b/i.test(q);
-  const steps=hotelQuestion
-   ?['Understanding the request','Identifying the property','Searching public sources','Preparing the response']
-   :['Understanding your question','Checking trip information','Preparing your answer'];
-  const stepList=document.createElement('div');stepList.className='chat-steps';
-  const stepNodes=steps.map((label,index)=>{const row=document.createElement('div');row.className='chat-step'+(index===0?' active':'');const dot=document.createElement('span');dot.className='step-dot';dot.textContent=index===0?'…':String(index+1);const text=document.createElement('span');text.textContent=label;row.append(dot,text);stepList.appendChild(row);return row});
-  const track=document.createElement('div');track.className='ai-activity-track';track.appendChild(document.createElement('span'));
-  waiting.append(title,stage,stepList,track);stage.textContent='Step 1 of '+steps.length+(thinkHarder?' · Think harder':' · Quick');
-  log.appendChild(waiting);log.scrollTop=log.scrollHeight;
-  let stepTimer=null;let stepIndex=0;
-  const advance=()=>{if(stepIndex>=steps.length-1)return;stepNodes[stepIndex].classList.remove('active');stepNodes[stepIndex].classList.add('done');stepNodes[stepIndex].querySelector('.step-dot').textContent='✓';stepIndex++;stepNodes[stepIndex].classList.add('active');stepNodes[stepIndex].querySelector('.step-dot').textContent='…';stage.textContent='Step '+(stepIndex+1)+' of '+steps.length+' · '+steps[stepIndex]};
-  stepTimer=setInterval(advance,1800);advance();
-  try{
-   const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q,thinkHarder:!!thinkHarder})});
-   const d=await r.json();if(!r.ok)throw new Error(d.error||'Assistant unavailable');
-   clearInterval(stepTimer);stepNodes.forEach((node,index)=>{node.classList.add('done');node.classList.remove('active');node.querySelector('.step-dot').textContent='✓'});
-   stage.textContent='Formatting response';
-   renderChatReply(waiting,d.reply||'I could not prepare an answer.');
-   if(Array.isArray(d.sources)&&d.sources.length){
-    if(window.TripMarkdown)window.TripMarkdown.renderSources(waiting,d.sources,{title:'Sources ('+d.sources.length+')'});
-    if(d.researchedAt){const stamp=document.createElement('small');const date=new Date(d.researchedAt);stamp.textContent='Research timestamp: '+(Number.isNaN(date.getTime())?'unavailable':date.toLocaleString());waiting.appendChild(stamp);}
-   }
-  }catch(err){clearInterval(stepTimer);waiting.className='assistant-reply';waiting.textContent=err.message; if(/busy|temporarily|retry|too long|unreachable/i.test(err.message)){const retry=document.createElement('button');retry.type='button';retry.className='btn alt';retry.textContent='Retry this question';retry.addEventListener('click',()=>{document.getElementById('chat-depth').value=thinkHarder?'deep':'quick';input.value=q;form.requestSubmit()},{once:true});waiting.appendChild(retry);}}
-  finally{button.disabled=false;button.textContent='Send';button.title='Send';}
-  log.scrollTop=log.scrollHeight;
- });
-})();
-</script>
-
-<script>
-(function(){
- const byId=id=>document.getElementById(id);
- function renderAnswer(answer,sources,resultEl){
-  if(window.TripMarkdown){
-   window.TripMarkdown.renderMarkdown(resultEl,answer,{cardClass:'card hotel-result-card',tableWrapClass:'hotel-table-wrap',tableClass:'hotel-table'});
-   window.TripMarkdown.renderSources(resultEl,sources,{asCard:true,className:'card hotel-result-card hotel-sources',title:'Sources & booking checks'});
-   return;
-  }
-  resultEl.textContent=String(answer||'');
- }
- async function runHotelSearch(query,statusEl,resultEl,activityId){
-  const activity=byId(activityId),timer=byId(activityId.replace('-activity','-elapsed'));
-  const started=Date.now();let ticker=null;
-  const thinkHarder=readThinkHarder('hotel-research-depth')||readThinkHarder('chat-depth');
-  statusEl.textContent='';resultEl.replaceChildren();if(activity){activity.hidden=false;if(timer)timer.textContent='0s';ticker=setInterval(()=>{if(timer)timer.textContent=Math.floor((Date.now()-started)/1000)+'s'},1000)}
-  try{
-   const response=await fetch('/api/hotels/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query,thinkHarder:!!thinkHarder})});
-   const data=await response.json();if(!response.ok)throw new Error(data.error||'Hotel search is unavailable.');
-   renderAnswer(data.answer,data.sources,resultEl);
-   const seconds=Math.max(1,Math.round((Date.now()-started)/1000));
-   const sourceCount=Number.isFinite(data.sourceCount)?data.sourceCount:(Array.isArray(data.sources)?data.sources.length:0);
-   const checked=data.researchedAt?new Date(data.researchedAt):null;
-   const checkedLabel=checked&&!Number.isNaN(checked.getTime())?' Research timestamp: '+checked.toLocaleString() + '.':'';
-   statusEl.textContent='Completed in '+seconds+' seconds · mode '+(data.mode|| (thinkHarder?'deep':'quick'))+' · '+sourceCount+' source link(s) returned.'+checkedLabel+' Verify current prices, ratings and availability directly with each provider.';
-  }catch(error){statusEl.replaceChildren(document.createTextNode(error.message+' '));if(/busy|temporarily|retry|too long|unreachable/i.test(error.message)){const retry=document.createElement('button');retry.type='button';retry.className='btn alt';retry.textContent='Retry search';retry.addEventListener('click',()=>runHotelSearch(query,statusEl,resultEl,activityId),{once:true});statusEl.appendChild(retry);}}
-  finally{if(ticker)clearInterval(ticker);if(activity)activity.hidden=true}
- }
- function ensureHotelDepthControl(form){
-  if(!form||form.querySelector('#hotel-research-depth'))return;
-  const row=document.createElement('div');row.className='chat-mode-row';row.style.padding='0 0 10px';
-  row.innerHTML='<label for="hotel-research-depth">Research depth</label><select id="hotel-research-depth" aria-label="Hotel research depth"><option value="quick">Quick answer</option><option value="deep">Think harder · deeper research</option></select>';
-  form.insertBefore(row, form.firstChild);
- }
- const hf=byId('hotel-search-form');
- if(hf){ensureHotelDepthControl(hf);hf.addEventListener('submit',e=>{
-  e.preventDefault();
-  const destination=byId('hotel-destination').value,budget=byId('hotel-budget').value;
-  const prefs=[...document.querySelectorAll('input[name="hotel-pref"]:checked')].map(x=>x.value);
-  const extra=byId('hotel-search-extra').value.trim();
-  const places=destination==='all'?'Dwarka, Somnath and Diu':destination;
-  const query='Find and compare current public hotel options in '+places+' for our family trip (6 adults and one toddler), 2 rooms where possible. Budget: '+budget+'. Priorities: '+(prefs.length?prefs.join('; '):'general family suitability')+'. Additional requirements: '+(extra||'none')+'. Dates: Dwarka 29–31 Dec 2026, Somnath 31 Dec 2026–1 Jan 2027, Diu 1–2 Jan 2027. Return concise hotel options with name, area, separate platform ratings and review counts when available, room suitability, parking, distance to key attractions, current indicative price and taxes, key pros/cons, and source links. Never invent missing details or claim availability is confirmed. Use the exact selected property names; do not substitute similarly named hotels.';
-  runHotelSearch(query,byId('hotel-search-status'),byId('hotel-search-results'),'hotel-search-activity');
- });}
- const rf=byId('hotel-review-search-form');
- if(rf){if(!document.getElementById('hotel-research-depth'))ensureHotelDepthControl(rf);rf.addEventListener('submit',e=>{
-  e.preventDefault();
-  const name=byId('hotel-review-hotel').value;
-  const prefs=[...document.querySelectorAll('input[name="review-pref"]:checked')].map(x=>x.value);
-  const extra=byId('hotel-review-extra')?.value.trim()||'';
-  const exact=name.includes('Laxmi Niwas')?' Exact property: Hotel Dwarkesh Homely Stay, Dwarka. Do not substitute similarly named properties.':'';
-  const query='Research current public guest feedback for '+name+'.'+exact+' Compare Google, Tripadvisor, Booking.com, Agoda and other credible sources where available. Focus on: '+(prefs.length?prefs.join('; '):'overall guest experience')+'. Specific questions: '+(extra||'none')+'. Show each platform rating separately with review count and latest review date when visible. Summarise repeated positive themes and repeated complaints, note family/toddler suitability only when supported, investigate under-18 policies carefully, distinguish the exact property from similarly named hotels, and include source links. Do not invent scores, counts, quotes or availability.';
-  runHotelSearch(query,byId('hotel-review-status'),byId('hotel-review-results'),'hotel-review-activity');
- });}
-})();
-</script>
-
-<script>
-(function(){
- const Speech=window.SpeechRecognition||window.webkitSpeechRecognition;
- const fields=[...document.querySelectorAll('input:not([type]),input[type="text"],input[type="search"],textarea')].filter(el=>!el.disabled&&el.type!=="hidden");
- fields.forEach(field=>{
-  if(field.dataset.voiceReady)return;field.dataset.voiceReady="1";
-  const wrap=document.createElement("span");wrap.className="voice-field";
-  field.parentNode.insertBefore(wrap,field);wrap.appendChild(field);
-  const mic=document.createElement("button");mic.type="button";mic.className="voice-mic";mic.textContent="🎙️";mic.title="Dictate text";mic.setAttribute("aria-label","Start voice typing");mic.setAttribute("aria-pressed","false");
-  if(!Speech){mic.disabled=true;mic.title="Voice typing is not supported in this browser";}
-  wrap.appendChild(mic);let recognition=null;
-  mic.addEventListener("click",()=>{
-   if(!Speech)return;if(recognition){recognition.stop();return}
-   recognition=new Speech();recognition.lang="en-IN";recognition.continuous=false;recognition.interimResults=false;
-   mic.setAttribute("aria-pressed","true");mic.textContent="⏹";mic.title="Stop voice typing";
-   recognition.onresult=e=>{
-    const spoken=Array.from(e.results).map(x=>x[0].transcript).join(" ").trim();
-    if(spoken){const start=field.selectionStart??field.value.length,end=field.selectionEnd??field.value.length;const before=field.value.slice(0,start),after=field.value.slice(end);field.value=before+(before&&!/\s$/.test(before)?" ":"")+spoken+(after&&!/^\s/.test(after)?" ":"")+after;field.dispatchEvent(new Event("input",{bubbles:true}));field.dispatchEvent(new Event("change",{bubbles:true}));}
-   };
-   const reset=()=>{recognition=null;mic.setAttribute("aria-pressed","false");mic.textContent="🎙️";mic.title="Dictate text"};
-   recognition.onerror=reset;recognition.onend=reset;try{recognition.start()}catch(e){reset()}
-  });
- });
-})();
-</script>
-<script>
-(function(){
- const panel=document.getElementById('trip-bot-panel'),launcher=document.getElementById('trip-bot-launcher');
- const closeChat=()=>{if(panel){panel.classList.remove('open','expanded');const b=document.getElementById('trip-bot-expand');if(b){b.textContent='⛶';b.setAttribute('aria-label','Expand chatbot')}}};
- document.addEventListener('pointerdown',event=>{if(panel&&panel.classList.contains('open')&&!panel.contains(event.target)&&!launcher.contains(event.target))closeChat();});
- document.addEventListener('keydown',event=>{if(event.key==='Escape')closeChat();});
- document.querySelectorAll('a[href^="#train-"]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();const plan=document.querySelector('[data-tab="plan"]');if(plan)plan.click();const target=document.querySelector(link.getAttribute('href'));if(target)setTimeout(()=>target.scrollIntoView({behavior:'smooth',block:'center'}),120);}));
+document.querySelectorAll('a[href^="#train-"]').forEach(link=>link.addEventListener('click',event=>{event.preventDefault();const plan=document.querySelector('[data-tab="plan"]');if(plan)plan.click();const target=document.querySelector(link.getAttribute('href'));if(target)setTimeout(()=>target.scrollIntoView({behavior:'smooth',block:'center'}),120);}));
  const signout=document.getElementById('sign-out-btn');
  if(signout)signout.addEventListener('click',async()=>{if(!confirm('Sign out of the family trip website on this device?'))return;signout.disabled=true;signout.textContent='Signing out…';try{const r=await fetch('/api/auth/logout',{method:'POST',headers:{'Content-Type':'application/json'}});if(!r.ok)throw new Error('Sign out failed');location.replace('/login.html');}catch(e){signout.disabled=false;signout.textContent='Sign out';alert('Could not sign out. Please try again.')}});
  const status=document.getElementById('child-policy-status'),note=document.getElementById('child-policy-note'),save=document.getElementById('save-child-policy'),saved=document.getElementById('child-policy-saved');
