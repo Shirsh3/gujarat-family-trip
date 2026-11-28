@@ -26,11 +26,13 @@ test("family UI exposes sign out and calls the existing logout endpoint", () => 
   assert.match(html, /location\.replace\('\/login\.html'\)/);
 });
 
-test("Laxmi Niwas toddler admission remains unconfirmed until user records written confirmation", () => {
-  assert.match(html, /Toddler admission: written confirmation required/);
-  assert.match(html, /Written confirmation received/);
-  assert.match(html, /gujarat-child-policy:/);
-  assert.match(html, /Do not rely on this hotel/);
+test("selected Gujarat hotels are reflected without claiming room or booking confirmation", () => {
+  assert.match(html, /Hotel Dwarkesh Homely Stay/);
+  assert.match(html, /Hotel Decent Somnath/);
+  assert.match(html, /Hotel Apana/);
+  assert.match(html, /does not show hotel prices or booking confirmations/);
+  assert.doesNotMatch(html, /Hotel Laxmi Niwas/);
+  assert.doesNotMatch(html, /Hotel Sukhnath/);
 });
 
 test("broken Hawthorn factsheet URL is no longer presented as a working link", () => {
