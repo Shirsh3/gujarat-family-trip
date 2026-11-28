@@ -1,6 +1,9 @@
 name: Cloudflare production monitor
 
 on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/cloudflare-monitor.yml"]
   schedule:
     - cron: "*/15 * * * *"
   workflow_run:
