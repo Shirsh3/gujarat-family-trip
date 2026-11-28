@@ -28,6 +28,14 @@ test("trip context endpoint exists and matches structured hotels", () => {
   assert.match(worker, /Anand Chowk, Dwarka/);
 });
 
+function loadTripMarkdown(dom) {
+  const script = dom.window.document.createElement("script");
+  script.textContent = markdownSrc;
+  dom.window.document.body.appendChild(script);
+  assert.ok(dom.window.TripMarkdown, "TripMarkdown should attach to window");
+  return dom.window.TripMarkdown;
+}
+
 test("shared markdown renderer bold/table/link behaviour", () => {
   const dom = new JSDOM("<!doctype html><body><div id='out'></div></body>", { runScripts: "dangerously" });
   const { renderMarkdown } = loadTripMarkdown(dom);
