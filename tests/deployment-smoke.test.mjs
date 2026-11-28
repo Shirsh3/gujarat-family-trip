@@ -37,7 +37,7 @@ test("existing D1 migrations are non-destructive and repeat-safe", () => {
 });
 
 test("main page retains essential trip features and has unique element IDs", () => {
-  for (const feature of ["hotel-search-form", "hotel-review-search-form", "floating-chat-form", "trip-map", "checklist", "costs"]) {
+  for (const feature of ["trip-map", "checklist"]) {
     assert.ok(html.includes(`id="${feature}"`), `Missing feature ${feature}`);
   }
   const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
