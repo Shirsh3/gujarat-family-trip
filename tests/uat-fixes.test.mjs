@@ -71,12 +71,13 @@ test("all AI routes use GPT-4o mini and never route requests to Astra", () => {
 });
 
 
-test("map overlays Survey of India national boundary data over OpenStreetMap navigation tiles", () => {
+test("map uses the current Government of India BharatMapService boundary layer", () => {
   assert.match(html, /esri-leaflet@3\.0\.15/);
-  assert.match(html, /IND_AdminBoundary\/FeatureServer\/0/);
+  assert.match(html, /mapservice\.gov\.in\/gismapservice\/rest\/services\/BharatMapService\/Admin_Boundary_District\/MapServer\/0/);
   assert.match(html, /L\.esri\.featureLayer/);
-  assert.match(html, /color:'#9b1c1c'/);
-  assert.match(html, /OpenStreetMap/);
+  assert.doesNotMatch(html, /tile\.openstreetmap\.org/);
+  assert.doesNotMatch(html, /IND_AdminBoundary\/FeatureServer\/0/);
+  assert.doesNotMatch(html, /color:'#9b1c1c'/);
 });
 
 
