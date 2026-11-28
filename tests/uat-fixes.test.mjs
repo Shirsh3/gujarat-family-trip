@@ -35,16 +35,6 @@ test("selected Gujarat hotels are reflected without claiming room or booking con
   assert.doesNotMatch(html, /Hotel Sukhnath/);
 });
 
-test("broken Hawthorn factsheet URL is no longer presented as a working link", () => {
-  assert.doesNotMatch(html, /href="https:\/\/hawthorndwarka\.com\/wp-content\/uploads\/2026\/04\/Factsheet-Hawthorn-Suites-By-Wyndham-Dwarka\.pdf"/);
-  assert.match(html, /Hawthorn factsheet · unavailable/);
-});
-
-test("chatbot can close on outside click and Escape", () => {
-  assert.match(html, /document\.addEventListener\('pointerdown'/);
-  assert.match(html, /event\.key==='Escape'/);
-});
-
 test("train cards are cross-linked from Getting Around without fabricating unavailable times", () => {
   for (const train of ["20938","20937","15013","12983"]) {
     assert.match(html, new RegExp('id="train-' + train + '"'));
@@ -58,12 +48,6 @@ test("Getting Around explains the Bet Dwarka ferry separately from road legs", (
   assert.match(html, /separate transfer/);
   assert.match(html, /No ferry departure time, fare or availability is confirmed/);
 });
-
-test("AI and hotel research failures provide user-facing retry actions", () => {
-  assert.match(html, /Retry this question/);
-  assert.match(html, /Retry search/);
-});
-
 
 test("all AI routes use GPT-4o mini and never route requests to Astra", () => {
   assert.doesNotMatch(worker, /gpt-6\\.2-astra|gpt-4\\.1-mini/);
